@@ -23,6 +23,7 @@
     _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)                                -> Bool
     _Vector_Erase(ByRef $aVector, Const $nIndex)                                             -> Bool
     _Vector_EraseValue(ByRef $aVector, Const $vValue)                                        -> Bool
+    _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)                                           -> Bool
     _Vector_Clear(ByRef $aVector)                                                            -> Bool
 
  Internal Functions:
@@ -462,12 +463,20 @@ EndFunc
 
 
 
+Func _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)
+    If Not _Vector_IsVector($aVectorL) Then
+        Return SetError(@error, 0, 0)
+    EndIf
 
+    If Not _Vector_IsVector($aVectorR) Then
+        Return SetError(@error, 0, 0)
+    EndIf
 
     Local $aTempVector = $aVectorR
     $aVectorR = $aVectorL
     $aVectorL = $aTempVector
 
+    Return 1
 EndFunc
 
 
