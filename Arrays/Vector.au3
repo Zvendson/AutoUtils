@@ -94,6 +94,13 @@ Func _Vector_Init(Const $nCapacity = 32)
 	For $i = 0 To $nCapacity - 1
 		$aContainer[$i] = Null
 	Next
+Global Enum _
+    $__VECTOR_SIZE     , _
+    $__VECTOR_CAPACITY , _
+    $__VECTOR_DEFAULT  , _
+    $__VECTOR_MODIFIER , _
+    $__VECTOR_BUFFER   , _
+    $__VECTOR_PARAMS
 
     Local $aVector[3] = [0, $nCapacity, $aContainer]
 
