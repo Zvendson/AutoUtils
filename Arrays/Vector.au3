@@ -119,6 +119,16 @@ EndFunc
 
 
 
+Func _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)
+    If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    If $nIndex < 0 Or $nIndex >= $aVector[$__VECTOR_SIZE] Then
+        Return SetError(3, 0, 0)
+    EndIf
+
+    Return 1
 EndFunc
 
 
