@@ -81,10 +81,6 @@
 
 
 
-#include <Array.au3>
-
-
-
 Func _CallbackArray_Init(Const $nSize)
 	;~ using a temp array here cause ReDim only works if the given var is already
 	;~ declared as an array. Neat trick to get rid of it.
@@ -164,17 +160,24 @@ Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemov
 	EndIf
 
 	Local $aCurrentCallbacks = $aArray[$nIndex]
-	Local $i = 1
+	Local $i = 0
+	Local $j = 0
+
+	Local $aNewCallbacks[UBound($aCurrentCallbacks)]
 
 	While $i < $aCurrentCallbacks[0]
+		$i += 1
 		If $aCurrentCallbacks[$i] == $sCallbackToRemove Then
-			;~ mhmm not quite happy using _ArrayDelete here but all the other things i tried were slower or crashed >.< + its not really that important to re-invent it
-			_ArrayDelete($aCurrentCallbacks, $i)
-			$aCurrentCallbacks[0] -= 1
-		Else
-			$i += 1
+			ContinueLoop
 		EndIf
+
+		$j += 1
+		$aNewCallbacks[$j] = $aCurrentCallbacks[$i]
 	WEnd
+
+	ReDim $aNewCallbacks[$j + 1]
+	$aNewCallbacks[0] = $j
+	$aArray[$nIndex] = $aNewCallbacks
 
 	Return 1
 EndFunc
