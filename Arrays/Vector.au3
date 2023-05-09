@@ -105,6 +105,20 @@ Global Enum _
     Local $aVector[3] = [0, $nCapacity, $aContainer]
 
     Return $aVector
+Func _Vector_IsVector(Const ByRef $aVector)
+    If Not IsArray($aVector) Then
+        Return SetError(1, 0, 0)
+    EndIf
+
+    If UBound($aVector) <> $__VECTOR_PARAMS Then
+        Return SetError(2, 0, 0)
+    EndIf
+
+    Return 1
+EndFunc
+
+
+
 EndFunc
 
 
