@@ -221,7 +221,9 @@ Func _Vector_GetValues(Const ByRef $aVector)
     EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
-    ReDim $aContainer[$aVector[$__VECTOR_SIZE]]
+	If $aVector[$__VECTOR_SIZE] < $aVector[$__VECTOR_CAPACITY] Then
+		ReDim $aContainer[$aVector[$__VECTOR_SIZE]]
+	EndIf
 
     Return $aContainer
 EndFunc
