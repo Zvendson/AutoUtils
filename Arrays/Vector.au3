@@ -153,6 +153,16 @@ EndFunc
 
 
 
+Func _Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)
+    If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    Return $aVector[$__VECTOR_CAPACITY] - $aVector[$__VECTOR_SIZE] >= $nSize
+EndFunc
+
+
+
 Func _Vector_GetSize(Const ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
