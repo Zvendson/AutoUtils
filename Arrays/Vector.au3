@@ -21,10 +21,12 @@
     _Vector_Pop(ByRef $aVector)                                                              -> Variant / DefaultValue / Null
     _Vector_PopFirst(ByRef $aVector)                                                         -> Variant / DefaultValue / Null
     _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)                                -> Bool
+    _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)                              -> Bool
     _Vector_Erase(ByRef $aVector, Const $nIndex)                                             -> Bool
     _Vector_EraseValue(ByRef $aVector, Const $vValue)                                        -> Bool
     _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)                                           -> Bool
     _Vector_Clear(ByRef $aVector)                                                            -> Bool
+    _Vector_Find(Const ByRef $aVector, Const $vValue)                                        -> Bool @extended = index
 
  Internal Functions:
     __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)                     -> UInt
