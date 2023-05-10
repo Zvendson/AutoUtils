@@ -27,6 +27,7 @@
     _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)                                           -> Bool
     _Vector_Clear(ByRef $aVector)                                                            -> Bool
     _Vector_Find(Const ByRef $aVector, Const $vValue)                                        -> Bool @extended = index
+    _Vector_FindBackwards(Const ByRef $aVector, Const $vValue)                               -> Bool @extended = index
 
  Internal Functions:
     __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)                     -> UInt
@@ -569,14 +570,18 @@ EndFunc
 
 
 
-Func _Vector_Find(Const ByRef $aVector, Const $vValue)
+Func _Vector_FindBackwards(Const ByRef $aVector, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
     EndIf
 
+	If $aVector[$__VECTOR_SIZE] = 0 Then
+		Return SetExtended(-1, False)
+	EndIf
+
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
-    For $i = 0 To $aVector[$__VECTOR_SIZE] - 1
+    For $i = $aVector[$__VECTOR_SIZE] - 1 To 0 Step -1
         If $aContainer[$i] = $vValue Then
 			Return SetExtended($i, True)
 		EndIf
