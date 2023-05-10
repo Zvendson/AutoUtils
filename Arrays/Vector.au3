@@ -546,15 +546,25 @@ EndFunc
 
 
 
-Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
-	If $nModifier < 1.5 Then $nModifier = 1.5
-	If $nCapacity < 4   Then $nCapacity = 4
+Func _Vector_Find(Const ByRef $aVector, Const $vValue)
+    If Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
 
-    While $nRequiredSize > $nCapacity
-        $nCapacity = Floor($nCapacity * $nModifier)
-    WEnd
+	If $aVector[$__VECTOR_SIZE] = 0 Then
+		Return SetExtended(-1, False)
+	EndIf
 
-    Return $nCapacity
+
+    Local $aContainer = $aVector[$__VECTOR_BUFFER]
+
+    For $i = 0 To $aVector[$__VECTOR_SIZE] - 1
+        If $aContainer[$i] = $vValue Then
+			Return SetExtended($i, True)
+		EndIf
+    Next
+
+	Return SetExtended(-1, False)
 EndFunc
 
 
@@ -574,3 +584,22 @@ Func _Vector_Find(Const ByRef $aVector, Const $vValue)
 
 	Return SetExtended(-1, False)
 EndFunc
+
+
+
+#Region Internal Only
+
+Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
+	If $nModifier < 1.5 Then $nModifier = 1.5
+	If $nCapacity < 4   Then $nCapacity = 4
+
+    While $nRequiredSize > $nCapacity
+        $nCapacity = Floor($nCapacity * $nModifier)
+    WEnd
+
+    Return $nCapacity
+EndFunc
+
+#EndRegion Internal Only
+
+
