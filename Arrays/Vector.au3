@@ -27,7 +27,7 @@
     _Vector_Clear(ByRef $aVector)                                                            -> Bool
 
  Internal Functions:
-    __Vector_CalculateSize(Const $nCurrentSize, Const $nRequiredSize)                        -> UInt
+    __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)                     -> UInt
 
  Description:
     This Vector "Class" implementation acts exactly like the stdlib vector from C++ just without typesafe values.
@@ -106,16 +106,12 @@ Global Enum _
 
 
 
-Func _Vector_Init(Const $nCapacity = 32, Const $vDefaultValue = Null, Const $nModifier = 1.5)
+Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5)
     If $nModifier <= 1 Then
         Return SetError(1, 0, Null)
     EndIf
 
     Local $aContainer[$nCapacity]
-    For $i = 0 To $nCapacity - 1
-        $aContainer[$i] = $vDefaultValue
-    Next
-
     Local $aNewVector[$__VECTOR_PARAMS]
     $aNewVector[$__VECTOR_SIZE]     = 0
     $aNewVector[$__VECTOR_CAPACITY] = $nCapacity
@@ -242,7 +238,7 @@ Func _Vector_Reserve(ByRef $aVector, Const $nCapacity)
     EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
-    Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nCapacity)
+    Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nCapacity, $aVector[$__VECTOR_MODIFIER])
 
     ReDim $aContainer[$nNewCapacity]
 
@@ -263,7 +259,7 @@ Func _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
     If $nNextSize > $aVector[$__VECTOR_CAPACITY] Then
-        Local $nNewSize = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nNextSize)
+        Local $nNewSize = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nNextSize, $aVector[$__VECTOR_MODIFIER])
         ReDim $aContainer[$nNewSize]
         $aVector[$__VECTOR_CAPACITY] = $nNewSize
     EndIf
@@ -292,7 +288,7 @@ Func _Vector_Push(ByRef $aVector, Const $vValue)
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
     If $nNextSize > $aVector[$__VECTOR_CAPACITY] Then
-        Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nNextSize)
+        Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nNextSize, $aVector[$__VECTOR_MODIFIER])
         ReDim $aContainer[$nNewCapacity]
         $aVector[$__VECTOR_CAPACITY] = $nNewCapacity
     EndIf
@@ -500,11 +496,12 @@ EndFunc
 
 
 
-Func __Vector_CalculateSize(Const $nCurrentSize, Const $nRequiredSize)
-    Local $nCapacity = $nCurrentSize
+Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
+	If $nModifier < 1.5 Then $nModifier = 1.5
+	If $nCapacity < 4   Then $nCapacity = 4
 
     While $nRequiredSize > $nCapacity
-        $nCapacity = Floor($nCapacity * 1.5)
+        $nCapacity = Floor($nCapacity * $nModifier)
     WEnd
 
     Return $nCapacity
