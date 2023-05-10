@@ -9,7 +9,7 @@ ConsoleWrite("Time passed: " & TimerDiff($hStopwatch) & "ms" & @CRLF)
 
 Func Test()
     Local $aVector1 = _Vector_Init()
-	For $i = 1 To 10
+	For $i = 1 To 20
 		_Vector_Push($aVector1, "Henlo " & $i)
 	Next
 
@@ -32,6 +32,17 @@ Func Test()
 	ConsoleWrite(@LF & "<<AddVector>>" & @LF & @LF)
     PrintVector($aVector1, "Vector 1")
     PrintVector($aVector2, "Vector 2")
+
+	ConsoleWrite(@LF & "<<Find>>" & @LF & @LF)
+
+	Local $bRet = _Vector_Find($aVector1, "Henlo 20")
+	ConsoleWrite("Found 'Henlo 20' = " & $bRet & @LF)
+
+	$bRet = _Vector_FindBackwards($aVector1, "Henlo 1")
+	ConsoleWrite("Found Backwards 'Henlo 1' = " & $bRet & @LF)
+
+	$bRet = _Vector_Find($aVector1, "Henlo 21")
+	ConsoleWrite("Found 'Henlo 21' = " & $bRet & @LF)
 EndFunc
 
 
