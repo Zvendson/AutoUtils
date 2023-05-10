@@ -511,3 +511,19 @@ Func __Vector_CalculateSize(Const $nCurrentSize, Const $nRequiredSize)
 EndFunc
 
 
+
+Func _Vector_Find(Const ByRef $aVector, Const $vValue)
+    If Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    Local $aContainer = $aVector[$__VECTOR_BUFFER]
+
+    For $i = 0 To $aVector[$__VECTOR_SIZE] - 1
+        If $aContainer[$i] = $vValue Then
+			Return SetExtended($i, True)
+		EndIf
+    Next
+
+	Return SetExtended(-1, False)
+EndFunc
