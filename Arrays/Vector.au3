@@ -377,6 +377,42 @@ EndFunc
 
 
 
+Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
+    If Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    Local $aValuesToAdd = _Vector_GetValues($aFromVector) ;~ Contains IsVector Check
+	If @error                    Then Return SetError(@error, 0, 0)
+	If UBound($aValuesToAdd) = 0 Then Return SetError(3, 0, 0)
+
+    Local $aContainer = $aVector[$__VECTOR_BUFFER]
+	Local $nSize      = $aVector[$__VECTOR_SIZE]
+	Local $nFromSize  = $aFromVector[$__VECTOR_SIZE]
+
+	;~ Eesize if needed
+	If Not _Vector_HasSpace($aVector, $nFromSize, True) Then
+		Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nSize + $nFromSize, $aVector[$__VECTOR_MODIFIER])
+
+		ReDim $aContainer[$nNewCapacity]
+		$aVector[$__VECTOR_CAPACITY] = $nNewCapacity
+	EndIf
+
+	;~ add
+	Local $i = $nSize
+	For $vValue In $aValuesToAdd
+		$aContainer[$i] = $vValue
+		$i += 1
+	Next
+
+    $aVector[$__VECTOR_SIZE] += $nSize
+    $aVector[$__VECTOR_BUFFER] = $aContainer
+
+    Return 1
+EndFunc
+
+
+
 Func _Vector_Erase(ByRef $aVector, Const $nIndex)
     If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, 0)
