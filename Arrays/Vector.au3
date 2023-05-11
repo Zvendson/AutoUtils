@@ -1,7 +1,7 @@
 #cs ----------------------------------------------------------------------------
 
  AutoIt Version: 3.3.16.1
- Author(s):       Zvend       Abaddon
+ Author(s):       Zvend       Nadav
  Discord(s):      Zvend#6666  Abaddon#9048
 
  Script Functions:
@@ -109,6 +109,21 @@ Global Enum _
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Init
+; Description ...: Creates a new Vector.
+; Syntax ........: _Vector_Init([$nCapacity = 32[, $vDefaultValue = Null[, $nModifier = 1.5]]])
+; Parameters ....: $nCapacity           - [optional] a general number value. Default is 32.
+;                  $vDefaultValue       - [optional] a variant value. Default is Null.
+;                  $nModifier           - [optional] a general number value. Default is 1.5.
+; Return values .: The new Vector.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5)
     If $nModifier < 1.5 Then
         Return SetError(1, 0, Null)
@@ -128,6 +143,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_IsVector
+; Description ...: Checks whether the argument is a valid Vector.
+; Syntax ........: _Vector_IsVector(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: 1 if the parameter is a Vector, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_IsVector(Const ByRef $aVector)
     If Not IsArray($aVector) Then
         Return SetError(1, 0, 0)
@@ -142,6 +170,21 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_IsValidIndex
+; Description ...: Checks whether the index is a valid for the Vector.
+; Syntax ........: _Vector_IsValidIndex(Const Byref $aVector, Const $nIndex, Const $bSkipVectorCheck)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $nIndex              - [const] a general number value.
+;                  $bSkipVectorCheck    - [const] a boolean value.
+; Return values .: 1 if the index is valid, 0 otherwise
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)
     If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -156,6 +199,21 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_HasSpace
+; Description ...: Checks whether the vector has enough space for $nSize elements.
+; Syntax ........: _Vector_HasSpace(Const Byref $aVector, Const $nSize, Const $bSkipVectorCheck)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $nSize               - [const] a general number value.
+;                  $bSkipVectorCheck    - [const] a boolean value.
+; Return values .: True if have enough space, False otherwise
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)
     If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -166,17 +224,42 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_GetSize
+; Description ...: Returns the number of elements in the Vector.
+; Syntax ........: _Vector_GetSize(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: The number of elements.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_GetSize(Const ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
     EndIf
-
 
     Return $aVector[$__VECTOR_SIZE]
 EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_GetCapacity
+; Description ...: Returns the maximum possible number of elements.
+; Syntax ........: _Vector_GetCapacity(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: The maximum possible number of elements.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_GetCapacity(Const ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -187,6 +270,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_GetDefaultValue
+; Description ...: Returns the default value of the vector.
+; Syntax ........: _Vector_GetDefaultValue(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: The default value of the vector.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_GetDefaultValue(Const ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, Null)
@@ -197,6 +293,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_GetModifier
+; Description ...: Returns the Vector's Modifier.
+; Syntax ........: _Vector_GetModifier(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: The Vector's Modifier.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_GetModifier(Const ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0.0)
@@ -207,6 +316,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_IsEmpty
+; Description ...: Checks whether the Vector is empty.
+; Syntax ........: _Vector_IsEmpty(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: True if the Vector is empty, False otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_IsEmpty(Const ByRef $aVector)
     Local $nSize = _Vector_GetSize($aVector)
     Return SetError(@error, @extended, $nSize = 0)
@@ -214,6 +336,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Get
+; Description ...: Return specified element with bounds checking.
+; Syntax ........: _Vector_Get(Const Byref $aVector, Const $nIndex)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $nIndex              - [const] a general number value.
+; Return values .: The value of the element, Null if the index doesn't exists
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Get(Const ByRef $aVector, Const $nIndex)
     If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, Null)
@@ -230,6 +366,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_GetValues
+; Description ...: Return the value's array of the Vector.
+; Syntax ........: _Vector_GetValues(Const Byref $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: The value's array of the Vector.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_GetValues(Const ByRef $aVector)
     Static Local $aEmptyContainer[0]
 
@@ -247,6 +396,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Reserve
+; Description ...: Requests that the vector's capacity be at least enough to contain $nCapacity elements.
+; Syntax ........: _Vector_Reserve(Byref $aVector, Const $nCapacity)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $nCapacity           - [const] a general number value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Reserve(ByRef $aVector, Const $nCapacity)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -269,6 +432,21 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Insert
+; Description ...: Inserts elements at the specified location in the Vector.
+; Syntax ........: _Vector_Insert(Byref $aVector, Const $nIndex, Const $vValue)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $nIndex              - [const] a general number value.
+;                  $vValue              - [const] a variant value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)
     If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, 0)
@@ -298,6 +476,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Push
+; Description ...: Appends the given element value to the end of the Vector.
+; Syntax ........: _Vector_Push(Byref $aVector, Const $vValue)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $vValue              - [const] a variant value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Push(ByRef $aVector, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -321,6 +513,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Pop
+; Description ...: Removes the last element of the container and returns it.
+; Syntax ........: _Vector_Pop(Byref $aVector)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+; Return values .: The value of the removed element.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Pop(ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, Null)
@@ -341,6 +546,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_PopFirst
+; Description ...: Removes the first element of the container and returns it.
+; Syntax ........: _Vector_PopFirst(Byref $aVector)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+; Return values .: The value of the removed element.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_PopFirst(ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, Null)
@@ -365,6 +583,21 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Set
+; Description ...: Changes the value of the element at the given index.
+; Syntax ........: _Vector_Set(Byref $aVector, Const $nIndex, Const $vValue)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $nIndex              - [const] a general number value.
+;                  $vValue              - [const] a variant value.
+; Return values .: 1 for success, Null otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, Null)
@@ -387,6 +620,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_AddVector
+; Description ...: Adds the values of the second vector to the first vector.
+; Syntax ........: _Vector_AddVector(Byref $aVector, Const Byref $aFromVector)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $aFromVector         - [in/out and const] an array of unknowns.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -423,6 +670,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Erase
+; Description ...: Erases the specified element from the Vector.
+; Syntax ........: _Vector_Erase(Byref $aVector, Const $nIndex)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $nIndex              - [const] a general number value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Erase(ByRef $aVector, Const $nIndex)
     If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, 0)
@@ -442,6 +703,21 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_EraseRange
+; Description ...: Erases the specified elements from the Vector.
+; Syntax ........: _Vector_EraseRange(Byref $aVector, Const $nIndexStart, Const $nIndexEnd)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $nIndexStart         - [const] a general number value.
+;                  $nIndexEnd           - [const] a general number value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_EraseRange(ByRef $aVector, Const $nIndexStart, Const $nIndexEnd)
     If $nIndexStart = $nIndexEnd Then
         Return _Vector_Erase($aVector, $nIndexStart)
@@ -473,6 +749,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_EraseValue
+; Description ...: Erases all of the elements with the specified value from the Vector.
+; Syntax ........: _Vector_EraseValue(Byref $aVector, Const $vValue)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $vValue              - [const] a variant value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_EraseValue(ByRef $aVector, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -517,6 +807,20 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Swap
+; Description ...: Swaps between the Vectors.
+; Syntax ........: _Vector_Swap(Byref $aVectorL, Byref $aVectorR)
+; Parameters ....: $aVectorL            - [in/out] an array of unknowns.
+;                  $aVectorR            - [in/out] an array of unknowns.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)
     If Not _Vector_IsVector($aVectorL) Then
         Return SetError(@error, 0, 0)
@@ -535,6 +839,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Clear
+; Description ...: Erases all elements from the container.
+; Syntax ........: _Vector_Clear(Byref $aVector)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......: After this call, size returns zero.
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Clear(ByRef $aVector)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -554,13 +871,28 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Find
+; Description ...: Checks whether the given value exists in the Vector.
+; Syntax ........: _Vector_Find(Const Byref $aVector, Const $vValue)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $vValue              - [const] a variant value.
+; Return values .: 1 if the value has been found, 0 otherwise.
+; Author ........: Nadav
+; Modified ......: Zvend
+; Remarks .......: Searches the value from the beggining of the Vector.
+; ...............: Sets @extended to the index of the first element contains the specified value, -1 otherwise.
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Find(Const ByRef $aVector, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
     EndIf
 
 	If $aVector[$__VECTOR_SIZE] = 0 Then
-		Return SetExtended(-1, False)
+		Return SetExtended(-1, 0)
 	EndIf
 
 
@@ -568,15 +900,30 @@ Func _Vector_Find(Const ByRef $aVector, Const $vValue)
 
     For $i = 0 To $aVector[$__VECTOR_SIZE] - 1
         If $aContainer[$i] = $vValue Then
-			Return SetExtended($i, True)
+			Return SetExtended($i, 1)
 		EndIf
     Next
 
-	Return SetExtended(-1, False)
+	Return SetExtended(-1, 0)
 EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_FindBackwards
+; Description ...: Checks whether the given value exists in the Vector.
+; Syntax ........: _Vector_FindBackwards(Const Byref $aVector, Const $vValue)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $vValue              - [const] a variant value.
+; Return values .: 1 if the value has been found, 0 otherwise.
+; Author ........: Zvend
+; Modified ......: 
+; Remarks .......: Searches the value from the end of the Vector.
+; ...............: Sets @extended to the index of the last element contains the specified value, -1 otherwise.
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_FindBackwards(Const ByRef $aVector, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
