@@ -370,14 +370,17 @@ Func _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)
         Return SetError(@error, 0, Null)
     EndIf
 
-    If Not _Vector_IsValidIndex($aVector, $nIndex, True) Then
-        Return SetError(@error, 0, $aVector[$__VECTOR_DEFAULT])
+    If $nIndex < 0 Or $nIndex >= $aVector[$__VECTOR_CAPACITY] Then
+        Return SetError(3, 0, 0)
     EndIf
 
-    Local $aContainer    = $aVector[$__VECTOR_BUFFER]
+    Local $aContainer = $aVector[$__VECTOR_BUFFER]
     $aContainer[$nIndex] = $vValue
-
     $aVector[$__VECTOR_BUFFER] = $aContainer
+
+	If $nIndex >= $aVector[$__VECTOR_SIZE] Then
+		$aVector[$__VECTOR_SIZE] = $nIndex + 1
+	EndIf
 
     Return 1
 EndFunc
