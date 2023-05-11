@@ -1,8 +1,8 @@
 #cs ----------------------------------------------------------------------------
 
  AutoIt Version: 3.3.16.1
- Author:       Zvend
- Discord:      Zvend#6666
+ Author(s):       Zvend       Abaddon
+ Discord(s):      Zvend#6666  Abaddon#9048
 
  Script Functions:
     _Vector_Init(Const $nCapacity = 32, Const $vDefaultValue = Null, Const $nModifier = 1.5) -> Vector
