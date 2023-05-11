@@ -221,6 +221,10 @@ Func _Vector_Get(Const ByRef $aVector, Const $nIndex)
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
+	If $aContainer[$nIndex] == "" And Not ($aVector[$__VECTOR_DEFAULT] == "") Then
+		Return $aVector[$__VECTOR_DEFAULT]
+	EndIf
+
     Return $aContainer[$nIndex]
 EndFunc
 
