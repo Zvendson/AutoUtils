@@ -590,7 +590,7 @@ EndFunc
 ; Parameters ....: $aVector             - [in/out] an array of unknowns.
 ;                  $nIndex              - [const] a general number value.
 ;                  $vValue              - [const] a variant value.
-; Return values .: 1 for success, Null otherwise.
+; Return values .: 1 for success, 0 otherwise.
 ; Author ........: Zvend
 ; Modified ......:
 ; Remarks .......:
@@ -600,7 +600,7 @@ EndFunc
 ; ===============================================================================================================================
 Func _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)
     If Not _Vector_IsVector($aVector) Then
-        Return SetError(@error, 0, Null)
+        Return SetError(@error, 0, 0)
     EndIf
 
     If $nIndex < 0 Or $nIndex >= $aVector[$__VECTOR_CAPACITY] Then
@@ -930,18 +930,18 @@ Func _Vector_FindBackwards(Const ByRef $aVector, Const $vValue)
     EndIf
 
 	If $aVector[$__VECTOR_SIZE] = 0 Then
-		Return SetExtended(-1, False)
+		Return SetExtended(-1, 0)
 	EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
     For $i = $aVector[$__VECTOR_SIZE] - 1 To 0 Step -1
         If $aContainer[$i] = $vValue Then
-			Return SetExtended($i, True)
+			Return SetExtended($i, 1)
 		EndIf
     Next
 
-	Return SetExtended(-1, False)
+	Return SetExtended(-1, 0)
 EndFunc
 
 
