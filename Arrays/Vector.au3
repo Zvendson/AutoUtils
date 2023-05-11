@@ -110,7 +110,7 @@ Global Enum _
 
 
 Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5)
-    If $nModifier <= 1 Then
+    If $nModifier < 1.5 Then
         Return SetError(1, 0, Null)
     EndIf
 
