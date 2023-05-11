@@ -152,11 +152,11 @@ Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemov
 
     Local $nSize = UBound($aArray)
     If $nSize <= 0 Then
-        Return SetError(3, 0, 0)
+        Return 1
     EndIf
 
     If $nIndex >= $nSize Or $nIndex < 0 Then
-        Return SetError(4, 0, 0)
+        Return SetError(3, 0, 0)
     EndIf
 
     Local $aCurrentCallbacks = $aArray[$nIndex]
