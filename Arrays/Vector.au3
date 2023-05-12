@@ -212,31 +212,6 @@ EndFunc
 
 
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: _Vector_HasSpace
-; Description ...: Checks whether the vector has enough space for $nSize elements.
-; Syntax ........: _Vector_HasSpace(Const Byref $aVector, Const $nSize, Const $bSkipVectorCheck)
-; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
-;                  $nSize               - [const] a general number value.
-;                  $bSkipVectorCheck    - [const] a boolean value.
-; Return values .: True if have enough space, False otherwise
-; Author ........: Zvend
-; Modified ......:
-; Remarks .......:
-; Related .......:
-; Link ..........:
-; Example .......: No
-; ===============================================================================================================================
-Func _Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)
-    If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
-        Return SetError(@error, 0, 0)
-    EndIf
-
-    Return $aVector[$__VECTOR_CAPACITY] - $aVector[$__VECTOR_SIZE] >= $nSize
-EndFunc
-
-
-
-; #FUNCTION# ====================================================================================================================
 ; Name ..........: _Vector_GetSize
 ; Description ...: Returns the number of elements in the Vector.
 ; Syntax ........: _Vector_GetSize(Const Byref $aVector)
@@ -660,7 +635,7 @@ Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
 	Local $nFromSize  = $aFromVector[$__VECTOR_SIZE]
 
 	;~ Eesize if needed
-	If Not _Vector_HasSpace($aVector, $nFromSize, True) Then
+	If Not __Vector_HasSpace($aVector, $nFromSize, True) Then
 		Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nSize + $nFromSize, $aVector[$__VECTOR_MODIFIER])
 
 		ReDim $aContainer[$nNewCapacity]
@@ -1017,6 +992,32 @@ Func __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVect
 
     Return 1
 EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: __Vector_HasSpace
+; Description ...: Checks whether the vector has enough space for $nSize elements.
+; Syntax ........: __Vector_HasSpace(Const Byref $aVector, Const $nSize, Const $bSkipVectorCheck)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $nSize               - [const] a general number value.
+;                  $bSkipVectorCheck    - [const] a boolean value.
+; Return values .: True if have enough space, False otherwise
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func __Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)
+    If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    Return $aVector[$__VECTOR_CAPACITY] - $aVector[$__VECTOR_SIZE] >= $nSize
+EndFunc
+
+
 
 Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
 	If $nModifier < 1.5 Then $nModifier = 1.5
