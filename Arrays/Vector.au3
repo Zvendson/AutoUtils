@@ -797,25 +797,8 @@ Func _Vector_EraseValue(ByRef $aVector, Const $vValue)
     Local $sValueType = VarGetType($vValue)
 
     For $v In _Vector_GetBuffer($aVector)
-        ;~ TODO: Overall specify better checking.
-        ;~ CLEANUP: Add a custom callback for self handling?
-        If VarGetType($v) <> $nValueType Then ContinueLoop
-
-        If $aVector[$__VECTOR_COMPARE] <> Null And Call($aVector[$__VECTOR_COMPARE], $v, $vValue) = 0 Then
-            ContinueLoop 
-        Else
-            Switch $nValueType
-                Case "Array"
-                    ;~ CLEANUP: also check array contents?
-                    If UBound($v) = UBound($vValue) Then ContinueLoop 
-                Case "Function"
-                    If FuncName($v) == FuncName($vValue) Then ContinueLoop
-                Case "DLLStruct"
-                    ;~ CLEANUP: Should use memcmp instead?
-                    If DllStructGetPtr($v) = DllStructGetPtr($vValue) Then ContinueLoop 
-                Case Else
-                    If $v = $vValue Then ContinueLoop
-            EndSwitch
+        If __Vector_Compare($aVector[$__VECTOR_COMPARE], $v, $vValue, $sValueType) = 0 Then
+            ContinueLoop
         EndIf
 
         _Vector_Push($aNewVector, $v)
