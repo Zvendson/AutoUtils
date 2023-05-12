@@ -40,10 +40,6 @@
 
 
 
-#include ".\..\Converter\Integer.au3"
-
-
-
 Global Enum _
     $__FLAGARRAY_CAPACITY, _
     $__FLAGARRAY_BUFFER  , _
@@ -61,7 +57,7 @@ Func _FlagArray_Init(Const $nCapacity = 32)
     Local $aContainer[$nGroups]
 
     For $i = 0 To $nGroups - 1
-        $aContainer[$i] = DWORD(0x00000000)
+        $aContainer[$i] = Int(0x00000000, 1)
     Next
 
     Local $aFlagArray[$__FLAGARRAY_PARAMS] 
