@@ -37,7 +37,7 @@
     __Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)                             -> Bool
     __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)                 -> (None)
     __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)        -> UInt
-    __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)                                  -> (None)
+    __Vector_SwapContainer(ByRef $aContainer, Const $nIndex1, Const $nIndex2)                                  -> (None)
     __Vector_Compare(Const ByRef $fuCompare, Const $vValue1, Const $vValue2)                                   -> UInt
 
  Description:
@@ -835,7 +835,7 @@ Func _Vector_Swap(ByRef $aVector, Const $nIndex1, Const $nIndex2)
         Return SetError(@error, 0, 0)
     EndIf
 
-    __Vector_ContainerSwap($aVector[$__VECTOR_BUFFER], $nIndex1, $nIndex2)
+    __Vector_SwapContainer($aVector[$__VECTOR_BUFFER], $nIndex1, $nIndex2)
 
     Return 1
 EndFunc
@@ -1130,12 +1130,12 @@ Func __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowI
         ;~ If the current element is smaller than the pivot
         If __Vector_Compare($aVector[$__VECTOR_COMPARE], $aContainer[$j], $vPivot) < 0 Then
             $i += 1
-            __Vector_ContainerSwap($aContainer, $i, $j)
+            __Vector_SwapContainer($aContainer, $i, $j)
         EndIf
     Next
 
     $i += 1
-    __Vector_ContainerSwap($aContainer, $i, $nHighIndex)
+    __Vector_SwapContainer($aContainer, $i, $nHighIndex)
 
     Return $i
 EndFunc
@@ -1143,9 +1143,9 @@ EndFunc
 
 
 ; #INTERNAL_USE_ONLY# ===========================================================================================================
-; Name ..........: __Vector_ContainerSwap
+; Name ..........: __Vector_SwapContainer
 ; Description ...: Swaps between the values of the specified elements.
-; Syntax ........: __Vector_ContainerSwap(Byref $aContainer, Const $nIndex1, Const $nIndex2)
+; Syntax ........: __Vector_SwapContainer(Byref $aContainer, Const $nIndex1, Const $nIndex2)
 ; Parameters ....: $aContainer          - [in/out] an array of unknowns.
 ;                  $nIndex1             - [const] a general number value.
 ;                  $nIndex2             - [const] a general number value.
@@ -1157,7 +1157,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)
+Func __Vector_SwapContainer(ByRef $aContainer, Const $nIndex1, Const $nIndex2)
     Local $vTemp = $aContainer[$nIndex1]
     $aContainer[$nIndex1] = $aContainer[$nIndex2]
     $aContainer[$nIndex2] = $vTemp
