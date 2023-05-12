@@ -744,7 +744,7 @@ Func _Vector_EraseRange(ByRef $aVector, Const $nIndexStart, Const $nIndexEnd)
     If Not __Vector_IsValidIndex($aVector, $nIndexStart, False) Then
         Return SetError(@error, 0, 0)
     EndIf
-    
+
     If Not __Vector_IsValidIndex($aVector, $nIndexEnd, True) Then
         Return SetError(@error, 1, 0)
     EndIf
@@ -794,7 +794,7 @@ Func _Vector_EraseValue(ByRef $aVector, Const $vValue)
                             $aVector[$__VECTOR_MODIFIER]  _
                         )
 
-    Local $nValueType = VarGetType($vValue)
+    Local $sValueType = VarGetType($vValue)
 
     For $v In _Vector_GetBuffer($aVector)
         ;~ TODO: Overall specify better checking.
@@ -969,7 +969,7 @@ EndFunc
 ;                  $vValue              - [const] a variant value.
 ; Return values .: 1 if the value has been found, 0 otherwise.
 ; Author ........: Zvend
-; Modified ......: 
+; Modified ......:
 ; Remarks .......: Searches the value from the end of the Vector.
 ; ...............: Sets @extended to the index of the last element contains the specified value, -1 otherwise.
 ; Related .......:
@@ -1001,10 +1001,6 @@ EndFunc
 Func _Vector_Sort(ByRef $aVector)
     If _Vector_GetSize($aVector) <= 1 Then
         Return SetError(@error, 0, @error = $VECTOR_NO_ERROR)
-    EndIf
-
-    If Not IsFunc($aVector[$__VECTOR_COMPARE]) Then
-        Return SetError($VECTOR_ERROR_NO_COMPARE_FUNCTION, 0, 0)
     EndIf
 
     __Vector_QuickSort($aVector, $aVector[$__VECTOR_BUFFER], 0, $aVector[$__VECTOR_SIZE] - 1)
@@ -1193,7 +1189,7 @@ EndFunc
 ; Parameters ....: $fuCompare           - [in/out and const] function (first class object).
 ;                  $vValue1             - [const] a variant value.
 ;                  $vValue2             - [const] a variant value.
-; Return values .: A negative number if the first was smaller, 0 if the values are equal, 
+; Return values .: A negative number if the first was smaller, 0 if the values are equal,
 ;                  and a positive number if the first was larger.
 ; Author ........: Nadav
 ; Modified ......:
