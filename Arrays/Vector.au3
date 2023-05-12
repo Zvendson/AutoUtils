@@ -107,6 +107,15 @@ Global Enum _
     $__VECTOR_BUFFER   , _
     $__VECTOR_PARAMS
 
+Global Enum _
+    $VECTOR_NO_ERROR                       , _
+    $VECTOR_ERROR_INVALID_VECTOR           , _
+    $VECTOR_ERROR_BAD_MODIFIER             , _
+    $VECTOR_ERROR_INVALID_PARAMS           , _
+    $VECTOR_ERROR_INVALID_COMPARE_FUNCTION , _
+    $VECTOR_ERROR_INDEX_OUT_OF_BOUNDS      , _
+    $VECTOR_ERROR_EMTPY_VECTOR      , _
+    $VECTOR_ERROR_NO_COMPARE_FUNCTION
 
 
 ; #FUNCTION# ====================================================================================================================
