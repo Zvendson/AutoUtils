@@ -82,12 +82,9 @@ Global Enum _
 ; Name ..........: _Vector_Init
 ; Description ...: Creates a new Vector.
 ; Syntax ........: _Vector_Init([$nCapacity = 32[, $vDefaultValue = Null[, $nModifier = 1.5[, $fuCompare = Null]]]])
-; Parameters ....: $nCapacity           - [optional] a general number value. Default is 32.
-;                  $vDefaultValue       - [optional] a variant value. Default is Null.
-;                  $nModifier           - [optional] a general number value. Default is 1.5.
-;                  $fuCompare           - [optional] function (first class object). Default is Null.
-;                                         Gets 2 comparable values and returns a negative number if the first was smaller,
-;                                         0 if the values are equal, and a positive number if the first was larger.
+; Parameters ....: $nCapacity           - [optional and const] a general number value. Default is 32.
+;                  $vDefaultValue       - [optional and const] a variant value. Default is Null.
+;                  $nModifier           - [optional and const] a general number value. Default is 1.5.
 ; Return values .: The new Vector.
 ; Author ........: Zvend
 ; Modified ......: Nadav
@@ -120,8 +117,10 @@ EndFunc
 ; Description ...: Sets the compare callback of the Vector.
 ; Syntax ........: _Vector_SetComparatorCallback(Byref $aVector, Const $fuCompare)
 ; Parameters ....: $aVector             - [in/out] an array of unknowns.
-;                  $fuCompare           - [const] function (first class object).
-; Return values .: 1 for success, 0 otherwise
+;                  $fuCompare           - [const] a function (first class object). Default is Null.
+;                                         Gets 2 comparable values and returns a negative number if the first was smaller,
+;                                         0 if the values are equal, and a positive number if the first was larger.
+; Return values .: 1 for success, 0 otherwise.
 ; Author ........: Nadav
 ; Modified ......:
 ; Remarks .......:
@@ -134,7 +133,7 @@ Func _Vector_SetComparatorCallback(ByRef $aVector, Const $fuCompare)
         Return SetError($VECTOR_ERROR_INVALID_COMPARE_FUNCTION, 0, 0)
     EndIf
 
-    $aVector[$__VECTOR_COMPARE]  = $fuCompare
+    $aVector[$__VECTOR_COMPARE] = $fuCompare
 
     Return 1
 EndFunc
