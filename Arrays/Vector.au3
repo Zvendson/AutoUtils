@@ -965,6 +965,18 @@ EndFunc
 
 #Region Internal Only
 
+Func __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)
+    If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    If $nIndex < 0 Or $nIndex >= $aVector[$__VECTOR_SIZE] Then
+        Return SetError($VECTOR_ERROR_INDEX_OUT_OF_BOUNDS, 0, 0)
+    EndIf
+
+    Return 1
+EndFunc
+
 Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
 	If $nModifier < 1.5 Then $nModifier = 1.5
 	If $nCapacity < 4   Then $nCapacity = 4
