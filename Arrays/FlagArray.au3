@@ -209,7 +209,8 @@ Func _FlagArray_Debug(Const ByRef $aFlagArray, Const $fuStream = "ConsoleWrite")
         Return SetError(@error, 0, 0)
     EndIf
 
-    Local $sOut = "{"
+    Local $sOut = "[FlagArray] [Size: " & _FlagArray_GetSize($aFlagArray) & ", Groups: " & _FlagArray_GetGroupSize($aFlagArray) & "]" & @LF
+    $sOut &= "Group  0: {"
 
     For $i = 0 To $aFlagArray[$__FLAGARRAY_CAPACITY] - 1
         $sOut &= StringFormat("%1d ", _FlagArray_GetFlag($aFlagArray, $i))
@@ -217,7 +218,7 @@ Func _FlagArray_Debug(Const ByRef $aFlagArray, Const $fuStream = "ConsoleWrite")
         If $i = $aFlagArray[$__FLAGARRAY_CAPACITY] - 1 Then
             ExitLoop
         ElseIf Mod($i + 1, 32) = 0 Then
-            $sOut = StringTrimRight($sOut, 1) & "}" & @LF & "{"
+            $sOut = StringTrimRight($sOut, 1) & "}" & @LF & "Group  " & __FlagArray_ConvertToGroup($i + 1) & ": {"
         ElseIf Mod($i + 1, 8) = 0 Then
             $sOut &= "  "
         EndIf
