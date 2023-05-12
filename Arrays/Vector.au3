@@ -363,7 +363,7 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Vector_Get(Const ByRef $aVector, Const $nIndex)
-    If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
+    If Not __Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, Null)
     EndIf
 
@@ -460,7 +460,7 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)
-    If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
+    If Not __Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, 0)
     EndIf
 
@@ -697,7 +697,7 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Vector_Erase(ByRef $aVector, Const $nIndex)
-    If Not _Vector_IsValidIndex($aVector, $nIndex, False) Then
+    If Not __Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, 0)
     EndIf
 
@@ -735,7 +735,7 @@ Func _Vector_EraseRange(ByRef $aVector, Const $nIndexStart, Const $nIndexEnd)
         Return _Vector_Erase($aVector, $nIndexStart)
     EndIf
 
-    If Not _Vector_IsValidIndex($aVector, $nIndexStart, False) Then
+    If Not __Vector_IsValidIndex($aVector, $nIndexStart, False) Then
         Return SetError(@error, 0, 0)
     EndIf
 
