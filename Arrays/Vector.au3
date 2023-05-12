@@ -1081,6 +1081,59 @@ Func __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)
     $aContainer[$nIndex2] = $vTemp
 EndFunc
 
+
+
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __Vector_Compare
+; Description ...: Compares the specified values.
+; Syntax ........: __Vector_Compare(Const Byref $fuCompare, Const $vValue1, Const $vValue2)
+; Parameters ....: $fuCompare           - [in/out and const] function (first class object).
+;                  $vValue1             - [const] a variant value.
+;                  $vValue2             - [const] a variant value.
+; Return values .: A negative number if the first was smaller, 0 if the values are equal, 
+;                  and a positive number if the first was larger.
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func __Vector_Compare(Const ByRef $fuCompare, Const $vValue1, Const $vValue2)
+
+    If $fuCompare <> Null Then
+        Return Call($fuCompare, $vValue1, $vValue2)
+    EndIf
+
+    Local $nValueType = VarGetType($vValue1)
+
+    If $nValueType <> VarGetType($vValue2) Then
+        Return SetError($VECTOR_ERROR_INVALID_COMPARISION, 0, 0)
+    EndIf
+
+    Switch $nValueType
+        Case "Array"
+            ;~ CLEANUP: also check array contents?
+            Return UBound($vValue1) - UBound($vValue2)
+
+        Case "Function"
+            If FuncName($vValue1) == FuncName($vValue2) Then
+                Return 0
+            ElseIf FuncName($vValue1) < FuncName($vValue2) Then
+                Return -1
+            Else
+                Return 1
+            EndIf
+
+        Case "DLLStruct"
+            ;~ CLEANUP: Should use memcmp instead?
+            Return DllStructGetPtr($vValue1) - DllStructGetPtr($vValue2)
+
+        Case Else
+            Return $vValue1 - $vValue2
+    EndSwitch
+EndFunc
+
 #EndRegion Internal Only
 
 
