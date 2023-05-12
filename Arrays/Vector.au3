@@ -96,7 +96,7 @@ Global Enum _
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5)
+Func _Vector_Init(Const $nCapacity = 32, Const $vDefaultValue = Null, Const $nModifier = 1.5)
     If $nModifier < 1.5 Then
         Return SetError($VECTOR_ERROR_BAD_MODIFIER, 0, Null)
     EndIf
