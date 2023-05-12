@@ -1163,19 +1163,21 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Vector_Compare(Const ByRef $fuCompare, Const $vValue1, Const $vValue2)
+Func __Vector_Compare(Const ByRef $fuCompare, Const $vValue1, Const $vValue2, $sValueType = Default)
 
     If $fuCompare <> Null Then
         Return Call($fuCompare, $vValue1, $vValue2)
     EndIf
 
-    Local $nValueType = VarGetType($vValue1)
+    If $sValueType = Default Then
+        $sValueType = VarGetType($vValue1)
+    EndIf
 
-    If $nValueType <> VarGetType($vValue2) Then
+    If $sValueType <> VarGetType($vValue2) Then
         Return SetError($VECTOR_ERROR_INVALID_COMPARISION, 0, 0)
     EndIf
 
-    Switch $nValueType
+    Switch $sValueType
         Case "Array"
             ;~ CLEANUP: also check array contents?
             Return UBound($vValue1) - UBound($vValue2)
