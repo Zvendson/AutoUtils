@@ -738,9 +738,9 @@ Func _Vector_EraseRange(ByRef $aVector, Const $nIndexStart, Const $nIndexEnd)
     If Not __Vector_IsValidIndex($aVector, $nIndexStart, False) Then
         Return SetError(@error, 0, 0)
     EndIf
-
-    If Not _Vector_IsValidIndex($aVector, $nIndexEnd, True) Then
-        Return SetError(4, 0, 0)
+    
+    If Not __Vector_IsValidIndex($aVector, $nIndexEnd, True) Then
+        Return SetError(@error, 1, 0)
     EndIf
 
     Local $nDiff      = Abs($nIndexStart - $nIndexEnd) + 1
