@@ -39,7 +39,7 @@
     __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)        -> UInt
     __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)                                  -> (None)
     __Vector_Compare(Const ByRef $fuCompare, Const $vValue1, Const $vValue2)                                   -> UInt
-    
+
  Description:
     This Vector "Class" implementation acts exactly like the stdlib vector from C++ just without typesafe values.
     Of course this will have massive struggle to actually go head to head with the c++ version and was never
@@ -146,13 +146,9 @@ Global Enum _
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null)
+Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5)
     If $nModifier < 1.5 Then
         Return SetError($VECTOR_ERROR_BAD_MODIFIER, 0, Null)
-    EndIf
-
-    If $fuCompare <> Null And Not IsFunc($fuCompare) Then
-        Return SetError($VECTOR_ERROR_INVALID_COMPARE_FUNCTION, 0, Null)
     EndIf
 
     Local $aContainer[$nCapacity]
@@ -162,9 +158,35 @@ Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5
     $aNewVector[$__VECTOR_DEFAULT]  = $vDefaultValue
     $aNewVector[$__VECTOR_MODIFIER] = $nModifier
     $aNewVector[$__VECTOR_BUFFER]   = $aContainer
-    $aNewVector[$__VECTOR_COMPARE]  = $fuCompare
+    $aNewVector[$__VECTOR_COMPARE]  = Null
 
     Return $aNewVector
+EndFunc
+
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_SetComparatorCallback
+; Description ...: Sets the compare callback of the Vector.
+; Syntax ........: _Vector_SetComparatorCallback(Byref $aVector, Const $fuCompare)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $fuCompare           - [const] function (first class object).
+; Return values .: 1 for success, 0 otherwise
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func _Vector_SetComparatorCallback(ByRef $aVector, Const $fuCompare)
+    If Not IsFunc($fuCompare) Then
+        Return SetError($VECTOR_ERROR_INVALID_COMPARE_FUNCTION, 0, 0)
+    EndIf
+
+    $aVector[$__VECTOR_COMPARE]  = $fuCompare
+
+    Return 1
 EndFunc
 
 
