@@ -14,7 +14,7 @@
     _Vector_GetModifier(Const ByRef $aVector)                                                                  -> Float
     _Vector_IsEmpty(Const ByRef $aVector)                                                                      -> Bool
     _Vector_Get(Const ByRef $aVector, Const $nIndex)                                                           -> Variant / Null
-    _Vector_GetValues(Const ByRef $aVector)                                                                    -> Array
+    _Vector_GetBuffer(Const ByRef $aVector)                                                                    -> Array
     _Vector_Reserve(ByRef $aVector, Const $nCapacity)                                                          -> Bool
     _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)                                               -> Bool
     _Vector_Push(ByRef $aVector, Const $vValue)                                                                -> Bool
@@ -81,7 +81,7 @@
 
     Now you can loop through your values like:
 
-        For $vValue In _Vector_GetValues($aVector)
+        For $vValue In _Vector_GetBuffer($aVector)
             ConsoleWrite($vValue & @LF)
         Next
 
@@ -361,9 +361,9 @@ EndFunc
 
 
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: _Vector_GetValues
+; Name ..........: _Vector_GetBuffer
 ; Description ...: Return a copy of the values array of the Vector.
-; Syntax ........: _Vector_GetValues(Const Byref $aVector)
+; Syntax ........: _Vector_GetBuffer(Const Byref $aVector)
 ; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
 ; Return values .: A copy of the values array of the Vector.
 ; Author ........: Zvend
@@ -373,7 +373,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_GetValues(Const ByRef $aVector)
+Func _Vector_GetBuffer(Const ByRef $aVector)
     Static Local $aEmptyContainer[0]
 
     If Not _Vector_IsVector($aVector) Then
@@ -633,7 +633,7 @@ Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
         Return SetError(@error, 0, 0)
     EndIf
 
-    Local $aValuesToAdd = _Vector_GetValues($aFromVector) ;~ Contains IsVector Check
+    Local $aValuesToAdd = _Vector_GetBuffer($aFromVector) ;~ Contains IsVector Check
 	If @error                    Then Return SetError(@error, 0, 0)
 	If UBound($aValuesToAdd) = 0 Then Return 1
 
@@ -770,7 +770,7 @@ Func _Vector_EraseValue(ByRef $aVector, Const $vValue)
                             $aVector[$__VECTOR_MODIFIER]  _
                         )
 
-    For $v In _Vector_GetValues($aVector)
+    For $v In _Vector_GetBuffer($aVector)
         ;~ TODO: Overall specify better checking.
         ;~ CLEANUP: Add a custom callback for self handling?
         Select
