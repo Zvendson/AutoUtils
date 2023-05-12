@@ -931,6 +931,19 @@ EndFunc
 
 
 
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_Sort
+; Description ...: Sorts the Vector.
+; Syntax ........: _Vector_Sort(ByRef $aVector)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func _Vector_Sort(ByRef $aVector)
     If _Vector_GetSize($aVector) <= 1 Then
         Return SetError(@error, 0, @error = $VECTOR_NO_ERROR)
