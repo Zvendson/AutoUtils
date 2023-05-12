@@ -139,7 +139,7 @@ Global Enum _
 ; ===============================================================================================================================
 Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null)
     If $nModifier < 1.5 Then
-        Return SetError(1, 0, Null)
+        Return SetError($VECTOR_ERROR_BAD_MODIFIER, 0, Null)
     EndIf
 
     If $fuCompare <> Null And Not IsFunc($fuCompare) Then
@@ -175,11 +175,11 @@ EndFunc
 ; ===============================================================================================================================
 Func _Vector_IsVector(Const ByRef $aVector)
     If Not IsArray($aVector) Then
-        Return SetError(1, 0, 0)
+        Return SetError($VECTOR_ERROR_INVALID_VECTOR, 0, 0)
     EndIf
 
     If UBound($aVector) <> $__VECTOR_PARAMS Then
-        Return SetError(2, 0, 0)
+        Return SetError($VECTOR_ERROR_INVALID_PARAMS, 0, 0)
     EndIf
 
     Return 1
@@ -549,7 +549,7 @@ Func _Vector_Pop(ByRef $aVector)
     EndIf
 
     If $aVector[$__VECTOR_SIZE] <= 0 Then
-        Return SetError(3, 0, $aVector[$__VECTOR_DEFAULT])
+        Return SetError($VECTOR_ERROR_EMTPY_VECTOR, 0, $aVector[$__VECTOR_DEFAULT])
     EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
@@ -582,7 +582,7 @@ Func _Vector_PopFirst(ByRef $aVector)
     EndIf
 
     If $aVector[$__VECTOR_SIZE] <= 0 Then
-        Return SetError(3, 0, $aVector[$__VECTOR_DEFAULT])
+        Return SetError($VECTOR_ERROR_EMTPY_VECTOR, 0, $aVector[$__VECTOR_DEFAULT])
     EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
@@ -621,7 +621,7 @@ Func _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)
     EndIf
 
     If $nIndex < 0 Or $nIndex >= $aVector[$__VECTOR_CAPACITY] Then
-        Return SetError(3, 0, 0)
+        Return SetError($VECTOR_ERROR_INDEX_OUT_OF_BOUNDS, 0, 0)
     EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
