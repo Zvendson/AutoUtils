@@ -32,7 +32,7 @@
     _Vector_Sort(Const ByRef $aVector, Const $vValue)                                                          -> Bool
 
  Internal Functions:
-    __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)                                       -> UInt
+    __Vector_CalculateCapacity($nCapacity, Const $nRequiredSize, $nModifier)                                       -> UInt
     __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)                        -> Bool
     __Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)                             -> Bool
     __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)                 -> (None)
@@ -414,7 +414,7 @@ Func _Vector_Reserve(ByRef $aVector, Const $nCapacity)
     EndIf
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
-    Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nCapacity, $aVector[$__VECTOR_MODIFIER])
+    Local $nNewCapacity = __Vector_CalculateCapacity($aVector[$__VECTOR_CAPACITY], $nCapacity, $aVector[$__VECTOR_MODIFIER])
 
     ReDim $aContainer[$nNewCapacity]
 
@@ -450,7 +450,7 @@ Func _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
     If $nNextSize > $aVector[$__VECTOR_CAPACITY] Then
-        Local $nNewSize = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nNextSize, $aVector[$__VECTOR_MODIFIER])
+        Local $nNewSize = __Vector_CalculateCapacity($aVector[$__VECTOR_CAPACITY], $nNextSize, $aVector[$__VECTOR_MODIFIER])
         ReDim $aContainer[$nNewSize]
         $aVector[$__VECTOR_CAPACITY] = $nNewSize
     EndIf
@@ -493,7 +493,7 @@ Func _Vector_Push(ByRef $aVector, Const $vValue)
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
     If $nNextSize > $aVector[$__VECTOR_CAPACITY] Then
-        Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nNextSize, $aVector[$__VECTOR_MODIFIER])
+        Local $nNewCapacity = __Vector_CalculateCapacity($aVector[$__VECTOR_CAPACITY], $nNextSize, $aVector[$__VECTOR_MODIFIER])
         ReDim $aContainer[$nNewCapacity]
         $aVector[$__VECTOR_CAPACITY] = $nNewCapacity
     EndIf
@@ -643,7 +643,7 @@ Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
 
 	;~ Eesize if needed
 	If Not __Vector_HasSpace($aVector, $nFromSize, True) Then
-		Local $nNewCapacity = __Vector_CalculateSize($aVector[$__VECTOR_CAPACITY], $nSize + $nFromSize, $aVector[$__VECTOR_MODIFIER])
+		Local $nNewCapacity = __Vector_CalculateCapacity($aVector[$__VECTOR_CAPACITY], $nSize + $nFromSize, $aVector[$__VECTOR_MODIFIER])
 
 		ReDim $aContainer[$nNewCapacity]
 		$aVector[$__VECTOR_CAPACITY] = $nNewCapacity
@@ -1045,7 +1045,22 @@ EndFunc
 
 
 
-Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __Vector_CalculateCapacity
+; Description ...: Calculates the capacity for the specified required size and modifier.
+; Syntax ........: __Vector_CalculateCapacity($nCapacity, Const $nRequiredSize, $nModifier)
+; Parameters ....: $nCapacity           - a general number value.
+;                  $nRequiredSize       - [const] a general number value.
+;                  $nModifier           - a general number value.
+; Return values .: The capacity.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func __Vector_CalculateCapacity($nCapacity, Const $nRequiredSize, $nModifier)
 	If $nModifier < 1.5 Then $nModifier = 1.5
 	If $nCapacity < 4   Then $nCapacity = 4
 
