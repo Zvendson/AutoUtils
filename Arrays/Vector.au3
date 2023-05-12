@@ -1125,7 +1125,7 @@ Func __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowI
 
     For $j = $nLowIndex To $nHighIndex - 1
         ;~ If the current element is smaller than the pivot
-        If Call($aVector[$__VECTOR_COMPARE], $aContainer[$j], $vPivot) < 0 Then
+        If __Vector_Compare($aVector[$__VECTOR_COMPARE], $aContainer[$j], $vPivot) < 0 Then
             $i += 1
             __Vector_ContainerSwap($aContainer, $i, $j)
         EndIf
