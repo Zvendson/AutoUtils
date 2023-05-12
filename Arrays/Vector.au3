@@ -989,6 +989,21 @@ EndFunc
 
 
 
+Func _Vector_Sort(ByRef $aVector)
+    If _Vector_GetSize($aVector) <= 1 Then
+        Return SetError(@error, 0, @error = $VECTOR_NO_ERROR)
+    EndIf
+
+    If Not IsFunc($aVector[$__VECTOR_COMPARE]) Then
+        Return SetError($VECTOR_ERROR_NO_COMPARE_FUNCTION, 0, 0)
+    EndIf
+
+    __Vector_QuickSort($aVector, $aVector[$__VECTOR_BUFFER], 0, $aVector[$__VECTOR_SIZE] - 1)
+    Return 1
+EndFunc
+
+
+
 #Region Internal Only
 
 Func __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)
@@ -1012,6 +1027,47 @@ Func __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)
     WEnd
 
     Return $nCapacity
+EndFunc
+
+
+
+Func __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)
+    If $nLowIndex >= $nHighIndex Then Return
+
+    Local $nPartitionIndex = __Vector_QuickSortPartition($aVector, $aContainer, $nLowIndex, $nHighIndex)
+
+    __Vector_QuickSort($aVector, $aContainer, $nLowIndex, $nPartitionIndex - 1)
+    __Vector_QuickSort($aVector, $aContainer, $nPartitionIndex + 1, $nHighIndex)
+EndFunc
+
+
+
+Func __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)
+    ;~ Choose the Pivot as the last index.
+    Local $vPivot = $aContainer[$nHighIndex]
+
+    Local $i = $nLowIndex - 1
+
+    For $j = $nLowIndex To $nHighIndex - 1
+        ;~ If the current element is smaller than the pivot
+        If Call($aVector[$__VECTOR_COMPARE], $aContainer[$j], $vPivot) < 0 Then
+            $i += 1
+            __Vector_ContainerSwap($aContainer, $i, $j)
+        EndIf
+    Next
+
+    $i += 1
+    __Vector_ContainerSwap($aContainer, $i, $nHighIndex)
+
+    Return $i
+EndFunc
+
+
+
+Func __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)
+    Local $vTemp = $aContainer[$nIndex1]
+    $aContainer[$nIndex1] = $aContainer[$nIndex2]
+    $aContainer[$nIndex2] = $vTemp
 EndFunc
 
 #EndRegion Internal Only
