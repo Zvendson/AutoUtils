@@ -821,8 +821,39 @@ EndFunc
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _Vector_Swap
+; Description ...: Swaps between the values of the specified elements in the Vector.
+; Syntax ........: _Vector_Swap(Byref $aVector, Const $nIndex1, Const $nIndex2)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $nIndex1             - [const] a general number value.
+;                  $nIndex2             - [const] a general number value.
+; Return values .: 1 for success, 0 otherwise.
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func _Vector_Swap(ByRef $aVector, Const $nIndex1, Const $nIndex2)
+    If Not __Vector_IsValidIndex($aVector, $nIndex1, False) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    If Not __Vector_IsValidIndex($aVector, $nIndex2, True) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    __Vector_ContainerSwap($aVector[$__VECTOR_BUFFER], $nIndex1, $nIndex2)
+
+    Return 1
+EndFunc
+
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Vector_SwapVectors
 ; Description ...: Swaps between the Vectors.
-; Syntax ........: _Vector_Swap(Byref $aVectorL, Byref $aVectorR)
+; Syntax ........: _Vector_SwapVectors(Byref $aVectorL, Byref $aVectorR)
 ; Parameters ....: $aVectorL            - [in/out] an array of unknowns.
 ;                  $aVectorR            - [in/out] an array of unknowns.
 ; Return values .: 1 for success, 0 otherwise.
@@ -833,7 +864,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)
+Func _Vector_SwapVectors(ByRef $aVectorL, ByRef $aVectorR)
     If Not _Vector_IsVector($aVectorL) Then
         Return SetError(@error, 0, 0)
     EndIf
