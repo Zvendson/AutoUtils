@@ -7,7 +7,7 @@
  Script Functions:
     Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null) -> Vector
     _Vector_IsVector(Const ByRef $aVector)                                                                     -> Bool
-    _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)                         -> Bool
+    _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex)                                                  -> Bool
     _Vector_GetSize(Const ByRef $aVector)                                                                      -> UInt
     _Vector_GetCapacity(Const ByRef $aVector)                                                                  -> UInt
     _Vector_GetDefaultValue(Const ByRef $aVector)                                                              -> DefaultValue / Null
@@ -38,7 +38,8 @@
     __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)                 -> (None)
     __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)        -> UInt
     __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)                                  -> (None)
-
+    __Vector_Compare(Const ByRef $fuCompare, Const $vValue1, Const $vValue2)                                   -> UInt
+    
  Description:
     This Vector "Class" implementation acts exactly like the stdlib vector from C++ just without typesafe values.
     Of course this will have massive struggle to actually go head to head with the c++ version and was never
@@ -123,8 +124,8 @@ Global Enum _
     $VECTOR_ERROR_INVALID_COMPARE_FUNCTION , _
     $VECTOR_ERROR_INDEX_OUT_OF_BOUNDS      , _
     $VECTOR_ERROR_EMTPY_VECTOR             , _
-    $VECTOR_ERROR_INVALID_COMPARISION      , _
-    $VECTOR_ERROR_NO_COMPARE_FUNCTION
+    $VECTOR_ERROR_INVALID_COMPARISION
+
 
 
 ; #FUNCTION# ====================================================================================================================
@@ -135,8 +136,8 @@ Global Enum _
 ;                  $vDefaultValue       - [optional] a variant value. Default is Null.
 ;                  $nModifier           - [optional] a general number value. Default is 1.5.
 ;                  $fuCompare           - [optional] function (first class object). Default is Null.
-;                                         Gets 2 comparable values and returns -1 if the first was smaller, 
-;                                         0 if the values are equal, 1 if the first was larger.
+;                                         Gets 2 comparable values and returns a negative number if the first was smaller,
+;                                         0 if the values are equal, and a positive number if the first was larger.
 ; Return values .: The new Vector.
 ; Author ........: Zvend
 ; Modified ......: Nadav
@@ -1019,6 +1020,7 @@ Func __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVect
 
     Return 1
 EndFunc
+
 
 
 ; #FUNCTION# ====================================================================================================================
