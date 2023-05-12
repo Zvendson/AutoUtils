@@ -991,6 +991,22 @@ EndFunc
 
 #Region Internal Only
 
+
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __Vector_IsValidIndex
+; Description ...: Checks whether the index is a valid for the Vector.
+; Syntax ........: __Vector_IsValidIndex(Const Byref $aVector, Const $nIndex, Const $bSkipVectorCheck)
+; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
+;                  $nIndex              - [const] a general number value.
+;                  $bSkipVectorCheck    - [const] a boolean value.
+; Return values .: 1 if the index is valid, 0 otherwise.
+; Author ........: Zvend
+; Modified ......: Nadav
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)
     If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
@@ -1042,6 +1058,22 @@ EndFunc
 
 
 
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __Vector_QuickSort
+; Description ...: Sorts the Vector using Quicksort with HighIndex-Pivot.
+; Syntax ........: __Vector_QuickSort(Byref $aVector, Byref $aContainer, Const $nLowIndex, Const $nHighIndex)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $aContainer          - [in/out] an array of unknowns.
+;                  $nLowIndex           - [const] a general number value.
+;                  $nHighIndex          - [const] a general number value.
+; Return values .: None
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)
     If $nLowIndex >= $nHighIndex Then Return
 
@@ -1053,6 +1085,22 @@ EndFunc
 
 
 
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __Vector_QuickSortPartition
+; Description ...: Moves all of the values that are smaller
+; Syntax ........: __Vector_QuickSortPartition(Byref $aVector, Byref $aContainer, Const $nLowIndex, Const $nHighIndex)
+; Parameters ....: $aVector             - [in/out] an array of unknowns.
+;                  $aContainer          - [in/out] an array of unknowns.
+;                  $nLowIndex           - [const] a general number value.
+;                  $nHighIndex          - [const] a general number value.
+; Return values .: Returns the Partition's pivot.
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)
     ;~ Choose the Pivot as the last index.
     Local $vPivot = $aContainer[$nHighIndex]
