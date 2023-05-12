@@ -23,9 +23,9 @@
     __FlagArray_ConvertToGroup(Const $nIndex)
 
  Description:
-    The Flag Array is a very storage efficient BitMasl for setting & getting flags.
+    The Flag Array is a very storage efficient BitMask for setting & getting flags.
     It can store 32 bool values in one array index and this 'class' let you set
-    a very large amount booleans in an array which is super tiny and fast.
+    a very large amount of booleans in an array which is super tiny and fast.
 
     The main reason i made this class is for storing bitmasks into packets or
     getting bitmasks from received packets. No matter if its socket or inter
