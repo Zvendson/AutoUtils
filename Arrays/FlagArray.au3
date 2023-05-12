@@ -12,9 +12,9 @@
     _FlagArray_GetFlag(Const ByRef $aFlagArray, Const $nIndex)                                  -> Bool
     _FlagArray_SetFlag(ByRef $aFlagArray, Const $nIndex, Const $bBool)                          -> Bool
     _FlagArray_SetGroup(ByRef $aFlagArray, Const $nGroup, Const $nBitMask)                      -> Bool
-    _FlagArray_GetGroup(ByRef $aFlagArray, Const $nGroup)                                       -> DWORD
-    _FlagArray_GetSize(ByRef $aFlagArray)                                                       -> Int32
-    _FlagArray_GetGroupSize(ByRef $aFlagArray)                                                  -> Int32
+    _FlagArray_GetGroup(Const ByRef $aFlagArray, Const $nGroup)                                 -> DWORD
+    _FlagArray_GetSize(Const ByRef $aFlagArray)                                                 -> Int32
+    _FlagArray_GetGroupSize(Const ByRef $aFlagArray)                                            -> Int32
     _FlagArray_Debug(Const ByRef $aFlagArray, Const $fuStream = "ConsoleWrite")                 -> Bool
 
  Internal Functions:
@@ -172,7 +172,7 @@ EndFunc
 
 
 
-Func _FlagArray_GetGroup(ByRef $aFlagArray, Const $nGroup)
+Func _FlagArray_GetGroup(Const ByRef $aFlagArray, Const $nGroup)
     If Not _FlagArray_IsValidGroup($aFlagArray, $nGroup, False) Then
         Return SetError(@error, 0, 0)
     EndIf
@@ -184,7 +184,7 @@ EndFunc
 
 
 
-Func _FlagArray_GetSize(ByRef $aFlagArray)
+Func _FlagArray_GetSize(Const ByRef $aFlagArray)
     If Not _FlagArray_IsFlagArray($aFlagArray) Then
         Return SetError(@error, 0, 0)
     EndIf
@@ -194,7 +194,7 @@ EndFunc
 
 
 
-Func _FlagArray_GetGroupSize(ByRef $aFlagArray)
+Func _FlagArray_GetGroupSize(Const ByRef $aFlagArray)
     If Not _FlagArray_IsFlagArray($aFlagArray) Then
         Return SetError(@error, 0, 0)
     EndIf
