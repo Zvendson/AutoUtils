@@ -32,7 +32,7 @@
     _Vector_Sort(Const ByRef $aVector, Const $vValue)                                                          -> Bool
 
  Internal Functions:
-    __Vector_CalculateCapacity($nCapacity, Const $nRequiredSize, $nModifier)                                       -> UInt
+    __Vector_CalculateCapacity($nCapacity, Const $nRequiredSize, $nModifier)                                   -> UInt
     __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)                        -> Bool
     __Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)                             -> Bool
     __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)                 -> (None)
