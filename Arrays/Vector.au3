@@ -1139,6 +1139,21 @@ EndFunc
 
 
 
+; #INTERNAL_USE_ONLY# ===========================================================================================================
+; Name ..........: __Vector_ContainerSwap
+; Description ...: Swaps between the values of the specified elements.
+; Syntax ........: __Vector_ContainerSwap(Byref $aContainer, Const $nIndex1, Const $nIndex2)
+; Parameters ....: $aContainer          - [in/out] an array of unknowns.
+;                  $nIndex1             - [const] a general number value.
+;                  $nIndex2             - [const] a general number value.
+; Return values .: None
+; Author ........: Nadav
+; Modified ......:
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
 Func __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)
     Local $vTemp = $aContainer[$nIndex1]
     $aContainer[$nIndex1] = $aContainer[$nIndex2]
