@@ -50,57 +50,7 @@
 
 #ce ----------------------------------------------------------------------------
 
-#cs - Guide --------------------------------------------------------------------
 
- How To Use:
-    Initialize your vector like:
-
-        Local $aVector = _Vector_Init(4)
-
-    This will create an vector of size 4 and a current size of 0.
-    Empty fields are always set to Null as default.
-    Now Set your values like:
-
-        _Vector_Push($aVector, "Test 1")
-        _Vector_Push($aVector, "Test 2")
-        _Vector_Push($aVector, "Test 3")
-        _Vector_Push($aVector, "Test")
-        _Vector_Push($aVector, "Test 4")
-        _Vector_Push($aVector, "Test")
-        _Vector_Push($aVector, "Test 5")
-        _Vector_Set($aVector, 2, "Ops!")
-        _Vector_Set($aVector, 50, "Not gonna happen") ;~ Sets the error flag
-        _Vector_Insert($aVector, 3, "Get outta here!")
-
-    If you sharpened your eyes you see that the vector got filled with way more values that it could actually fit in.
-    as soon "Test 4" got pushed to the vector, the vector's capacity increased to 6 and then took the "Test 4" in.
-    After the 6th value it will increase its capacity again to 9. _Vector_Set should be self explanatory.
-    Using _Vector_Set above its capacity will cause an error and wont affect the vector at all.
-    _Vector_Insert does what it says. it puts "Get outta here!" at index 3 and every value from index 3 gets set one
-    place behind. so Index 3 will be moved to index 4 and then "Get outta here!" is set to index 3. It also increases
-    the capacity if needed.
-
-    Now you can loop through your values like:
-
-        For $vValue In _Vector_GetBuffer($aVector)
-            ConsoleWrite($vValue & @LF)
-        Next
-
-    Or like:
-
-        For $i = 0 To _Vector_GetSize($aVector) - 1
-            ConsoleWrite($i & " = " & _Vector_Get($aVector, $i) & @LF)
-        Next
-
-    And delete values with:
-
-        _Vector_EraseValue($aVector, "Test") ;~ Will remove all entries with the value "Test"!
-        _Vector_Erase($aVector, 1)
-        _Vector_Clear($aVector)
-        _Vector_EraseRange($aVector, 2, 4) ;~ Removes index 2, 3 and 4
-
-
-#ce ----------------------------------------------------------------------------
 
 #include-once
 #AutoIt3Wrapper_Au3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6 -w 7
