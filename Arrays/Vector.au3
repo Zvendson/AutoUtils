@@ -1,36 +1,43 @@
 #cs ----------------------------------------------------------------------------
 
- AutoIt Version: 3.3.16.1
+ AutoIt Version:  3.3.16.1
  Author(s):       Zvend       Nadav
  Discord(s):      Zvend#6666  Abaddon#9048
 
  Script Functions:
-    _Vector_Init(Const $nCapacity = 32, Const $vDefaultValue = Null, Const $nModifier = 1.5) -> Vector
-    _Vector_IsVector(Const ByRef $aVector)                                                   -> Bool
-    _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)       -> Bool
-    _Vector_GetSize(Const ByRef $aVector)                                                    -> UInt
-    _Vector_GetCapacity(Const ByRef $aVector)                                                -> UInt
-    _Vector_GetDefaultValue(Const ByRef $aVector)                                            -> DefaultValue / Null
-    _Vector_GetModifier(Const ByRef $aVector)                                                -> Float
-    _Vector_IsEmpty(Const ByRef $aVector)                                                    -> Bool
-    _Vector_Get(Const ByRef $aVector, Const $nIndex)                                         -> Variant / Null
-    _Vector_GetValues(Const ByRef $aVector)                                                  -> Array
-    _Vector_Reserve(ByRef $aVector, Const $nCapacity)                                        -> Bool
-    _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)                             -> Bool
-    _Vector_Push(ByRef $aVector, Const $vValue)                                              -> Bool
-    _Vector_Pop(ByRef $aVector)                                                              -> Variant / DefaultValue / Null
-    _Vector_PopFirst(ByRef $aVector)                                                         -> Variant / DefaultValue / Null
-    _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)                                -> Bool
-    _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)                              -> Bool
-    _Vector_Erase(ByRef $aVector, Const $nIndex)                                             -> Bool
-    _Vector_EraseValue(ByRef $aVector, Const $vValue)                                        -> Bool
-    _Vector_Swap(ByRef $aVectorL, ByRef $aVectorR)                                           -> Bool
-    _Vector_Clear(ByRef $aVector)                                                            -> Bool
-    _Vector_Find(Const ByRef $aVector, Const $vValue)                                        -> Bool @extended = index
-    _Vector_FindBackwards(Const ByRef $aVector, Const $vValue)                               -> Bool @extended = index
+    Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null) -> Vector
+    _Vector_IsVector(Const ByRef $aVector)                                                                     -> Bool
+    _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)                         -> Bool
+    _Vector_GetSize(Const ByRef $aVector)                                                                      -> UInt
+    _Vector_GetCapacity(Const ByRef $aVector)                                                                  -> UInt
+    _Vector_GetDefaultValue(Const ByRef $aVector)                                                              -> DefaultValue / Null
+    _Vector_GetModifier(Const ByRef $aVector)                                                                  -> Float
+    _Vector_IsEmpty(Const ByRef $aVector)                                                                      -> Bool
+    _Vector_Get(Const ByRef $aVector, Const $nIndex)                                                           -> Variant / Null
+    _Vector_GetValues(Const ByRef $aVector)                                                                    -> Array
+    _Vector_Reserve(ByRef $aVector, Const $nCapacity)                                                          -> Bool
+    _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)                                               -> Bool
+    _Vector_Push(ByRef $aVector, Const $vValue)                                                                -> Bool
+    _Vector_Pop(ByRef $aVector)                                                                                -> Variant / DefaultValue / Null
+    _Vector_PopFirst(ByRef $aVector)                                                                           -> Variant / DefaultValue / Null
+    _Vector_Set(ByRef $aVector, Const $nIndex, Const $vValue)                                                  -> Bool
+    _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)                                                -> Bool
+    _Vector_Erase(ByRef $aVector, Const $nIndex)                                                               -> Bool
+    _Vector_EraseValue(ByRef $aVector, Const $vValue)                                                          -> Bool
+    _Vector_Swap(ByRef $aVector, Const $nIndex1, Const $nIndex2)                                               -> Bool
+    _Vector_SwapVectors(ByRef $aVectorL, ByRef $aVectorR)                                                      -> Bool
+    _Vector_Clear(ByRef $aVector)                                                                              -> Bool
+    _Vector_Find(Const ByRef $aVector, Const $vValue)                                                          -> Bool @extended = index
+    _Vector_FindBackwards(Const ByRef $aVector, Const $vValue)                                                 -> Bool @extended = index
+    _Vector_Sort(Const ByRef $aVector, Const $vValue)                                                          -> Bool
 
  Internal Functions:
-    __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)                     -> UInt
+    __Vector_CalculateSize($nCapacity, Const $nRequiredSize, $nModifier)                                       -> UInt
+    __Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)                        -> Bool
+    __Vector_HasSpace(Const ByRef $aVector, Const $nSize, Const $bSkipVectorCheck)                             -> Bool
+    __Vector_QuickSort(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)                 -> (None)
+    __Vector_QuickSortPartition(ByRef $aVector, ByRef $aContainer, Const $nLowIndex, Const $nHighIndex)        -> UInt
+    __Vector_ContainerSwap(ByRef $aContainer, Const $nIndex1, Const $nIndex2)                                  -> (None)
 
  Description:
     This Vector "Class" implementation acts exactly like the stdlib vector from C++ just without typesafe values.
