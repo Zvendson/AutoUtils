@@ -751,7 +751,7 @@ EndFunc
 ;                  $vValue              - [const] a variant value.
 ; Return values .: 1 for success, 0 otherwise.
 ; Author ........: Zvend
-; Modified ......:
+; Modified ......: Nadav
 ; Remarks .......:
 ; Related .......:
 ; Link ..........:
@@ -770,26 +770,29 @@ Func _Vector_EraseValue(ByRef $aVector, Const $vValue)
                             $aVector[$__VECTOR_MODIFIER]  _
                         )
 
+    Local $nValueType = VarGetType($vValue)
+
     For $v In _Vector_GetBuffer($aVector)
         ;~ TODO: Overall specify better checking.
         ;~ CLEANUP: Add a custom callback for self handling?
-        Select
-            Case IsString($v) And IsString($vValue) And $v == $vValue
-                ContinueLoop
+        If VarGetType($v) <> $nValueType Then ContinueLoop
 
-            Case IsArray($v) And IsArray($vValue) And UBound($v) = UBound($vValue)
-                ContinueLoop ;~ CLEANUP: also check array contents?
-
-            Case IsFunc($v) And IsFunc($vValue) And FuncName($v) == FuncName($vValue)
-                ContinueLoop
-
-            Case IsDllStruct($v) And IsDllStruct($vValue) And DllStructGetPtr($v) = DllStructGetPtr($vValue)
-                ContinueLoop ;~ CLEANUP: Should i do a memcmp instead?
-
-            Case $v = $vValue
-                ContinueLoop
-
-        EndSelect
+        If $aVector[$__VECTOR_COMPARE] <> Null And Call($aVector[$__VECTOR_COMPARE], $v, $vValue) = 0 Then
+            ContinueLoop 
+        Else
+            Switch $nValueType
+                Case "Array"
+                    ;~ CLEANUP: also check array contents?
+                    If UBound($v) = UBound($vValue) Then ContinueLoop 
+                Case "Function"
+                    If FuncName($v) == FuncName($vValue) Then ContinueLoop
+                Case "DLLStruct"
+                    ;~ CLEANUP: Should use memcmp instead?
+                    If DllStructGetPtr($v) = DllStructGetPtr($vValue) Then ContinueLoop 
+                Case Else
+                    If $v = $vValue Then ContinueLoop
+            EndSwitch
+        EndIf
 
         _Vector_Push($aNewVector, $v)
     Next
