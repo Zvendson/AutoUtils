@@ -105,6 +105,7 @@ Global Enum _
     $__VECTOR_DEFAULT  , _
     $__VECTOR_MODIFIER , _
     $__VECTOR_BUFFER   , _
+    $__VECTOR_COMPARE  , _
     $__VECTOR_PARAMS
 
 Global Enum _
@@ -121,21 +122,28 @@ Global Enum _
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _Vector_Init
 ; Description ...: Creates a new Vector.
-; Syntax ........: _Vector_Init([$nCapacity = 32[, $vDefaultValue = Null[, $nModifier = 1.5]]])
+; Syntax ........: _Vector_Init([$nCapacity = 32[, $vDefaultValue = Null[, $nModifier = 1.5[, $fuCompare = Null]]]])
 ; Parameters ....: $nCapacity           - [optional] a general number value. Default is 32.
 ;                  $vDefaultValue       - [optional] a variant value. Default is Null.
 ;                  $nModifier           - [optional] a general number value. Default is 1.5.
+;                  $fuCompare           - [optional] function (first class object). Default is Null.
+;                                         Gets 2 comparable values and returns -1 if the first was smaller, 
+;                                         0 if the values are equal, 1 if the first was larger.
 ; Return values .: The new Vector.
 ; Author ........: Zvend
-; Modified ......:
+; Modified ......: Nadav
 ; Remarks .......:
 ; Related .......:
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5)
+Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null)
     If $nModifier < 1.5 Then
         Return SetError(1, 0, Null)
+    EndIf
+
+    If $fuCompare <> Null And Not IsFunc($fuCompare) Then
+        Return SetError($VECTOR_ERROR_INVALID_COMPARE_FUNCTION, 0, Null)
     EndIf
 
     Local $aContainer[$nCapacity]
@@ -145,7 +153,7 @@ Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5
     $aNewVector[$__VECTOR_DEFAULT]  = $vDefaultValue
     $aNewVector[$__VECTOR_MODIFIER] = $nModifier
     $aNewVector[$__VECTOR_BUFFER]   = $aContainer
-
+    $aNewVector[$__VECTOR_COMPARE]  = $fuCompare
 
     Return $aNewVector
 EndFunc
