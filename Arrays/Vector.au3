@@ -362,10 +362,10 @@ EndFunc
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _Vector_GetValues
-; Description ...: Return the value's array of the Vector.
+; Description ...: Return a copy of the values array of the Vector.
 ; Syntax ........: _Vector_GetValues(Const Byref $aVector)
 ; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
-; Return values .: The value's array of the Vector.
+; Return values .: A copy of the values array of the Vector.
 ; Author ........: Zvend
 ; Modified ......:
 ; Remarks .......:
