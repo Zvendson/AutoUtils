@@ -35,14 +35,16 @@ Func Test()
 
 	ConsoleWrite(@LF & "<<Find>>" & @LF & @LF)
 
-	Local $bRet = _Vector_Find($aVector1, "Henlo 20")
-	ConsoleWrite("Found 'Henlo 20' = " & $bRet & @LF)
+	Local $bRet = _Vector_Find($aVector1, "Test 5")
+	ConsoleWrite("Found 'Test 5' = " & $bRet & " at index: " & @extended & @LF)
 
 	$bRet = _Vector_FindBackwards($aVector1, "Henlo 1")
-	ConsoleWrite("Found Backwards 'Henlo 1' = " & $bRet & @LF)
+	ConsoleWrite("Found Backwards 'Henlo 1' = " & $bRet & " at index: " & @extended & @LF)
 
 	$bRet = _Vector_Find($aVector1, "Henlo 21")
-	ConsoleWrite("Found 'Henlo 21' = " & $bRet & @LF)
+	ConsoleWrite("Found 'Henlo 21' = " & $bRet & " at index: " & @extended & @LF)
+
+	ConsoleWrite(@LF & "<<End>>" & @LF & @LF)
 EndFunc
 
 
