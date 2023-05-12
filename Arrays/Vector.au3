@@ -190,10 +190,9 @@ EndFunc
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _Vector_IsValidIndex
 ; Description ...: Checks whether the index is a valid for the Vector.
-; Syntax ........: _Vector_IsValidIndex(Const Byref $aVector, Const $nIndex, Const $bSkipVectorCheck)
+; Syntax ........: _Vector_IsValidIndex(Const Byref $aVector, Const $nIndex)
 ; Parameters ....: $aVector             - [in/out and const] an array of unknowns.
 ;                  $nIndex              - [const] a general number value.
-;                  $bSkipVectorCheck    - [const] a boolean value.
 ; Return values .: 1 if the index is valid, 0 otherwise
 ; Author ........: Zvend
 ; Modified ......:
@@ -202,13 +201,9 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex, Const $bSkipVectorCheck)
-    If Not $bSkipVectorCheck And Not _Vector_IsVector($aVector) Then
+Func _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex)
+    If Not __Vector_IsValidIndex($aVector, $nIndex, False) Then
         Return SetError(@error, 0, 0)
-    EndIf
-
-    If $nIndex < 0 Or $nIndex >= $aVector[$__VECTOR_SIZE] Then
-        Return SetError(3, 0, 0)
     EndIf
 
     Return 1
