@@ -653,7 +653,7 @@ Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
 
     Local $aValuesToAdd = _Vector_GetValues($aFromVector) ;~ Contains IsVector Check
 	If @error                    Then Return SetError(@error, 0, 0)
-	If UBound($aValuesToAdd) = 0 Then Return SetError(3, 0, 0)
+	If UBound($aValuesToAdd) = 0 Then Return 1
 
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 	Local $nSize      = $aVector[$__VECTOR_SIZE]
