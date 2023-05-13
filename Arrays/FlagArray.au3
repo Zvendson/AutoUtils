@@ -60,7 +60,7 @@ Func _FlagArray_Init(Const $nCapacity = 32)
         $aContainer[$i] = Int(0x00000000, 1)
     Next
 
-    Local $aFlagArray[$__FLAGARRAY_PARAMS] 
+    Local $aFlagArray[$__FLAGARRAY_PARAMS]
     $aFlagArray[$__FLAGARRAY_CAPACITY] = $nCapacity
     $aFlagArray[$__FLAGARRAY_BUFFER]   = $aContainer
 
@@ -78,7 +78,7 @@ Func _FlagArray_IsFlagArray(Const ByRef $aFlagArray)
         Return SetError(2, 0, 0)
     EndIf
 
-    Return 1    
+    Return 1
 EndFunc
 
 
@@ -139,7 +139,7 @@ Func _FlagArray_SetFlag(ByRef $aFlagArray, Const $nIndex, Const $bBool)
         $aContainer[$nGroup] = BitOR($aContainer[$nGroup], $nBitMask)
     Else
         $aContainer[$nGroup] = BitAND($aContainer[$nGroup], BitNOT($nBitMask))
-    EndIf    
+    EndIf
 
     $aFlagArray[$__FLAGARRAY_BUFFER] = $aContainer
 
