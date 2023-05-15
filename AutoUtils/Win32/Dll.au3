@@ -6,11 +6,11 @@
 #   @author     [Zvend](Zvend#6666)
 #   @link       [Zvendson](https://github.com/Zvendson)
 #
-#   @func       _Dll_IsInitialized()
-#   @func       _Dll_Open(Const $dDllBinary)
-#   @func       _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
-#   @func       _Dll_Close(Const ByRef $hDllHandle)
-#   @func       _Dll_CloseAll()
+#   @func       _Dll_IsInitialized
+#   @func       _Dll_Open
+#   @func       _Dll_GetProcAddrress
+#   @func       _Dll_Close
+#   @func       _Dll_CloseAll
 #
 #   @version     3.3.16.1
 #
