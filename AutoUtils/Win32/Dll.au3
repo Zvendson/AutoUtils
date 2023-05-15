@@ -584,13 +584,14 @@ EndFunc
 #cs Internal Only
     Checks if a module exist in the API vector.
 
-    @param Const ByRef $hDllHandle  Handle to check if it exists
-    @return                         1 on success, 0 on failure
+    @param (Handle) Const ByRef $hDllHandle     DllModule Handle to check if it exists
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _Dll_Close
+    @return (Bool)  1 on success, 0 on failure
+
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _Dll_Close
 #ce
 Func __Dll_GetModuleExist(Const ByRef $hDllHandle)
     Return _Vector_Find($__g_vecWindowsDllHandles, $hDllHandle)
