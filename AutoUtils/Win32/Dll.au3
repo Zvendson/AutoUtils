@@ -278,18 +278,29 @@ Func _Dll_Close(Const ByRef $hDllHandle)
         Return SetError($AU_ERR_DLLAPI_UNIT, $AUFUNC_DLLAPI_CLOSE, 0)
     EndIf
 
+    ;Loops through the vector to check if the module exist. to not accidentally
+    ;call the FreeLibrary on an invalid handle to prevent DllCallAddress to cause
+    ;a crash
     If Not __Dll_GetModuleExist($hDllHandle) Then
         Return SetError($AU_ERR_DLLAPI_CLOSE, $AU_ERREX_INVALID_HANDLE, 0)
     EndIf
 
+    ;Could use _Vector_GetBuffer here but erasing by value can be costly.
+    ;So we better loop by index.
     For $i = 0 To _Vector_GetSize($__g_vecWindowsDllHandles) - 1
         If _Vector_Get($__g_vecWindowsDllHandles, $i) = $hDllHandle Then
+
+            ;Remove module from vector
             _Vector_Erase($__g_vecWindowsDllHandles, $i)
+
+            ;Free module
             __Dll_FreeLibrary($hDllHandle)
+
             Return 1
         EndIf
     Next
 
+    ;Module not found. this should never be called, so just in case.
     Return SetError($AU_ERR_DLLAPI_CLOSE, $AU_ERREX_INVALID_HANDLE, 0)
 EndFunc
 
