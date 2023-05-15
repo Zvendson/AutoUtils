@@ -205,7 +205,8 @@ Func _Dll_Open(Const $dDllBinary)
         Return SetError($AU_ERR_DLLAPI_STARTUP, $AU_ERREX_FREE_MEMORY, 0)
     EndIf
 
-    ;Push module handle in the vector to keep a reference for _Dll_Close And _Dll_CloseAll
+    ;Push module handle in the vector if it doesnt already exist.
+    ;To keep a reference for _Dll_Close And _Dll_CloseAll
     If Not __Dll_GetModuleExist($hModule) Then
         _Vector_Push($__g_vecWindowsDllHandles, $hModule)
     EndIf
