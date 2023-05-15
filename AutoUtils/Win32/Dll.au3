@@ -14,7 +14,7 @@
 
 
 #cs
-#   @include StructTags.au3     Structures that reveal some of the in-depths of PE File Formats
+#   @include ApiErrorCodes.au3  Global AutoUtilsAPI error codes with an errorcode2string converter
 #ce
 #include ".\..\ApiErrorCodes.au3"
 
@@ -27,7 +27,15 @@
 #   @include Constants.au3      Win32 "Magic Values" for using the Windows API
 #ce
 #include ".\Constants.au3"
+
+#cs
+#   @include Memory.au3         Win32 Memory toolset
+#ce
 #include ".\Memory.au3"
+
+#cs
+#   @include Vector.au3         A C++ Vector implementation written in AutoIt
+#ce
 #include ".\..\Arrays\Vector.au3"
 
 
