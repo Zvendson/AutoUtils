@@ -521,20 +521,21 @@ EndFunc
 
 
 #cs Internal Only
-    Loads a dll module from an address in memory. Do not use it or AutoIt might crash.
+    Loads a dll module from an address in memory.
 
-    @param Const $pBinaryAddress    Memory address of the binary data
-    @return                         Address of the module handle, 0 if failed
+    @param (Pointer) Const $pBinaryAddress  Memory address of the binary data
 
-    @error      $AU_ERR_DLLCALL_FAILED
-    @extended   Detailed error infos
+    @return (Handle)    DllModule Handle, 0 if failed
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        __Dll_FreeLibrary
-    @see        _AU_ConvertErorr
-    @see        __Dll_GetModuleExist
+    @error              $AU_ERR_DLLCALL_FAILED
+    @extended           Detailed error infos
+
+    @author             [Zvend](Zvend#6666)
+    @version            3.3.16.1
+    @since              3.3.16.1
+    @see                _AU_ConvertErorr
+    @see                __Dll_FreeLibrary
+    @see                __Dll_GetModuleExist
 #ce
 Func __Dll_LoadLibraryA(Const $pBinaryAddress)
     Local $aCall = DllCallAddress("HANDLE", $__g_pWindowsDllLoad, "PTR", $__g_pKernelLoadLib, "PTR", $__g_pKernelGetProcAddr, "PTR", $pBinaryAddress)
