@@ -95,11 +95,11 @@ Global $__g_pKernelGetProcAddr   = 0
 
     @return (Bool)  1 or 0
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _Dll_Open
-    @see        _Dll_Close
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _Dll_Open
+    @see            _Dll_Close
 #ce
 Func _Dll_IsInitialized()
     Return $__g_bWindowsDllSetup
@@ -111,21 +111,22 @@ EndFunc
     Loads a 32Bit Dll from an embedded autoit Binary String.
 
     @param  (Binary) Const $dDllBinary  Binary data of a Dll
-    @return (Handle)                    DllModule Handle or 0
 
-    @error      $AU_ERR_DLLAPI_STARTUP, $AU_ERR_DLLAPI_STARTUP
-    @extended   Detailed error infos
+    @return (Handle)    DllModule Handle or 0
 
-    @remarks    If you have a string of opcodes. make sure that it starts with a '0x' and is converted with Binary().
+    @error              $AU_ERR_DLLAPI_STARTUP, $AU_ERR_DLLAPI_STARTUP
+    @extended           Detailed error infos
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        _Dll_GetProcAddrress
-    @see        _Dll_Close
-    @see        _Dll_CloseAll
-    @link       [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
+    @remarks            If you have a string of opcodes. make sure that it starts with a '0x' and is converted with Binary().
+
+    @author             [Zvend](Zvend#6666)
+    @version            3.3.16.1
+    @since              3.3.16.1
+    @see                _AU_ConvertErorr
+    @see                _Dll_GetProcAddrress
+    @see                _Dll_Close
+    @see                _Dll_CloseAll
+    @link               [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
 #ce
 Func _Dll_Open(Const $dDllBinary)
     If Not _Dll_IsInitialized() Then
@@ -222,17 +223,18 @@ EndFunc
 
     @param  (Handle) Const ByRef $hDllHandle    DllModule Handle
     @param  (String) Const       $sProcName     The function or variable name, or the function's ordinal value.
-    @return (Pointer)                           Address of the ProcName or 0
 
-    @error      $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_GETPROC
-    @extended   Detailed error infos
+    @return (Pointer)   Address of the ProcName or 0
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        DllCallAddress
-    @link       [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
+    @error              $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_GETPROC
+    @extended           Detailed error infos
+
+    @author             [Zvend](Zvend#6666)
+    @version            3.3.16.1
+    @since              3.3.16.1
+    @see                _AU_ConvertErorr
+    @see                DllCallAddress
+    @link               [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
 #ce
 Func _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
     If Not _Dll_IsInitialized() Then
@@ -262,16 +264,17 @@ EndFunc
     Closes a handle previously opened by _Dll_Call.
 
     @param (Handle) Const ByRef $hDllHandle     DllModule Handle
-    @return (Bool)                              1 on success, 0 on failure
 
-    @error      $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_CLOSE
-    @extended   Detailed error infos
+    @return (Bool)  1 on success, 0 on failure
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        _Dll_CloseAll
+    @error          $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_CLOSE
+    @extended       Detailed error infos
+
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _AU_ConvertErorr
+    @see            _Dll_CloseAll
 #ce
 Func _Dll_Close(Const ByRef $hDllHandle)
     If Not _Dll_IsInitialized() Then
@@ -311,17 +314,17 @@ EndFunc
 
     @return (Bool)  1 on success, 0 on failure
 
-    @error      $AU_ERR_DLLAPI_UNIT
-    @extended   Detailed error infos
+    @error          $AU_ERR_DLLAPI_UNIT
+    @extended       Detailed error infos
 
-    @remarks    Gets called on __Dll_ShutDown().
+    @remarks        Gets called on __Dll_ShutDown().
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        _Dll_Open
-    @see        _Dll_Close
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _AU_ConvertErorr
+    @see            _Dll_Open
+    @see            _Dll_Close
 #ce
 Func _Dll_CloseAll()
     If Not _Dll_IsInitialized() Then
@@ -369,9 +372,9 @@ EndFunc
 #cs Internal Only
     Checks if the BinaryString has the DosMagic set.
 
-    @return                         1 on success, 0 on failure
     @param (Binary) Const ByRef $dDllBinary     Binary to be checked
-    @return                                     1 on success, 0 on failure
+
+    @return     1 on success, 0 on failure
 
     @author     [Zvend](Zvend#6666)
     @version    3.3.16.1
