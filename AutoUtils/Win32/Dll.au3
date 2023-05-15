@@ -594,6 +594,7 @@ EndFunc
     @see            _Dll_Close
 #ce
 Func __Dll_GetModuleExist(Const ByRef $hDllHandle)
+    ;Searches the vector for the DllModule Handle
     Return _Vector_Find($__g_vecWindowsDllHandles, $hDllHandle)
 EndFunc
 
