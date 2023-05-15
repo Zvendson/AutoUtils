@@ -5,7 +5,7 @@
  Discord(s):      Zvend#6666  Abaddon#9048
 
  Script Functions:
-    Func _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null) -> Vector
+    _Vector_Init($nCapacity = 32, Const $vDefaultValue = Null, $nModifier = 1.5, Const $fuCompare = Null)      -> Vector
     _Vector_IsVector(Const ByRef $aVector)                                                                     -> Bool
     _Vector_IsValidIndex(Const ByRef $aVector, Const $nIndex)                                                  -> Bool
     _Vector_GetSize(Const ByRef $aVector)                                                                      -> UInt
