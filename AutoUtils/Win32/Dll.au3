@@ -1,4 +1,5 @@
 #cs
+#
 #   A 32Bit Dll loader that only needs the binarystrings of your dll file. I
 #   suggest to compress them before embedding them in AutoIt.
 #
@@ -6,6 +7,7 @@
 #   @link       [Zvendson](https://github.com/Zvendson)
 #
 #   Saturday 14 May 2023
+#
 #ce
 
 #include-once
@@ -203,7 +205,7 @@ EndFunc
 #   Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).
 #
 #   @param Const ByRef $hDllHandle  Handle previously loaded by _Dll_Open
-#   @param Const $sProcName         The function or variable name, or the function's ordinal value.
+#   @param Const       $sProcName   The function or variable name, or the function's ordinal value.
 #   @return                         Address of the ProcName or 0
 #
 #   @error      $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_GETPROC
@@ -504,6 +506,7 @@ Func __Dll_FreeLibrary(Const ByRef $hDllHandle)
 
 	Return 1
 EndFunc
+
 
 
 #cs Internal Only
