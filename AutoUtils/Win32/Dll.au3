@@ -110,7 +110,7 @@ EndFunc
 #cs
     Loads a 32Bit Dll from an embedded autoit Binary String.
 
-    @param  (Binary) Const $dDllBinary  Data to load a Dll from
+    @param  (Binary) Const $dDllBinary  Binary data of a Dll
     @return (Handle)                    DllModule Handle or 0
 
     @error      $AU_ERR_DLLAPI_STARTUP, $AU_ERR_DLLAPI_STARTUP
@@ -217,7 +217,7 @@ EndFunc
 #cs
     Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).
 
-    @param  (Handle) Const ByRef $hDllHandle    Handle previously loaded by _Dll_Open
+    @param  (Handle) Const ByRef $hDllHandle    DllModule Handle
     @param  (String) Const       $sProcName     The function or variable name, or the function's ordinal value.
     @return (Pointer)                           Address of the ProcName or 0
 
@@ -249,7 +249,7 @@ Func _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
         Return SetError($AU_ERR_DLLAPI_GETPROC, @error, 0)
 	EndIf
 
-
+    ;Return Handle
 	Return $aCall[0]
 EndFunc
 
@@ -258,8 +258,8 @@ EndFunc
 #cs
     Closes a handle previously opened by _Dll_Call.
 
-    @param Const ByRef $hDllHandle  Handle of the module to be closed
-    @return                         1 on success, 0 on failure
+    @param (Handle) Const ByRef $hDllHandle     Handle previously loaded by _Dll_Open
+    @return (Bool)                              1 on success, 0 on failure
 
     @error      $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_CLOSE
     @extended   Detailed error infos
