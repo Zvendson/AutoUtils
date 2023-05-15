@@ -408,12 +408,13 @@ Func __Dll_StartUp()
         Return 1
     EndIf
 
+    ;Gets the Binary of embedded machine code in a string
     Local $dPayLoad = __Dll_GetDllLoaderPayload()
     If @error Or $dPayLoad == "" Then
         Return SetError($AU_ERR_DLLAPI_STARTUP, $AU_ERREX_INVALID_BINARY, 0)
     EndIf
 
-    ;Reserve Space for the assembly code
+    ;Reserve Space for the machine code
     Local $nSize = BinaryLen($dPayLoad)
     $__g_pWindowsDllLoadBase = VirtualAlloc(0, $nSize, $MEM_COMMIT, $PAGE_EXECUTE_READWRITE)
 
