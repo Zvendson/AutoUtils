@@ -538,12 +538,14 @@ EndFunc
     @see                __Dll_GetModuleExist
 #ce
 Func __Dll_LoadLibraryA(Const $pBinaryAddress)
+    ;Calls a function from the custom assembly to load the library from a pointer
     Local $aCall = DllCallAddress("HANDLE", $__g_pWindowsDllLoad, "PTR", $__g_pKernelLoadLib, "PTR", $__g_pKernelGetProcAddr, "PTR", $pBinaryAddress)
 
 	If @error Then
         Return SetError($AU_ERR_DLLCALL_FAILED, @error, 0)
 	EndIf
 
+    ;Returns the handle of the loaded dll
 	Return $aCall[0]
 EndFunc
 
