@@ -294,12 +294,14 @@ EndFunc
 
 
 #cs
-    Frees every Dll previously loaded via _Dll_Open. Gets Auto called on __Dll_ShutDown().
+    Frees every Dll previously loaded via _Dll_Open.
 
     @return     1 on success, 0 on failure
 
     @error      $AU_ERR_DLLAPI_UNIT
     @extended   Detailed error infos
+
+    @remarks    Gets called on __Dll_ShutDown().
 
     @author     [Zvend](Zvend#6666)
     @version    3.3.16.1
