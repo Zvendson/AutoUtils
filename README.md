@@ -4,7 +4,7 @@
 
 # AutoUtils
 
-A small library which I will extend over time with tools
-i need working around AutoIt 3.
+A currently small library which will be extended over time with a handful tools
+u need working around AutoIt 3.<br>
+(See [Wiki](https://github.com/Zvendson/AutoUtils/wiki))
 
-* ## [Wiki](https://github.com/Zvendson/AutoUtils/wiki)
