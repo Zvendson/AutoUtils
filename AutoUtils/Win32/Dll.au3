@@ -284,7 +284,6 @@ Func _Dll_Close(Const ByRef $hDllHandle)
 
     For $i = 0 To _Vector_GetSize($__g_vecWindowsDllHandles) - 1
         If _Vector_Get($__g_vecWindowsDllHandles, $i) = $hDllHandle Then
-            ConsoleWrite("Removed Module" & @CRLF)
             _Vector_Erase($__g_vecWindowsDllHandles, $i)
             __Dll_FreeLibrary($hDllHandle)
             Return 1
