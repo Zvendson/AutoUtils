@@ -474,20 +474,20 @@ EndFunc
 
 
 #cs Internal Only
-    Deinitializes the previous loaded dlls and assembly and frees internal variables.
+    Frees the previous loaded dlls, deallocates assembly and internal variables.
     Gets auto called when AutoIt exits if initialized.
 
-    @return     1 on success, 0 on failure
+    @return (Bool)  1 on success, 0 on failure
 
-    @error      $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_SHUTDOWN
-    @extended   Detailed error infos
+    @error          $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_SHUTDOWN
+    @extended       Detailed error infos
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        __Dll_StartUp
-    @see        __Dll_Close
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _AU_ConvertErorr
+    @see            __Dll_StartUp
+    @see            __Dll_Close
 #ce
 Func __Dll_Shutdown()
     If Not _Dll_IsInitialized() Then
