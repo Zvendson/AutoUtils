@@ -24,7 +24,7 @@
 
 
 #cs
-    @include ApiErrorCodes.au3  Global AutoUtilsAPI error codes with an errorcode2string converter
+    @include ApiErrorCodes.au3  Global AutoUtilsAPI error codes with an code-to-string converter
 #ce
 #include ".\..\ApiErrorCodes.au3"
 
