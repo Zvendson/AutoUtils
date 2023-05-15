@@ -6,6 +6,12 @@
 #   @author     [Zvend](Zvend#6666)
 #   @link       [Zvendson](https://github.com/Zvendson)
 #
+#   @func       _Dll_IsInitialized()
+#   @func       _Dll_Open(Const $dDllBinary)
+#   @func       _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
+#   @func       _Dll_Close(Const ByRef $hDllHandle)
+#   @func       _Dll_CloseAll()
+#
 #   Saturday 14 May 2023
 #
 #ce
