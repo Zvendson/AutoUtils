@@ -593,13 +593,7 @@ EndFunc
     @see        _Dll_Close
 #ce
 Func __Dll_GetModuleExist(Const ByRef $hDllHandle)
-    For $i = 0 To _Vector_GetSize($__g_vecWindowsDllHandles) - 1
-        If _Vector_Get($__g_vecWindowsDllHandles, $i) = $hDllHandle Then
-            Return 1
-        EndIf
-    Next
-
-    Return 0
+    Return _Vector_Find($__g_vecWindowsDllHandles, $hDllHandle)
 EndFunc
 
 
