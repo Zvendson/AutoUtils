@@ -258,7 +258,7 @@ EndFunc
 #cs
     Closes a handle previously opened by _Dll_Call.
 
-    @param (Handle) Const ByRef $hDllHandle     Handle previously loaded by _Dll_Open
+    @param (Handle) Const ByRef $hDllHandle     DllModule Handle
     @return (Bool)                              1 on success, 0 on failure
 
     @error      $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_CLOSE
