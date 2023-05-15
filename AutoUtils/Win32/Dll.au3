@@ -309,7 +309,7 @@ EndFunc
 #cs
     Frees every Dll previously loaded via _Dll_Open.
 
-    @return     1 on success, 0 on failure
+    @return (Bool)  1 on success, 0 on failure
 
     @error      $AU_ERR_DLLAPI_UNIT
     @extended   Detailed error infos
