@@ -367,16 +367,16 @@ EndFunc
 
 
 #cs Internal Only
-    Checks if the BinaryString has the DosMagic set
+    Checks if the BinaryString has the DosMagic set.
 
-    @param Const    $dDllBinary     Binary to be checked
     @return                         1 on success, 0 on failure
+    @param (Binary) Const ByRef $dDllBinary     Binary to be checked
+    @return                                     1 on success, 0 on failure
 
     @author     [Zvend](Zvend#6666)
     @version    3.3.16.1
     @since      3.3.16.1
 #ce
-Func __Dll_IsDosMagic(Const $dDllBinary)
     Return BinaryMid($dDllBinary, 1, 2) == "0x4D5A"
 EndFunc
 
