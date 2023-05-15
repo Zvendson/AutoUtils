@@ -319,18 +319,37 @@ Func _Dll_CloseAll()
     EndIf
 
     Local $nModuleCount = _Vector_GetSize($__g_vecWindowsDllHandles)
+
     If $nModuleCount Then
+        ;Creating a Vector to store already freed modules, just in case the same
+        ;handle happened to be twice in the vector. It shouldnt happen but we
+        ;never know + the simple 2 liner check prevents interpreting 6 lines.
         Local $vecFreedModules = _Vector_Init($nModuleCount)
+
+        ;Gets the last module added to the vector and frees it.
+        ;Note: Vector Pop removes the last entry from the vector.
         Local $hDllHandle = _Vector_Pop($__g_vecWindowsDllHandles)
         While $hDllHandle <> Null
+            ;Check if module is already freed and if yes jump back to loop start
             If _Vector_Find($vecFreedModules, $hDllHandle) Then
                 ContinueLoop
             EndIf
+
+            ;Adding module to the already freed list
             _Vector_Push($vecFreedModules, $hDllHandle)
+
+            ;Freeing the module
             __Dll_FreeLibrary($hDllHandle)
+
+            ;Getting the next module or Null
             $hDllHandle = _Vector_Pop($__g_vecWindowsDllHandles)
         WEnd
     EndIf
+
+    ;I did it this way in case of dll dependencies. So when Module B needs Module A
+    ;and Module A gets closed first, that will cause unknown behaviour, so better
+    ;make a proper cleanup. Note: It does not prevent crashes from dlls that didnt
+    ;add propper close handlings!
 
     Return 1
 EndFunc
