@@ -554,18 +554,19 @@ EndFunc
 #cs Internal Only
     Frees a previously loaded dll module.
 
-    @param Const ByRef $hDllHandle  Handle of the module to be freed
-    @return                         1 on success, 0 on failure
+    @param (Handle) Const ByRef $hDllHandle     DllModule Handle to be freed
 
-    @error      $AU_ERR_DLLCALL_FAILED
-    @extended   Detailed error infos
+    @return (Bool)  1 on success, 0 on failure
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        __Dll_FreeLibrary
-    @see        __Dll_GetModuleExist
+    @error          $AU_ERR_DLLCALL_FAILED
+    @extended       Detailed error infos
+
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _AU_ConvertErorr
+    @see            __Dll_FreeLibrary
+    @see            __Dll_GetModuleExist
 #ce
 Func __Dll_FreeLibrary(Const ByRef $hDllHandle)
     DllCallAddress("PTR", $__g_pWindowsDllFree, "HANDLE", $hDllHandle)
