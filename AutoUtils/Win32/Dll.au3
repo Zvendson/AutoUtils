@@ -569,6 +569,7 @@ EndFunc
     @see            __Dll_GetModuleExist
 #ce
 Func __Dll_FreeLibrary(Const ByRef $hDllHandle)
+    ;Calls a function from the custom assembly to free a library
     DllCallAddress("PTR", $__g_pWindowsDllFree, "HANDLE", $hDllHandle)
 
 	If @error Then
