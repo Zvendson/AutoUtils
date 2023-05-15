@@ -601,11 +601,12 @@ EndFunc
 
 
 #cs Internal Only
-    Returns the assembly payload to load dlls from memory.
+    Returns the binary string of the custom assembly that makes it able to load dlls from memory,
+    free dlls or get their exported functions.
 
-    @return     BinaryString of the assembly or empty string
+    @return (Binary)    Custom Assembly or empty Binary("")
 
-    @error      Code 1 on fail
+    @error      Set to 1 if failed
 
     @author     [Zvend](Zvend#6666)
     @version    3.3.16.1
