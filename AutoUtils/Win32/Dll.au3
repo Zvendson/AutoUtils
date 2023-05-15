@@ -121,7 +121,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        _Dll_GetProcAddrress
 #   @see        _Dll_Close
 #   @see        _Dll_CloseAll
@@ -220,7 +220,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        DllCallAddress
 #   @link       [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
 #ce
@@ -256,7 +256,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        _Dll_CloseAll
 #ce
 Func _Dll_Close(Const ByRef $hDllHandle)
@@ -293,7 +293,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        _Dll_Open
 #   @see        _Dll_Close
 #ce
@@ -341,7 +341,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        __Dll_Shutdown
 #   @see        __Dll_Open
 #ce
@@ -424,7 +424,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        __Dll_StartUp
 #   @see        __Dll_Close
 #ce
@@ -472,7 +472,7 @@ EndFunc
 #   @version    3.3.16.1
 #   @since      3.3.16.1
 #   @see        __Dll_FreeLibrary
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        __Dll_GetModuleExist
 #ce
 Func __Dll_LoadLibraryA(Const $pBinaryAddress)
@@ -499,7 +499,7 @@ EndFunc
 #   @author     [Zvend](Zvend#6666)
 #   @version    3.3.16.1
 #   @since      3.3.16.1
-#   @see        _Win32_ConvertErorr
+#   @see        _AU_ConvertErorr
 #   @see        __Dll_FreeLibrary
 #   @see        __Dll_GetModuleExist
 #ce
