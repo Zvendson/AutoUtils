@@ -12,7 +12,7 @@
 #   @func       _Dll_Close
 #   @func       _Dll_CloseAll
 #
-#   @version     3.3.16.1
+#   @AutoIt     3.3.16.1
 #
 #   Saturday 14 May 2023
 #
