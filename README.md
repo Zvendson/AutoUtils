@@ -8,3 +8,8 @@ A currently small library which will be extended over time with a handful tools
 u need working around AutoIt 3.<br>
 (See [Wiki](https://github.com/Zvendson/AutoUtils/wiki))
 
+## Requirements
+
+[![AutoIt 3.3.16.1](https://img.shields.io/badge/AutoIt-v3.3.16.1-grey?labelColor=blue)](https://www.autoitscript.com/site/autoit/downloads/)
+[![AutoIt 3.3.16.1](https://img.shields.io/badge/SciTE-v4.4.6-grey?labelColor=78b9ff)](https://www.autoitscript.com/site/autoit-script-editor/downloads/)
+[![AutoIt 3.3.16.1](https://img.shields.io/badge/VS%20Code-Optional-grey?labelColor=blue)](https://www.autoitscript.com/site/autoit-script-editor/downloads/)
