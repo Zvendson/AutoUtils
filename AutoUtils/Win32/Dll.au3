@@ -206,7 +206,9 @@ Func _Dll_Open(Const $dDllBinary)
     EndIf
 
     ;Push module handle in the vector to keep a reference for _Dll_Close And _Dll_CloseAll
-    _Vector_Push($__g_vecWindowsDllHandles, $hModule)
+    If Not __Dll_GetModuleExist($hModule) Then
+        _Vector_Push($__g_vecWindowsDllHandles, $hModule)
+    EndIf
 
     ;Return module handle
     Return $hModule
