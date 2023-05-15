@@ -391,19 +391,19 @@ EndFunc
 
 #cs Internal Only
     Initializes the assembly and sets up internal variables.
-    Gets auto called when using _Dll_Open and registers an auto shutdown on AutoIt exit.
+    Gets called when using _Dll_Open and registers a shutdown callback when AutoIt exit.
 
-    @return     1 on success, 0 on failure
+    @return (Bool)  1 on success, 0 on failure
 
-    @error      $AU_ERR_DLLAPI_STARTUP
-    @extended   Detailed error infos
+    @error          $AU_ERR_DLLAPI_STARTUP
+    @extended       Detailed error infos
 
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        _AU_ConvertErorr
-    @see        __Dll_Shutdown
-    @see        __Dll_Open
+    @author         [Zvend](Zvend#6666)
+    @version        3.3.16.1
+    @since          3.3.16.1
+    @see            _AU_ConvertErorr
+    @see            __Dll_Shutdown
+    @see            __Dll_Open
 #ce
 Func __Dll_StartUp()
     If _Dll_IsInitialized() Then
