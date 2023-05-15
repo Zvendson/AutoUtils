@@ -1,4 +1,4 @@
-#cs
+#cs Header
 #
 #   A 32Bit Dll loader that only needs the binarystrings of your dll file. I
 #   suggest to compress them before embedding them in AutoIt.
@@ -11,6 +11,8 @@
 #   @func       _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
 #   @func       _Dll_Close(Const ByRef $hDllHandle)
 #   @func       _Dll_CloseAll()
+#
+#   @version     3.3.16.1
 #
 #   Saturday 14 May 2023
 #
