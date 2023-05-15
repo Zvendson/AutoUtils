@@ -377,6 +377,8 @@ EndFunc
     @version    3.3.16.1
     @since      3.3.16.1
 #ce
+Func __Dll_IsDosMagic(Const ByRef $dDllBinary)
+    ;Checks the first 2 bytes for 4D 5A which is represented as 'MZ'.
     Return BinaryMid($dDllBinary, 1, 2) == "0x4D5A"
 EndFunc
 
