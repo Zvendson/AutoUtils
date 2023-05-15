@@ -252,12 +252,12 @@ Func _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
     ;Calls custom assembly
     Local $aCall = DllCallAddress("PTR", $__g_pWindowsDllGetAddr, "HANDLE", $hDllHandle, "STR", $sProcName)
 
-	If @error Or $aCall[0] = 0 Then
+    If @error Or $aCall[0] = 0 Then
         Return SetError($AU_ERR_DLLAPI_GETPROC, @error, 0)
-	EndIf
+    EndIf
 
     ;Return Handle
-	Return $aCall[0]
+    Return $aCall[0]
 EndFunc
 
 
@@ -541,12 +541,12 @@ Func __Dll_LoadLibraryA(Const $pBinaryAddress)
     ;Calls a function from the custom assembly to load the library from a pointer
     Local $aCall = DllCallAddress("HANDLE", $__g_pWindowsDllLoad, "PTR", $__g_pKernelLoadLib, "PTR", $__g_pKernelGetProcAddr, "PTR", $pBinaryAddress)
 
-	If @error Then
+    If @error Then
         Return SetError($AU_ERR_DLLCALL_FAILED, @error, 0)
-	EndIf
+    EndIf
 
     ;Returns the handle of the loaded dll
-	Return $aCall[0]
+    Return $aCall[0]
 EndFunc
 
 
@@ -572,11 +572,11 @@ Func __Dll_FreeLibrary(Const ByRef $hDllHandle)
     ;Calls a function from the custom assembly to free a library
     DllCallAddress("PTR", $__g_pWindowsDllFree, "HANDLE", $hDllHandle)
 
-	If @error Then
+    If @error Then
         Return SetError($AU_ERR_DLLCALL_FAILED, @error, 0)
-	EndIf
+    EndIf
 
-	Return 1
+    Return 1
 EndFunc
 
 
