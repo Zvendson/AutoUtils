@@ -315,11 +315,19 @@ Func _Dll_CloseAll()
         Return SetError($AU_ERR_DLLAPI_UNIT, $AUFUNC_DLLAPI_CLOSE, 0)
     EndIf
 
-    Local $hDllHandle = _Vector_Pop($__g_vecWindowsDllHandles)
-    While $hDllHandle <> Null
-        __Dll_FreeLibrary($hDllHandle)
-        $hDllHandle = _Vector_Pop($__g_vecWindowsDllHandles)
-    WEnd
+    Local $nModuleCount = _Vector_GetSize($__g_vecWindowsDllHandles)
+    If $nModuleCount Then
+        Local $vecFreedModules = _Vector_Init($nModuleCount)
+        Local $hDllHandle = _Vector_Pop($__g_vecWindowsDllHandles)
+        While $hDllHandle <> Null
+            If _Vector_Find($vecFreedModules, $hDllHandle) Then
+                ContinueLoop
+            EndIf
+            _Vector_Push($vecFreedModules, $hDllHandle)
+            __Dll_FreeLibrary($hDllHandle)
+            $hDllHandle = _Vector_Pop($__g_vecWindowsDllHandles)
+        WEnd
+    EndIf
 
     Return 1
 EndFunc
