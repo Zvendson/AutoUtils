@@ -24,84 +24,86 @@
 
 
 #cs
-    @include ApiErrorCodes.au3  Global AutoUtilsAPI error codes with an code-to-string converter
+#   @include ApiErrorCodes.au3  Global AutoUtilsAPI error codes with an code-to-string converter
 #ce
 #include ".\..\ApiErrorCodes.au3"
 
 #cs
-    @include StructTags.au3     Structures that reveal some of the in-depths of PE File Formats
+#   @include StructTags.au3     Structures that reveal some of the in-depths of PE File Formats
 #ce
 #include ".\StructTags.au3"
 
 #cs
-    @include Constants.au3      Win32 "Magic Values" for using the Windows API
+#   @include Constants.au3      Win32 "Magic Values" for using the Windows API
 #ce
 #include ".\Constants.au3"
 
 #cs
-    @include Memory.au3         Win32 Memory toolset
+#   @include Memory.au3         Win32 Memory toolset
 #ce
 #include ".\Memory.au3"
 
 #cs
-    @include Vector.au3         A C++ Vector implementation written in AutoIt
+#   @include Vector.au3         A C++ Vector implementation written in AutoIt
 #ce
 #include ".\..\Arrays\Vector.au3"
 
 
 
 #cs
-    @private    Holding state if Dll API is initialized or not.
+#   @private    Holding state if Dll API is initialized or not.
 #ce
 Global $__g_bWindowsDllSetup = 0
 
 #cs
-    @private    Vector storing Module References through using _Dll_Open.
+#   @private    Vector storing Module References through using _Dll_Open.
 #ce
 Global $__g_vecWindowsDllHandles = 0
 
 #cs
-    @private    Allocated Address range storing the assembly payload.
+#   @private    Allocated Address range storing the assembly payload.
 #ce
 Global $__g_pWindowsDllLoadBase = 0
 
 #cs
-    @private    Address within the LoadBase to internally call LoadLibrary.
+#   @private    Address within the LoadBase to internally call LoadLibrary.
 #ce
 Global $__g_pWindowsDllLoad      = 0
 
 #cs
-    @private    Address within the LoadBase to internally call GetProcAddress.
+#   @private    Address within the LoadBase to internally call GetProcAddress.
 #ce
 Global $__g_pWindowsDllGetAddr   = 0
 
 #cs
-    @private    Address within the LoadBase to internally call FreeLibrary.
+#   @private    Address within the LoadBase to internally call FreeLibrary.
 #ce
 Global $__g_pWindowsDllFree      = 0
 
 #cs
-    @private    Address from the original LoadLibraryA function.
+#   @private    Address from the original LoadLibraryA function.
 #ce
 Global $__g_pKernelLoadLib       = 0
 
 #cs
-    @private    Address from the original GetProcAddress function.
+#   @private    Address from the original GetProcAddress function.
 #ce
 Global $__g_pKernelGetProcAddr   = 0
 
 
 
 #cs
-    Checks if the Dll API is initialized.
-
-    @return (Bool)  1 or 0
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _Dll_Open
-    @see            _Dll_Close
+#
+#   Checks if the Dll API is initialized.
+#
+#   @return (Bool)  1 or 0
+#
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _Dll_Open
+#   @see            _Dll_Close
+#
 #ce
 Func _Dll_IsInitialized()
     Return $__g_bWindowsDllSetup
@@ -110,25 +112,27 @@ EndFunc
 
 
 #cs
-    Loads a 32Bit Dll from an embedded autoit Binary String.
-
-    @param  (Binary) Const $dDllBinary  Binary data of a Dll
-
-    @return (Handle)    DllModule Handle or 0
-
-    @error              $AU_ERR_DLLAPI_STARTUP, $AU_ERR_DLLAPI_STARTUP
-    @extended           Detailed error infos
-
-    @remarks            If you have a string of opcodes. make sure that it starts with a '0x' and is converted with Binary().
-
-    @author             [Zvend](Zvend#6666)
-    @version            3.3.16.1
-    @since              3.3.16.1
-    @see                _AU_ConvertErorr
-    @see                _Dll_GetProcAddrress
-    @see                _Dll_Close
-    @see                _Dll_CloseAll
-    @link               [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
+#
+#   Loads a 32Bit Dll from an embedded autoit Binary String.
+#
+#   @param  (Binary) Const $dDllBinary  Binary data of a Dll
+#
+#   @return (Handle)    DllModule Handle or 0
+#
+#   @error              $AU_ERR_DLLAPI_STARTUP, $AU_ERR_DLLAPI_STARTUP
+#   @extended           Detailed error infos
+#
+#   @remarks            If you have a string of opcodes. make sure that it starts with a '0x' and is converted with Binary().
+#
+#   @author             [Zvend](Zvend#6666)
+#   @version            3.3.16.1
+#   @since              3.3.16.1
+#   @see                _AU_ConvertErorr
+#   @see                _Dll_GetProcAddrress
+#   @see                _Dll_Close
+#   @see                _Dll_CloseAll
+#   @link               [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
+#
 #ce
 Func _Dll_Open(Const $dDllBinary)
     If Not _Dll_IsInitialized() Then
@@ -221,22 +225,24 @@ EndFunc
 
 
 #cs
-    Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).
-
-    @param  (Handle) Const ByRef $hDllHandle    DllModule Handle
-    @param  (String) Const       $sProcName     The function or variable name, or the function's ordinal value.
-
-    @return (Pointer)   Address of the ProcName or 0
-
-    @error              $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_GETPROC
-    @extended           Detailed error infos
-
-    @author             [Zvend](Zvend#6666)
-    @version            3.3.16.1
-    @since              3.3.16.1
-    @see                _AU_ConvertErorr
-    @see                DllCallAddress
-    @link               [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
+#
+#   Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).
+#
+#   @param  (Handle) Const ByRef $hDllHandle    DllModule Handle
+#   @param  (String) Const       $sProcName     The function or variable name, or the function's ordinal value.
+#
+#   @return (Pointer)   Address of the ProcName or 0
+#
+#   @error              $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_GETPROC
+#   @extended           Detailed error infos
+#
+#   @author             [Zvend](Zvend#6666)
+#   @version            3.3.16.1
+#   @since              3.3.16.1
+#   @see                _AU_ConvertErorr
+#   @see                DllCallAddress
+#   @link               [PE File Format - In-Depth Look](https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail)
+#
 #ce
 Func _Dll_GetProcAddrress(Const ByRef $hDllHandle, Const $sProcName)
     If Not _Dll_IsInitialized() Then
@@ -263,20 +269,22 @@ EndFunc
 
 
 #cs
-    Closes a handle previously opened by _Dll_Call.
-
-    @param (Handle) Const ByRef $hDllHandle     DllModule Handle
-
-    @return (Bool)  1 on success, 0 on failure
-
-    @error          $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_CLOSE
-    @extended       Detailed error infos
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _AU_ConvertErorr
-    @see            _Dll_CloseAll
+#
+#   Closes a handle previously opened by _Dll_Call.
+#
+#   @param (Handle) Const ByRef $hDllHandle     DllModule Handle
+#
+#   @return (Bool)  1 on success, 0 on failure
+#
+#   @error          $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_CLOSE
+#   @extended       Detailed error infos
+#
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _AU_ConvertErorr
+#   @see            _Dll_CloseAll
+#
 #ce
 Func _Dll_Close(Const ByRef $hDllHandle)
     If Not _Dll_IsInitialized() Then
@@ -312,21 +320,23 @@ EndFunc
 
 
 #cs
-    Frees every Dll previously loaded via _Dll_Open.
-
-    @return (Bool)  1 on success, 0 on failure
-
-    @error          $AU_ERR_DLLAPI_UNIT
-    @extended       Detailed error infos
-
-    @remarks        Gets called on __Dll_ShutDown().
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _AU_ConvertErorr
-    @see            _Dll_Open
-    @see            _Dll_Close
+#
+#   Frees every Dll previously loaded via _Dll_Open.
+#
+#   @return (Bool)  1 on success, 0 on failure
+#
+#   @error          $AU_ERR_DLLAPI_UNIT
+#   @extended       Detailed error infos
+#
+#   @remarks        Gets called on __Dll_ShutDown().
+#
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _AU_ConvertErorr
+#   @see            _Dll_Open
+#   @see            _Dll_Close
+#
 #ce
 Func _Dll_CloseAll()
     If Not _Dll_IsInitialized() Then
@@ -372,15 +382,17 @@ EndFunc
 
 
 #cs Internal Only
-    Checks if the BinaryString has the DosMagic set.
-
-    @param (Binary) Const ByRef $dDllBinary     Binary to be checked
-
-    @return     1 on success, 0 on failure
-
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
+#
+#   Checks if the BinaryString has the DosMagic set.
+#
+#   @param (Binary) Const ByRef $dDllBinary     Binary to be checked
+#
+#   @return     1 on success, 0 on failure
+#
+#   @author     [Zvend](Zvend#6666)
+#   @version    3.3.16.1
+#   @since      3.3.16.1
+#
 #ce
 Func __Dll_IsDosMagic(Const ByRef $dDllBinary)
     ;Checks the first 2 bytes for 4D 5A which is represented as 'MZ'.
@@ -390,20 +402,22 @@ EndFunc
 
 
 #cs Internal Only
-    Initializes the assembly and sets up internal variables.
-    Gets called when using _Dll_Open and registers a shutdown callback when AutoIt exit.
-
-    @return (Bool)  1 on success, 0 on failure
-
-    @error          $AU_ERR_DLLAPI_STARTUP
-    @extended       Detailed error infos
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _AU_ConvertErorr
-    @see            __Dll_Shutdown
-    @see            __Dll_Open
+#
+#   Initializes the assembly and sets up internal variables.
+#   Gets called when using _Dll_Open and registers a shutdown callback when AutoIt exit.
+#
+#   @return (Bool)  1 on success, 0 on failure
+#
+#   @error          $AU_ERR_DLLAPI_STARTUP
+#   @extended       Detailed error infos
+#
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _AU_ConvertErorr
+#   @see            __Dll_Shutdown
+#   @see            __Dll_Open
+#
 #ce
 Func __Dll_StartUp()
     If _Dll_IsInitialized() Then
@@ -474,20 +488,22 @@ EndFunc
 
 
 #cs Internal Only
-    Frees the previous loaded dlls, deallocates assembly and internal variables.
-    Gets auto called when AutoIt exits if initialized.
-
-    @return (Bool)  1 on success, 0 on failure
-
-    @error          $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_SHUTDOWN
-    @extended       Detailed error infos
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _AU_ConvertErorr
-    @see            __Dll_StartUp
-    @see            __Dll_Close
+#
+#   Frees the previous loaded dlls, deallocates assembly and internal variables.
+#   Gets auto called when AutoIt exits if initialized.
+#
+#   @return (Bool)  1 on success, 0 on failure
+#
+#   @error          $AU_ERR_DLLAPI_UNIT, $AU_ERR_DLLAPI_SHUTDOWN
+#   @extended       Detailed error infos
+#
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _AU_ConvertErorr
+#   @see            __Dll_StartUp
+#   @see            __Dll_Close
+#
 #ce
 Func __Dll_Shutdown()
     If Not _Dll_IsInitialized() Then
@@ -521,21 +537,23 @@ EndFunc
 
 
 #cs Internal Only
-    Loads a dll module from an address in memory.
-
-    @param (Pointer) Const $pBinaryAddress  Memory address of the binary data
-
-    @return (Handle)    DllModule Handle, 0 if failed
-
-    @error              $AU_ERR_DLLCALL_FAILED
-    @extended           Detailed error infos
-
-    @author             [Zvend](Zvend#6666)
-    @version            3.3.16.1
-    @since              3.3.16.1
-    @see                _AU_ConvertErorr
-    @see                __Dll_FreeLibrary
-    @see                __Dll_GetModuleExist
+#
+#   Loads a dll module from an address in memory.
+#
+#   @param (Pointer) Const $pBinaryAddress  Memory address of the binary data
+#
+#   @return (Handle)    DllModule Handle, 0 if failed
+#
+#   @error              $AU_ERR_DLLCALL_FAILED
+#   @extended           Detailed error infos
+#
+#   @author             [Zvend](Zvend#6666)
+#   @version            3.3.16.1
+#   @since              3.3.16.1
+#   @see                _AU_ConvertErorr
+#   @see                __Dll_FreeLibrary
+#   @see                __Dll_GetModuleExist
+#
 #ce
 Func __Dll_LoadLibraryA(Const $pBinaryAddress)
     ;Calls a function from the custom assembly to load the library from a pointer
@@ -552,21 +570,23 @@ EndFunc
 
 
 #cs Internal Only
-    Frees a previously loaded dll module.
+#
+#   Frees a previously loaded dll module.
+#
+#   @param (Handle) Const ByRef $hDllHandle     DllModule Handle to be freed
+#
+#   @return (Bool)  1 on success, 0 on failure
+#
+#   @error          $AU_ERR_DLLCALL_FAILED
+#   @extended       Detailed error infos
 
-    @param (Handle) Const ByRef $hDllHandle     DllModule Handle to be freed
-
-    @return (Bool)  1 on success, 0 on failure
-
-    @error          $AU_ERR_DLLCALL_FAILED
-    @extended       Detailed error infos
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _AU_ConvertErorr
-    @see            __Dll_FreeLibrary
-    @see            __Dll_GetModuleExist
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _AU_ConvertErorr
+#   @see            __Dll_FreeLibrary
+#   @see            __Dll_GetModuleExist
+#
 #ce
 Func __Dll_FreeLibrary(Const ByRef $hDllHandle)
     ;Calls a function from the custom assembly to free a library
@@ -582,16 +602,18 @@ EndFunc
 
 
 #cs Internal Only
-    Checks if a module exist in the API vector.
-
-    @param (Handle) Const ByRef $hDllHandle     DllModule Handle to check if it exists
-
-    @return (Bool)  1 on success, 0 on failure
-
-    @author         [Zvend](Zvend#6666)
-    @version        3.3.16.1
-    @since          3.3.16.1
-    @see            _Dll_Close
+#
+#   Checks if a module exist in the API vector.
+#
+#   @param (Handle) Const ByRef $hDllHandle     DllModule Handle to check if it exists
+#
+#   @return (Bool)  1 on success, 0 on failure
+#
+#   @author         [Zvend](Zvend#6666)
+#   @version        3.3.16.1
+#   @since          3.3.16.1
+#   @see            _Dll_Close
+#
 #ce
 Func __Dll_GetModuleExist(Const ByRef $hDllHandle)
     ;Searches the vector for the DllModule Handle
@@ -601,17 +623,19 @@ EndFunc
 
 
 #cs Internal Only
-    Returns the binary string of the custom assembly that makes it able to load dlls from memory,
-    free dlls or get their exported functions.
-
-    @return (Binary)    Custom Assembly or empty Binary("")
-
-    @error      Set to 1 if failed
-
-    @author     [Zvend](Zvend#6666)
-    @version    3.3.16.1
-    @since      3.3.16.1
-    @see        __Dll_StartUp
+#
+#   Returns the binary string of the custom assembly that makes it able to load dlls from memory,
+#   free dlls or get their exported functions.
+#
+#   @return (Binary)    Custom Assembly or empty Binary("")
+#
+#   @error      Set to 1 if failed
+#
+#   @author     [Zvend](Zvend#6666)
+#   @version    3.3.16.1
+#   @since      3.3.16.1
+#   @see        __Dll_StartUp
+#
 #ce
 Func __Dll_GetDllLoaderPayload()
     Static Local $dBinary = ""
