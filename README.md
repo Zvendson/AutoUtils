@@ -1,5 +1,5 @@
 ![Platform:Windows](https://img.shields.io/github/actions/workflow/status/Zvendson/Utils-For-AutoIt/Unittests.yml?style=for-the-badge)
-![Platform:Windows](<https://img.shields.io/badge/Version-0.3.0%20(Alpha)-d742f5?style=for-the-badge>)
+![Platform:Windows](<https://img.shields.io/badge/Version-0.4.0%20(Alpha)-d742f5?style=for-the-badge>)
 ![Platform:Windows](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge)
 
 # Utils for AutoIt
