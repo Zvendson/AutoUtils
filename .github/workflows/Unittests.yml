@@ -29,6 +29,7 @@ jobs:
           Start-Process SciTE4AutoIt3.exe -ArgumentList /S -NoNewWindow -Wait
       - name: Run Tests
         run: |
+          ::group::{VectorTests}
           $process86 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in UtilsForAutoit/Tests/TestVector.au3 /UserParams" -PassThru -NoNewWindow
           Wait-Process -InputObject $process86
 
@@ -36,9 +37,21 @@ jobs:
           Wait-Process -InputObject $process64
 
           if ($process86.ExitCode -ne 0) {
-              Write-Error "$($process86.ExitCode) Unit Tests x86 failed"
+              Write-Error "$($process86.ExitCode) Vector x86 Unit Tests x86 failed"
           }
 
           if ($process64.ExitCode -ne 0) {
-              Write-Error "$($process64.ExitCode) Unit Tests x64 failed"
+              Write-Error "$($process64.ExitCode) Vector x64 Unit Tests x64 failed"
           }
+          ::endgroup::
+
+          ::group::{DllTests}
+          $dllProcess86 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in UtilsForAutoit/Tests/TestDll.au3 /UserParams" -PassThru -NoNewWindow
+          Wait-Process -InputObject $dllProcess86
+
+          Write-Notice "Skipping TestDll.au3 for x64 since its not supported yet."
+
+          if ($dllProcess86.ExitCode -ne 0) {
+              Write-Error "$($dllProcess86.ExitCode) Unit x86 Tests x64 failed"
+          }
+          ::endgroup::
