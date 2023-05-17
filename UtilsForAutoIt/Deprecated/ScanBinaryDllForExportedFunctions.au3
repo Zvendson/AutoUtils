@@ -22,6 +22,34 @@
 
 
 
+Global Const $tagINTERNAL_SECTION_HEADER = "" _
+    & "CHAR  Name[8];" _
+    & "DWORD VirtualSize;" _
+    & "DWORD VirtualAddress;" _
+    & "DWORD SizeOfRawData;" _
+    & "DWORD PointerToRawData;" _
+    & "DWORD PointerToRelocations;" _
+    & "DWORD PointerToLinenumbers;" _
+    & "WORD  NumberOfRelocations;" _
+    & "WORD  NumberOfLinenumbers;" _
+    & "DWORD Characteristics;"
+
+
+
+Global Const $tagINTERNAL_EXPORT_DIRECTORY = "" _
+    & "DWORD Characteristics;" _
+    & "DWORD TimeDateStamp;" _
+    & "WORD  MajorVersion;" _
+    & "WORD  MinorVersion;" _
+    & "DWORD Name;" _
+    & "DWORD Base;" _
+    & "DWORD NumberOfFunctions;" _
+    & "DWORD NumberOfNames;" _
+    & "DWORD AddressOfFunctions;" _
+    & "DWORD AddressOfNames;" _
+    & "DWORD AddressOfNameOrdinals;"
+
+
 Global $hFile = FileOpen("Test.dll", 16)
 Global $dDllBinary = FileRead($hFile)
 FileClose($hFile)
@@ -59,10 +87,10 @@ Func __Dll_GetNtHeader(Const $dDllBinary)
     Local $tDllBinary = DllStructCreate("BYTE[" & BinaryLen($dDllBinary) & "]")
     DllStructSetData($tDllBinary, 1, BinaryMid($dDllBinary, $nDllStart))
 
-    Local $tDosHeader = DllStructCreate($tagDOS_HEADER, DllStructGetPtr($tDllBinary))
+    Local $tDosHeader = DllStructCreate($tagINTERNAL_DOS_HEADER, DllStructGetPtr($tDllBinary))
     Local $nOffest = DllStructGetData($tDosHeader, "e_lfanew")
 
-    Local $tNtFileHeader = DllStructCreate($tagNT_HEADER, DllStructGetPtr($tDosHeader) + $nOffest)
+    Local $tNtFileHeader = DllStructCreate($tagINTERNAL_NT_HEADER, DllStructGetPtr($tDosHeader) + $nOffest)
     Local $nNumberOfSections = DllStructGetData($tNtFileHeader, "NumberOfSections")
     Local $nCharacteristics = DllStructGetData($tNtFileHeader, "Characteristics")
     Local $nVBase = DllStructGetData($tNtFileHeader, "BaseOfData")
@@ -80,7 +108,7 @@ Func __Dll_GetNtHeader(Const $dDllBinary)
     For $i = 0 To $nNumberOfSections - 1
         $nOffest = DllStructGetPtr($tNtFileHeader) + DllStructGetSize($tNtFileHeader)
         $nOffest = $nOffest + $i * 0x0028 ;~ 0x0028 = SizeOf($tagSECTION_HEADER)
-        $tQueueSectionHeader = DllStructCreate($tagSECTION_HEADER, $nOffest)
+        $tQueueSectionHeader = DllStructCreate($tagINTERNAL_SECTION_HEADER, $nOffest)
         $sSectionName =  DllStructGetData($tQueueSectionHeader, "Name")
         ConsoleWrite("    " & $sSectionName)
         If $sSectionName == ".rdata" Then
@@ -98,7 +126,7 @@ Func __Dll_GetNtHeader(Const $dDllBinary)
     Local $nRawAddress = DllStructGetData($tSectionHeader, "PointerToRawData")
 
     If $nDataSec_ExportDirOffset <> 0 Then
-        Local $tExportDirectory = DllStructCreate($tagEXPORT_DIRECTORY, DllStructGetPtr($tDllBinary) + $nDataSec_ExportDirOffset + $nRawAddress - $nVBase)
+        Local $tExportDirectory = DllStructCreate($tagINTERNAL_EXPORT_DIRECTORY, DllStructGetPtr($tDllBinary) + $nDataSec_ExportDirOffset + $nRawAddress - $nVBase)
         Local $nDllNameRVA = $nRawAddress + DllStructGetData($tExportDirectory, "Name") - $nVBase
         Local $tDllName = DllStructCreate("CHAR Name[256]", DllStructGetPtr($tDllBinary) + $nDllNameRVA)
         ConsoleWrite("DllName = " & DllStructGetData($tDllName, 1) & @CRLF)

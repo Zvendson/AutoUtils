@@ -890,10 +890,14 @@ Func _Vector_Find(Const ByRef $aVector, Const $vValue)
 		Return SetExtended(-1, 0)
 	EndIf
 
-
+    Local $sType = VarGetType($vValue)
     Local $aContainer = $aVector[$__VECTOR_BUFFER]
 
     For $i = 0 To $aVector[$__VECTOR_SIZE] - 1
+        If Not (VarGetType($aContainer[$i]) == $sType) Then
+            ContinueLoop
+        EndIf
+
         If $aContainer[$i] = $vValue Then
 			Return SetExtended($i, 1)
 		EndIf
