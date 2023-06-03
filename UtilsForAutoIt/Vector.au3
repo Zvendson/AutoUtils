@@ -70,6 +70,7 @@ Global Enum _
 
 Global Enum _
     $VECTORERR_NONE         , _
+    $VECTORERR_BAD_CAPACITY , _
     $VECTORERR_BAD_MODIFIER , _
     $VECTORERR_INVALID_FUNC , _
     $VECTORERR_BAD_VECTOR   , _
@@ -86,7 +87,8 @@ Global Enum _
 ; Parameters ....: $nCapacity           - [optional and const] an Integer. Default is 32.
 ;                  $vDefaultValue       - [optional and const] a Variant. Default is Null.
 ;                  $fModifier           - [optional and const] a Float. Default is 1.5.
-; Return values .: Vector on Success. Null on Failure and sets the errorcode to $VECTORERR_BAD_MODIFIER.
+; Return values .: Vector on Success. Null on Failure and sets the errorcode to $VECTORERR_BAD_MODIFIER or
+; ...............: $VECTORERR_BAD_CAPACITY.
 ; Author ........: Zvend
 ; Modified ......: Nadav
 ; Remarks .......:
@@ -97,6 +99,10 @@ Global Enum _
 Func _Vector_Init(Const $nCapacity = 32, Const $vDefaultValue = Null, Const $fModifier = 1.5)
     If $fModifier < 1.5 Then
         Return SetError($VECTORERR_BAD_MODIFIER, 0, Null)
+    EndIf
+
+    If Not IsInt($nCapacity) Or $nCapacity < 4 Then
+        Return SetError($VECTORERR_BAD_CAPACITY, 0, Null)
     EndIf
 
     Local $aContainer[$nCapacity]
@@ -375,7 +381,7 @@ EndFunc
 ; Syntax ........: _Vector_Reserve(Byref $aVector, Const $nCapacity)
 ; Parameters ....: $aVector             - [in/out] a Vector.
 ;                  $nCapacity           - [const] an Integer.
-; Return values .: 1 on Success, 0 on Failure and sets errorcode to $VECTORERR_BAD_VECTOR.
+; Return values .: 1 on Success, 0 on Failure and sets errorcode to $VECTORERR_BAD_VECTOR or $VECTORERR_BAD_CAPACITY.
 ; Author ........: Zvend
 ; Modified ......:
 ; Remarks .......:
@@ -386,6 +392,10 @@ EndFunc
 Func _Vector_Reserve(ByRef $aVector, Const $nCapacity)
     If Not _Vector_IsVector($aVector) Then
         Return SetError(@error, 0, 0)
+    EndIf
+
+    If Not IsInt($nCapacity) Or $nCapacity < 4 Then
+        Return SetError($VECTORERR_BAD_CAPACITY, 0, 0)
     EndIf
 
     If $nCapacity <= $aVector[$__VECTOR_CAPACITY] Then
