@@ -640,7 +640,7 @@ Func _Vector_AddVector(ByRef $aVector, Const ByRef $aFromVector)
 		$i += 1
 	Next
 
-    $aVector[$__VECTOR_SIZE] += $nSize
+    $aVector[$__VECTOR_SIZE] += $nFromSize
     $aVector[$__VECTOR_BUFFER] = $aContainer
 
     Return 1
