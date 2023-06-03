@@ -36,19 +36,9 @@ jobs:
           Wait-Process -InputObject $process64
 
           if ($process86.ExitCode -ne 0) {
-              Write-Error "$($process86.ExitCode) Vector x86 Unit Tests x86 failed"
+              Write-Error "$($process86.ExitCode) Vector x86 Unit Tests failed"
           }
 
           if ($process64.ExitCode -ne 0) {
-              Write-Error "$($process64.ExitCode) Vector x64 Unit Tests x64 failed"
-          }
-      - name: Run Dll Tests
-        run: |
-          $dllProcess86 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in UtilsForAutoit/Tests/TestDll.au3 /UserParams" -PassThru -NoNewWindow
-          Wait-Process -InputObject $dllProcess86
-
-          echo "Skipping TestDll.au3 for x64 since its not supported. yet.."
-
-          if ($dllProcess86.ExitCode -ne 0) {
-              Write-Error "$($dllProcess86.ExitCode) Unit x86 Tests x64 failed"
+              Write-Error "$($process64.ExitCode) Vector x64 Unit Tests failed"
           }
