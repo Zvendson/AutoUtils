@@ -83,7 +83,7 @@ Global Enum _
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _Vector_Init
 ; Description ...: Creates a new Vector.
-; Syntax ........: _Vector_Init([$nCapacity = 32[, $vDefaultValue = Null[, $fModifier = 1.5[, $fuCompare = Null]]]])
+; Syntax ........: _Vector_Init([$nCapacity = 32[, $vDefaultValue = Null[, $fModifier = 1.5]]])
 ; Parameters ....: $nCapacity           - [optional and const] an Integer. Default is 32.
 ;                  $vDefaultValue       - [optional and const] a Variant. Default is Null.
 ;                  $fModifier           - [optional and const] a Float. Default is 1.5.
