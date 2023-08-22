@@ -2,12 +2,12 @@
 ![Platform:Windows](<https://img.shields.io/badge/Version-0.4.0%20(Alpha)-d742f5?style=for-the-badge>)
 ![Platform:Windows](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge)
 
-# Utils for AutoIt
+# Auto Utils
 
 A currently small library with a handful tools u could need working around AutoIt 3.<br>
 (See [Wiki](https://github.com/Zvendson/AutoUtils/wiki))
 
-[![Discord Profile](https://img.shields.io/badge/Discord-Zvend%236666-6900c4?logo=discord)](https://discord.com/channels/259575222821322754)
+[![Discord Profile](https://img.shields.io/badge/Discord-zvend-6900c4?logo=discord)](https://discordapp.com/users/259575222821322754)
 
 ## Requirements
 
