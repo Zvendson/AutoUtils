@@ -29,10 +29,10 @@ jobs:
           Start-Process SciTE4AutoIt3.exe -ArgumentList /S -NoNewWindow -Wait
       - name: Run Vector Tests
         run: |
-          $process86 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in UtilsForAutoit/Tests/TestVector.au3 /UserParams" -PassThru -NoNewWindow
+          $process86 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in Tests/TestVector.au3 /UserParams" -PassThru -NoNewWindow
           Wait-Process -InputObject $process86
 
-          $process64 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in UtilsForAutoit/Tests/TestVector.au3 /UserParams" -PassThru -NoNewWindow
+          $process64 = Start-Process "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3.exe" "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /run /prod /x86 /ErrorStdOut /in Tests/TestVector.au3 /UserParams" -PassThru -NoNewWindow
           Wait-Process -InputObject $process64
 
           if ($process86.ExitCode -ne 0) {
