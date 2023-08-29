@@ -1,3 +1,4 @@
+---
 name: Test And Release
 
 on:
@@ -50,3 +51,5 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          files: |
+            *.au3
