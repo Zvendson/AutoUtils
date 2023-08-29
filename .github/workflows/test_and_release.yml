@@ -4,7 +4,7 @@ name: Test And Release
 on:
   push:
     tags:
-      - "v*"
+      - "*"
 
 jobs:
   Unit_Tests:
