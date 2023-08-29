@@ -1,6 +1,9 @@
-name: UnitTests
+name: Test And Release
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    tags:
+      - "v*"
 
 jobs:
   Unit_Tests:
@@ -42,3 +45,8 @@ jobs:
           if ($process64.ExitCode -ne 0) {
               Write-Error "$($process64.ExitCode) Vector x64 Unit Tests failed"
           }
+      - name: Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
