@@ -267,7 +267,7 @@ Func __Array_GetIndex(Const ByRef $avArray, $nIndex)
 		Return SetError($ARRAYERR_INVALID_INDEX, 0, 0)
 	EndIf
 
-	If $nIndex <= 0 Then
+	If $nIndex < 0 Then
 		$nIndex = $nSize - Abs(Mod($nIndex, $nSize))
 	EndIf
 
