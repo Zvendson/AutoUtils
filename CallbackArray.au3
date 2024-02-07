@@ -1,8 +1,8 @@
 #cs ----------------------------------------------------------------------------
 
  AutoIt Version: 3.3.16.1
- Author:         Zvend
- Discord:        Zvend#6666
+ Author(s):       Zvend
+ Discord(s):      zvend
 
  Script Function:
     _CallbackArray_Init(Const $nSize) -> Array[$nSize]

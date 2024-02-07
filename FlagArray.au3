@@ -2,7 +2,7 @@
 
  AutoIt Version: 3.3.16.1
  Author(s):       Zvend
- Discord(s):      Zvend#6666
+ Discord(s):      zvend
 
  Script Functions:
     _FlagArray_Init(Const $nCapacity = 32)                                                      -> FlagArray

@@ -2,7 +2,7 @@
 
  AutoIt Version:  3.3.16.1
  Author(s):       Zvend       Nadav
- Discord(s):      Zvend#6666  Abaddon#9048
+ Discord(s):      zvend       hero_of_abaddon
 
  Description:
     This Vector "Class" implementation acts exactly like the stdlib vector from C++ just without typesafe values.

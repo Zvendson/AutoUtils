@@ -1,4 +1,15 @@
+#cs ----------------------------------------------------------------------------
+
+ AutoIt Version: 3.3.16.1
+ Author(s):       Zvend
+ Discord(s):      zvend
+
+#ce ----------------------------------------------------------------------------
+
 #include-once
+#AutoIt3Wrapper_Au3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6 -w 7
+
+
 
 ;For storing loaded modules (Internal use)
 #include ".\Vector.au3"

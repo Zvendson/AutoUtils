@@ -2,7 +2,7 @@
 
  AutoIt Version:  3.3.16.1
  Author(s):       Zvend       Nadav
- Discord(s):      Zvend#6666  Abaddon#9048
+ Discord(s):      zvend       hero_of_abaddon
 
  Description:
     Small UnitTest library for GitHub Workflows

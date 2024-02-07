@@ -7,7 +7,8 @@
 A currently small library with a handful tools u could need working around AutoIt 3.<br>
 (See [Wiki](https://github.com/Zvendson/AutoUtils/wiki))
 
-[![Discord Profile](https://img.shields.io/badge/Discord-zvend-6900c4?logo=discord)](https://discordapp.com/users/259575222821322754)
+[![Zvend Discord Profile](https://img.shields.io/badge/Discord-Zvend-6900c4?logo=discord)](https://discordapp.com/users/259575222821322754)
+[![Nadav Discord Profile](https://img.shields.io/badge/Discord-Nadav-6900c4?logo=discord)](https://discordapp.com/users/599144935937015816)
 
 ## Requirements
 
