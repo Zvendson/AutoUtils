@@ -230,10 +230,14 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Array_Set(ByRef $avArray, $nIndex, Const $vValue)
+Func _Array_Set(ByRef $avArray, $nIndex, $vValue)
 	$nIndex = __Array_GetIndex($avArray, $nIndex)
 	If @error Then
 		Return SetError(@error, 0, 0)
+	EndIf
+
+	If $vValue = Default Then
+		$vValue = $avArray[$__AU_ARRAY_INITVALUE]
 	EndIf
 
 	$avArray[$__AU_ARRAY_RESERVED + $nIndex] = $vValue
