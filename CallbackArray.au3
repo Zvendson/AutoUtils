@@ -97,7 +97,7 @@ EndFunc
 
 
 
-Func _CallbackArray_Get(ByRef $aArray, Const $nIndex)
+Func _CallbackArray_Get(Const ByRef $aArray, Const $nIndex)
     Static Local $aEmptyArray = [0]
 
     If Not IsArray($aArray) Then
