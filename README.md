@@ -1,5 +1,5 @@
 ![Platform:Windows](https://img.shields.io/github/actions/workflow/status/Zvendson/AutoUtils/test_and_release.yml?style=for-the-badge)
-![Platform:Windows](<https://img.shields.io/badge/Version-0.5.2%20(Alpha)-d742f5?style=for-the-badge>)
+![Platform:Windows](<https://img.shields.io/badge/Version-0.5.3%20(Alpha)-d742f5?style=for-the-badge>)
 ![Platform:Windows](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge)
 
 # Auto Utils
