@@ -18,31 +18,31 @@ UTExit()
 
 
 Func testDllStart()
-	UTStart("_Dll_StartUp()")
+    UTStart("_Dll_StartUp()")
 
-	UTAssert(_Dll_StartUp(), "_Dll_StartUp() // First init try")
-	UTAssert(_Dll_StartUp(), "_Dll_StartUp() // Second init try")
+    UTAssert(_Dll_StartUp(), "_Dll_StartUp() // First init try")
+    UTAssert(_Dll_StartUp(), "_Dll_StartUp() // Second init try")
 
-	UTStop()
+    UTStop()
 EndFunc
 
 
 
 Func testDllOpen()
-	UTStart("_Dll_Open()")
+    UTStart("_Dll_Open()")
 
-	UTAssert(_Dll_Open($dDllPayload), "_Dll_Open($dDllPayload) // First open try")
-	UTAssert(_Dll_Open($dDllPayload), "_Dll_Open($dDllPayload) // Second open try")
+    UTAssert(_Dll_Open($dDllPayload), "_Dll_Open($dDllPayload) // First open try")
+    UTAssert(_Dll_Open($dDllPayload), "_Dll_Open($dDllPayload) // Second open try")
 
-	UTStop()
+    UTStop()
 EndFunc
 
 
 
 Func testDllGetProcAddress()
-	UTStart("_Dll_GetProcAddress()")
+    UTStart("_Dll_GetProcAddress()")
 
-	Local $hDll = _Dll_Open($dDllPayload)
+    Local $hDll = _Dll_Open($dDllPayload)
 
     _Dll_GetProcAddress($hDll, "MakeVector")
     _Dll_GetProcAddress($hDll, "KillVector")
@@ -50,45 +50,45 @@ Func testDllGetProcAddress()
     _Dll_GetProcAddress($hDll, "GetInt")
 
 
-	UTAssert(_Dll_GetProcAddress($hDll, 'MakeVector') <> 0, "_Dll_GetProcAddress($hDll, 'MakeVector') <> 0")
-	UTAssert(_Dll_GetProcAddress($hDll, 'KillVector') <> 0, "_Dll_GetProcAddress($hDll, 'KillVector') <> 0")
-	UTAssert(_Dll_GetProcAddress($hDll, 'PushInt')    <> 0, "_Dll_GetProcAddress($hDll, 'PushInt')    <> 0")
-	UTAssert(_Dll_GetProcAddress($hDll, 'GetInt')     <> 0, "_Dll_GetProcAddress($hDll, 'GetInt')     <> 0")
-	UTAssert(_Dll_GetProcAddress($hDll, 'InvalidFunc') = 0, "_Dll_GetProcAddress($hDll, 'MakeVector') <> 0")
-	UTAssert(_Dll_GetProcAddress($hDll, True)          = 0, "_Dll_GetProcAddress($hDll, True)          = 0")
-	UTAssert(_Dll_GetProcAddress($hDll, 180.0)         = 0, "_Dll_GetProcAddress($hDll, 180.0)         = 0")
-	UTAssert(_Dll_GetProcAddress($hDll, 50)            = 0, "_Dll_GetProcAddress($hDll, 50)            = 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 'MakeVector') <> 0, "_Dll_GetProcAddress($hDll, 'MakeVector') <> 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 'KillVector') <> 0, "_Dll_GetProcAddress($hDll, 'KillVector') <> 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 'PushInt')    <> 0, "_Dll_GetProcAddress($hDll, 'PushInt')    <> 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 'GetInt')     <> 0, "_Dll_GetProcAddress($hDll, 'GetInt')     <> 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 'InvalidFunc') = 0, "_Dll_GetProcAddress($hDll, 'MakeVector') <> 0")
+    UTAssert(_Dll_GetProcAddress($hDll, True)          = 0, "_Dll_GetProcAddress($hDll, True)          = 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 180.0)         = 0, "_Dll_GetProcAddress($hDll, 180.0)         = 0")
+    UTAssert(_Dll_GetProcAddress($hDll, 50)            = 0, "_Dll_GetProcAddress($hDll, 50)            = 0")
 
-	UTStop()
+    UTStop()
 EndFunc
 
 
 
 Func testDllClose()
-	UTStart("_Dll_Close()")
+    UTStart("_Dll_Close()")
 
-	Local $hDll = _Dll_Open($dDllPayload)
-	UTAssert($hDll <> 0, "_Dll_Open($dDllPayload) <> 0")
+    Local $hDll = _Dll_Open($dDllPayload)
+    UTAssert($hDll <> 0, "_Dll_Open($dDllPayload) <> 0")
 
-	UTAssert(_Dll_Close('$hDll') = 0, "_Dll_Close('$hDll') = 0")
-	UTAssert(_Dll_Close($hDll)   = 1, "_Dll_Close($hDll)   = 1")
-	UTAssert(_Dll_Close(42)      = 0, "_Dll_Close(42)      = 0")
-	UTAssert(_Dll_Close(True)    = 0, "_Dll_Close(True)    = 0")
-	UTAssert(_Dll_Close($hDll)   = 0, "_Dll_Close($hDll)   = 0")
-	UTAssert(_Dll_Close(Default) = 0, "_Dll_Close(Default) = 0")
+    UTAssert(_Dll_Close('$hDll') = 0, "_Dll_Close('$hDll') = 0")
+    UTAssert(_Dll_Close($hDll)   = 1, "_Dll_Close($hDll)   = 1")
+    UTAssert(_Dll_Close(42)      = 0, "_Dll_Close(42)      = 0")
+    UTAssert(_Dll_Close(True)    = 0, "_Dll_Close(True)    = 0")
+    UTAssert(_Dll_Close($hDll)   = 0, "_Dll_Close($hDll)   = 0")
+    UTAssert(_Dll_Close(Default) = 0, "_Dll_Close(Default) = 0")
 
-	UTStop()
+    UTStop()
 EndFunc
 
 
 
 Func testDllShutdown()
-	UTStart("_Dll_Shutdown()")
+    UTStart("_Dll_Shutdown()")
 
-	UTAssert(_Dll_Shutdown() = 1, "_Dll_Shutdown() = 1")
-	UTAssert(_Dll_Shutdown() = 0, "_Dll_Shutdown() = 0")
+    UTAssert(_Dll_Shutdown() = 1, "_Dll_Shutdown() = 1")
+    UTAssert(_Dll_Shutdown() = 0, "_Dll_Shutdown() = 0")
 
-	UTStop()
+    UTStop()
 EndFunc
 
 

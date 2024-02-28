@@ -36,15 +36,15 @@
 
 
 Func Int8($nInt)
-	$nInt = LoBYTE($nInt)
-	Return $nInt - 0x100 * BitShift($nInt, 7)
+    $nInt = LoBYTE($nInt)
+    Return $nInt - 0x100 * BitShift($nInt, 7)
 EndFunc
 
 
 
 Func Int16($nInt)
-	$nInt = LoWORD($nInt)
-	Return $nInt - 0x10000 * BitShift($nInt, 15)
+    $nInt = LoWORD($nInt)
+    Return $nInt - 0x10000 * BitShift($nInt, 15)
 EndFunc
 
 

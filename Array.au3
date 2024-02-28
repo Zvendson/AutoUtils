@@ -5,43 +5,43 @@
  Discord(s):      zvend
 
  Description:
-	Easily creates autoit arrays but hides all the stuff about ReDim and let's
-	you worry about different things. It also allows you to use negative
-	indecies for a backwards lookup. Invalid indecies wont break the script
-	and will just shoot an error, causing the script to run more 'saver'.
+    Easily creates autoit arrays but hides all the stuff about ReDim and let's
+    you worry about different things. It also allows you to use negative
+    indecies for a backwards lookup. Invalid indecies wont break the script
+    and will just shoot an error, causing the script to run more 'saver'.
 
-	Although it only covers 1D arrays you can nest arrays.
-	Example:
-		$g_aArray = _Array_New(3, _Array_New(3))
+    Although it only covers 1D arrays you can nest arrays.
+    Example:
+        $g_aArray = _Array_New(3, _Array_New(3))
 
-	This will result in following array:
-		[ [0, 0, 0],  [0, 0, 0],  [0, 0, 0] ]
+    This will result in following array:
+        [ [0, 0, 0],  [0, 0, 0],  [0, 0, 0] ]
 
-	And to get a subarray you simply do as usual:
-		_Array_Get($g_aArray, 0)
-		_Array_Get($g_aArray, 1)
-		_Array_Get($g_aArray, 2)
+    And to get a subarray you simply do as usual:
+        _Array_Get($g_aArray, 0)
+        _Array_Get($g_aArray, 1)
+        _Array_Get($g_aArray, 2)
 
-	Modifying those will be a bit more 'complicated':
-		$aSubarray = _Array_Get($g_aArray, 1)
-		_Array_Set($aSubarray, 2, 42)
-		_Array_Set($g_aArray, 1, $aSubarray)
+    Modifying those will be a bit more 'complicated':
+        $aSubarray = _Array_Get($g_aArray, 1)
+        _Array_Set($aSubarray, 2, 42)
+        _Array_Set($g_aArray, 1, $aSubarray)
 
-	This will result in following array:
-		[ [0, 0, 0],  [0, 0, 42],  [0, 0, 0] ]
+    This will result in following array:
+        [ [0, 0, 0],  [0, 0, 42],  [0, 0, 0] ]
 
 
  Script Function:
-	_Array_New($nArraySize = 0, Const $vInitValue = 0)				-> Array
-	_Array_Resize(ByRef $avArray, $nNewSize)						-> Bool
-	_Array_GetSize(Const ByRef $avArray)							-> UInt
-	_Array_GetInitValue(Const ByRef $avArray)						-> Variant
-	_Array_Get(Const ByRef $avArray, $nIndex, Const $vValue = 0)	-> Variant
-	_Array_Set(ByRef $avArray, $nIndex, Const $vValue)				-> Bool
+    _Array_New($nArraySize = 0, Const $vInitValue = 0)                -> Array
+    _Array_Resize(ByRef $avArray, $nNewSize)                        -> Bool
+    _Array_GetSize(Const ByRef $avArray)                            -> UInt
+    _Array_GetInitValue(Const ByRef $avArray)                        -> Variant
+    _Array_Get(Const ByRef $avArray, $nIndex, Const $vValue = 0)    -> Variant
+    _Array_Set(ByRef $avArray, $nIndex, Const $vValue)                -> Bool
 
  Internal Functions:
-	__Array_GetIndex(Const ByRef $avArray, $nIndex)              	-> UInt
-	__Array_IsSizeValid(Const $nSize)                            	-> Bool
+    __Array_GetIndex(Const ByRef $avArray, $nIndex)                  -> UInt
+    __Array_IsSizeValid(Const $nSize)                                -> Bool
 
 
 #ce ----------------------------------------------------------------------------
@@ -56,8 +56,8 @@ Global Const $ARRAYERR_INVALID_SIZE  = 2
 Global Const $ARRAYERR_INVALID_INDEX = 3
 
 Global Enum $__AU_ARRAY_SIZE, _
-			$__AU_ARRAY_INITVALUE, _
-			$__AU_ARRAY_RESERVED
+            $__AU_ARRAY_INITVALUE, _
+            $__AU_ARRAY_RESERVED
 Global Const $__AU_ARRAY_EMPTY = [0, 0]
 
 
@@ -76,21 +76,21 @@ Global Const $__AU_ARRAY_EMPTY = [0, 0]
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_New($nArraySize = 0, Const $vInitValue = 0)
-	$nArraySize = Int(Abs($nArraySize))
+    $nArraySize = Int(Abs($nArraySize))
 
-	If Not __Array_IsSizeValid($nArraySize) Then
-		Return SetError($ARRAYERR_INVALID_SIZE, 0, $__AU_ARRAY_EMPTY)
-	EndIf
+    If Not __Array_IsSizeValid($nArraySize) Then
+        Return SetError($ARRAYERR_INVALID_SIZE, 0, $__AU_ARRAY_EMPTY)
+    EndIf
 
-	Local $avArray[$__AU_ARRAY_RESERVED + $nArraySize]
-	$avArray[$__AU_ARRAY_SIZE]      = $nArraySize
-	$avArray[$__AU_ARRAY_INITVALUE] = $vInitValue
+    Local $avArray[$__AU_ARRAY_RESERVED + $nArraySize]
+    $avArray[$__AU_ARRAY_SIZE]      = $nArraySize
+    $avArray[$__AU_ARRAY_INITVALUE] = $vInitValue
 
-	For $i = $__AU_ARRAY_RESERVED To $nArraySize + $__AU_ARRAY_RESERVED - 1
-		$avArray[$i] = $vInitValue
-	Next
+    For $i = $__AU_ARRAY_RESERVED To $nArraySize + $__AU_ARRAY_RESERVED - 1
+        $avArray[$i] = $vInitValue
+    Next
 
-	Return $avArray
+    Return $avArray
 EndFunc
 
 
@@ -110,34 +110,34 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_Resize(ByRef $avArray, $nNewSize)
-	If Not IsArray($avArray) Then
-		Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
-	EndIf
+    If Not IsArray($avArray) Then
+        Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
+    EndIf
 
-	$nNewSize = Int(Abs($nNewSize))
+    $nNewSize = Int(Abs($nNewSize))
 
-	If Not __Array_IsSizeValid($nNewSize) Then
-		Return SetError($ARRAYERR_INVALID_SIZE, 0, 0)
-	EndIf
+    If Not __Array_IsSizeValid($nNewSize) Then
+        Return SetError($ARRAYERR_INVALID_SIZE, 0, 0)
+    EndIf
 
-	Local $nOldSize = $avArray[$__AU_ARRAY_SIZE]
+    Local $nOldSize = $avArray[$__AU_ARRAY_SIZE]
 
-	If $nOldSize = $nNewSize Then
-		Return 1
-	EndIf
+    If $nOldSize = $nNewSize Then
+        Return 1
+    EndIf
 
-	ReDim $avArray[$__AU_ARRAY_RESERVED + $nNewSize]
-	$avArray[$__AU_ARRAY_SIZE] = $nNewSize
+    ReDim $avArray[$__AU_ARRAY_RESERVED + $nNewSize]
+    $avArray[$__AU_ARRAY_SIZE] = $nNewSize
 
-	If $nOldSize < $nNewSize Then
+    If $nOldSize < $nNewSize Then
 
-		For $i = $nOldSize + $__AU_ARRAY_RESERVED To $nNewSize + $__AU_ARRAY_RESERVED - 1
-			$avArray[$i] = $avArray[$__AU_ARRAY_INITVALUE]
-		Next
+        For $i = $nOldSize + $__AU_ARRAY_RESERVED To $nNewSize + $__AU_ARRAY_RESERVED - 1
+            $avArray[$i] = $avArray[$__AU_ARRAY_INITVALUE]
+        Next
 
-	EndIf
+    EndIf
 
-	Return 1
+    Return 1
 EndFunc
 
 
@@ -156,11 +156,11 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_GetSize(Const ByRef $avArray)
-	If Not IsArray($avArray) Then
-		Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
-	EndIf
+    If Not IsArray($avArray) Then
+        Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
+    EndIf
 
-	Return $avArray[$__AU_ARRAY_SIZE]
+    Return $avArray[$__AU_ARRAY_SIZE]
 EndFunc
 
 
@@ -179,11 +179,11 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_GetInitValue(Const ByRef $avArray)
-	If Not IsArray($avArray) Then
-		Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
-	EndIf
+    If Not IsArray($avArray) Then
+        Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
+    EndIf
 
-	Return $avArray[$__AU_ARRAY_INITVALUE]
+    Return $avArray[$__AU_ARRAY_INITVALUE]
 EndFunc
 
 
@@ -205,12 +205,12 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_Get(Const ByRef $avArray, $nIndex, Const $vValue = 0)
-	$nIndex = __Array_GetIndex($avArray, $nIndex)
-	If @error Then
-		Return SetError(@error, 0, $vValue)
-	EndIf
+    $nIndex = __Array_GetIndex($avArray, $nIndex)
+    If @error Then
+        Return SetError(@error, 0, $vValue)
+    EndIf
 
-	Return $avArray[$__AU_ARRAY_RESERVED + $nIndex]
+    Return $avArray[$__AU_ARRAY_RESERVED + $nIndex]
 EndFunc
 
 
@@ -231,18 +231,18 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_Set(ByRef $avArray, $nIndex, $vValue)
-	$nIndex = __Array_GetIndex($avArray, $nIndex)
-	If @error Then
-		Return SetError(@error, 0, 0)
-	EndIf
+    $nIndex = __Array_GetIndex($avArray, $nIndex)
+    If @error Then
+        Return SetError(@error, 0, 0)
+    EndIf
 
-	If $vValue = Default Then
-		$vValue = $avArray[$__AU_ARRAY_INITVALUE]
-	EndIf
+    If $vValue = Default Then
+        $vValue = $avArray[$__AU_ARRAY_INITVALUE]
+    EndIf
 
-	$avArray[$__AU_ARRAY_RESERVED + $nIndex] = $vValue
+    $avArray[$__AU_ARRAY_RESERVED + $nIndex] = $vValue
 
-	Return 1
+    Return 1
 EndFunc
 
 
@@ -262,20 +262,20 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Array_GetIndex(Const ByRef $avArray, $nIndex)
-	If Not IsArray($avArray) Then
-		Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
-	EndIf
+    If Not IsArray($avArray) Then
+        Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
+    EndIf
 
-	Local $nSize = _Array_GetSize($avArray)
-	If $nIndex >= $nSize Then
-		Return SetError($ARRAYERR_INVALID_INDEX, 0, 0)
-	EndIf
+    Local $nSize = _Array_GetSize($avArray)
+    If $nIndex >= $nSize Then
+        Return SetError($ARRAYERR_INVALID_INDEX, 0, 0)
+    EndIf
 
-	If $nIndex < 0 Then
-		$nIndex = $nSize - Abs(Mod($nIndex, $nSize))
-	EndIf
+    If $nIndex < 0 Then
+        $nIndex = $nSize - Abs(Mod($nIndex, $nSize))
+    EndIf
 
-	Return $nIndex
+    Return $nIndex
 EndFunc
 
 
@@ -294,8 +294,8 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Array_IsSizeValid(Const $nSize)
-	;AutoIt Arrays are limited to 16 million elements
-	Return Int($nSize < (16000000 - $__AU_ARRAY_RESERVED))
+    ;AutoIt Arrays are limited to 16 million elements
+    Return Int($nSize < (16000000 - $__AU_ARRAY_RESERVED))
 EndFunc
 
 

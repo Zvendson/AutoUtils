@@ -810,13 +810,13 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Dll_GetModuleHandleW(Const $sModuleName)
-	Local $aCall = DllCall($__g_hDll_KernelDll, "HANDLE", "GetModuleHandleW", "WSTR", $sModuleName)
+    Local $aCall = DllCall($__g_hDll_KernelDll, "HANDLE", "GetModuleHandleW", "WSTR", $sModuleName)
 
-	If @error Then
+    If @error Then
         Return SetError($DLLERR_DLLCALL_FAILED, @error, 0)
-	EndIf
+    EndIf
 
-	Return $aCall[0]
+    Return $aCall[0]
 EndFunc
 
 
@@ -838,13 +838,13 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Dll_GetProcAddress(Const $hModule, Const $sProcName)
-	Local $aCall = DllCall($__g_hDll_KernelDll, "PTR", "GetProcAddress", "HANDLE", $hModule, "STR", $sProcName)
+    Local $aCall = DllCall($__g_hDll_KernelDll, "PTR", "GetProcAddress", "HANDLE", $hModule, "STR", $sProcName)
 
-	If @error Then
+    If @error Then
         Return SetError($DLLERR_DLLCALL_FAILED, @error, 0)
-	EndIf
+    EndIf
 
-	Return $aCall[0]
+    Return $aCall[0]
 EndFunc
 
 
@@ -868,13 +868,13 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Dll_VirtualAlloc(Const $pAddress, Const $nSize, Const $nAllocation, Const $nProtect)
-	Local $aCall = DllCall($__g_hDll_KernelDll, "PTR", "VirtualAlloc", "PTR", $pAddress, "ULONG_PTR", $nSize, "DWORD", $nAllocation, "DWORD", $nProtect)
+    Local $aCall = DllCall($__g_hDll_KernelDll, "PTR", "VirtualAlloc", "PTR", $pAddress, "ULONG_PTR", $nSize, "DWORD", $nAllocation, "DWORD", $nProtect)
 
-	If @error Then
+    If @error Then
         Return SetError($DLLERR_DLLCALL_FAILED, @error, 0)
     EndIf
 
-	Return $aCall[0]
+    Return $aCall[0]
 EndFunc
 
 
@@ -899,13 +899,13 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func __Dll_VirtualFree(Const $pAddress, Const $nSize, Const $nFreeType)
-	Local $aCall = DllCall($__g_hDll_KernelDll, "BOOL", "VirtualFree", "PTR", $pAddress, "ULONG_PTR", $nSize, "DWORD", $nFreeType)
+    Local $aCall = DllCall($__g_hDll_KernelDll, "BOOL", "VirtualFree", "PTR", $pAddress, "ULONG_PTR", $nSize, "DWORD", $nFreeType)
 
-	If @error Then
+    If @error Then
         Return SetError($DLLERR_DLLCALL_FAILED, @error, 0)
     EndIf
 
-	Return $aCall[0]
+    Return $aCall[0]
 EndFunc
 
 

@@ -29,7 +29,7 @@ Global $hStopwatch
 
 
 Func UTInit($fuCallback = ConsoleWrite)
-	$hTotalStopwatch = TimerInit()
+    $hTotalStopwatch = TimerInit()
     $fuOutFunction = $fuCallback
 EndFunc
 
@@ -38,7 +38,7 @@ Func UTExit()
     Call($fuOutFunction, StringFormat("%3d total UnitTests.\n", $nUnitTestCount))
     Call($fuOutFunction, StringFormat("%3d UnitTests were successful.\n", $nUnitTestSuccessCount))
     Call($fuOutFunction, StringFormat("%3d UnitTests have failed.\n", $nUnitTestFailCount))
-	Call($fuOutFunction, StringFormat("Test time passed: %0.3fms\n", TimerDiff($hTotalStopwatch)))
+    Call($fuOutFunction, StringFormat("Test time passed: %0.3fms\n", TimerDiff($hTotalStopwatch)))
 
     If $nUnitTestFailCount Then
         Exit(1)
@@ -50,26 +50,26 @@ EndFunc
 
 
 Func UTStart(Const $sTitle)
-	Call($fuOutFunction, StringFormat("Testing: %s\n", $sTitle))
+    Call($fuOutFunction, StringFormat("Testing: %s\n", $sTitle))
     $hStopwatch = TimerInit()
 EndFunc
 
 
 
 Func UTStop()
-	Call($fuOutFunction, StringFormat(" > Time passed: %0.3fms\n", TimerDiff($hStopwatch)))
+    Call($fuOutFunction, StringFormat(" > Time passed: %0.3fms\n", TimerDiff($hStopwatch)))
 EndFunc
 
 
 
 Func UTAssert(Const $bBool, Const $sOut)
-	$nUnitTestCount += 1
+    $nUnitTestCount += 1
 
     If $bBool Then
-		$nUnitTestSuccessCount += 1
+        $nUnitTestSuccessCount += 1
         Call($fuOutFunction, StringFormat("\tAssert Success: %s\n", $sOut))
-	Else
-		$nUnitTestFailCount += 1
+    Else
+        $nUnitTestFailCount += 1
         Call($fuOutFunction, StringFormat("\tAssert Failure: %s\n", $sOut))
     EndIf
 
