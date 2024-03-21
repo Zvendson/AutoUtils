@@ -445,7 +445,7 @@ Func _Vector_Insert(ByRef $aVector, Const $nIndex, Const $vValue)
     EndIf
 
 
-    For $i = $aVector[$__VECTOR_SIZE] To $nIndex Step -1
+    For $i = $aVector[$__VECTOR_SIZE] To $nIndex + 1 Step -1
         $aContainer[$i] = $aContainer[$i - 1]
     Next
 
