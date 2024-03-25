@@ -5,10 +5,10 @@
  Discord(s):      zvend
 
  Script Function:
-    _CallbackArray_Init(Const $nSize) -> Array[$nSize]
-    _CallbackArray_Get(ByRef $aArray, Const $nIndex) -> Array[N>0]
-    _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback) -> Bool
-    _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove) -> Bool
+    _CallbackArray_Init(Const $nSize)                                             -> CallbackArray-Handle
+    _CallbackArray_Get(ByRef $aArray, Const $nIndex)                              -> Array[Count, "Callback1", ..., "CallbackN"]
+    _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback)            -> Boolean
+    _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove) -> Boolean
 
  Description:
     Callback Arrays are 1D arrays storing sub arrays of strings. They are meant to be ID controlled.
@@ -81,14 +81,39 @@
 
 
 
-Func _CallbackArray_Init(Const $nSize)
+#include ".\Integer.au3"
+#include ".\Function.au3"
+
+
+
+Global Enum _
+    $CALLBACKARRAY_ERR_NONE            , _
+    $CALLBACKARRAY_ERR_BAD_SIZE        , _
+    $CALLBACKARRAY_ERR_INVALID         , _
+    $CALLBACKARRAY_ERR_INVALID_INDEX   , _
+    $CALLBACKARRAY_ERR_INVALID_CALLBACK, _
+    $__CALLBACKARRAY_ERR_COUNT
+
+
+
+Global Enum _
+    $__CALLBACKARRAY_IDENTIFIER, _
+    $__CALLBACKARRAY_PARAMS
+
+
+
+Func _CallbackArray_Init($nSize) ;-> CallbackArray-Handle
+    If Not IsInt($nSize) Or $nSize < 1 Then
+        Return SetError($CALLBACKARRAY_ERR_BAD_SIZE, 0, Null)
+    EndIf
+
     ;~ using a temp array here cause ReDim only works if the given var is already
     ;~ declared as an array. Neat trick to get rid of it.
-
-    Local $aTemp[$nSize]
+    Local $aTemp[$nSize + $__CALLBACKARRAY_PARAMS]
+    $aTemp[$__CALLBACKARRAY_IDENTIFIER] = "CallbackArray"
     Local $aEmptyArray = [0]
 
-    For $i = 0 To $nSize - 1
+    For $i = $__CALLBACKARRAY_PARAMS To $nSize + $__CALLBACKARRAY_PARAMS - 1
         $aTemp[$i] = $aEmptyArray
     Next
 
@@ -97,57 +122,37 @@ EndFunc
 
 
 
-Func _CallbackArray_Get(Const ByRef $aArray, Const $nIndex)
-    Static Local $aEmptyArray = [0]
-
-    If Not IsArray($aArray) Then
-        Return SetError(1, 0, $aEmptyArray)
+Func _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback) ;-> Boolean
+    Local $sFunction = _Function_Validate($sCallback)
+    If @error Then
+        Return SetError($CALLBACKARRAY_ERR_INVALID_CALLBACK, 0, 0)
     EndIf
 
-    Local $nSize = UBound($aArray)
-    If $nIndex >= $nSize Or $nIndex < 0 Then
-        Return SetError(2, 0, $aEmptyArray)
+    If Not __CallbackArray_IsIndexValid($aArray, $nIndex) Then
+        Return SetError(@error, 0, 0)
     EndIf
 
-    Return $aArray[$nIndex]
-EndFunc
-
-
-
-Func _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback)
-    If Not IsString($sCallback) Then
-        Return SetError(1, 0, 0)
-    EndIf
-
-    If Not IsArray($aArray) Then
-        Return SetError(2, 0, 0)
-    EndIf
-
-    Local $nSize = UBound($aArray)
-    If $nIndex >= $nSize Or $nIndex < 0 Then
-        Return SetError(3, 0, 0)
-    EndIf
-
-    Local $aCurrentCallbacks = $aArray[$nIndex]
+    Local $aCurrentCallbacks = $aArray[$nIndex + $__CALLBACKARRAY_PARAMS]
 
     $aCurrentCallbacks[0] += 1
     ReDim $aCurrentCallbacks[$aCurrentCallbacks[0] + 1]
-    $aCurrentCallbacks[$aCurrentCallbacks[0]] = $sCallback
+    $aCurrentCallbacks[$aCurrentCallbacks[0]] = $sFunction
 
-    $aArray[$nIndex] = $aCurrentCallbacks
+    $aArray[$nIndex + $__CALLBACKARRAY_PARAMS] = $aCurrentCallbacks
 
     Return 1
 EndFunc
 
 
 
-Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove)
-    If Not IsString($sCallbackToRemove) Then
-        Return SetError(1, 0, 0)
+Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove) ;-> Boolean
+    Local $sFunction = _Function_Validate($sCallbackToRemove)
+    If @error Then
+        Return SetError($CALLBACKARRAY_ERR_INVALID_CALLBACK, 0, 0)
     EndIf
 
-    If Not IsArray($aArray) Then
-        Return SetError(2, 0, 0)
+    If Not _CallbackArray_IsCallbackArray($aArray) Then
+        Return SetError(@error, 0, 0)
     EndIf
 
     Local $nSize = UBound($aArray)
@@ -155,11 +160,11 @@ Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemov
         Return 1
     EndIf
 
-    If $nIndex >= $nSize Or $nIndex < 0 Then
-        Return SetError(3, 0, 0)
+    If Not __CallbackArray_IsIndexValid($aArray, $nIndex) Then
+        Return SetError(@error, 0, 0)
     EndIf
 
-    Local $aCurrentCallbacks = $aArray[$nIndex]
+    Local $aCurrentCallbacks = $aArray[$nIndex + $__CALLBACKARRAY_PARAMS]
     Local $i = 0
     Local $j = 0
 
@@ -167,7 +172,7 @@ Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemov
 
     While $i < $aCurrentCallbacks[0]
         $i += 1
-        If $aCurrentCallbacks[$i] == $sCallbackToRemove Then
+        If $aCurrentCallbacks[$i] == $sFunction Then
             ContinueLoop
         EndIf
 
@@ -177,7 +182,55 @@ Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemov
 
     ReDim $aNewCallbacks[$j + 1]
     $aNewCallbacks[0] = $j
-    $aArray[$nIndex] = $aNewCallbacks
+    $aArray[$nIndex + $__CALLBACKARRAY_PARAMS] = $aNewCallbacks
+
+    Return 1
+EndFunc
+
+
+
+Func _CallbackArray_GetSize(Const ByRef $aArray) ;-> Int32
+    If Not _CallbackArray_IsCallbackArray($aArray) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    Return UBound($aArray) - $__CALLBACKARRAY_PARAMS
+EndFunc
+
+
+
+Func _CallbackArray_Get(Const ByRef $aArray, Const $nIndex) ;-> Array[Count, "Callback1", ..., "CallbackN"]
+    Static Local $aEmptyArray = [0]
+
+    If Not __CallbackArray_IsIndexValid($aArray, $nIndex) Then
+        Return SetError(@error, 0, $aEmptyArray)
+    EndIf
+
+    Return $aArray[$nIndex + $__CALLBACKARRAY_PARAMS]
+EndFunc
+
+
+
+Func _CallbackArray_IsCallbackArray(Const ByRef $aArray) ;-> Boolean
+    If Not IsArray($aArray) Then
+        Return SetError($CALLBACKARRAY_ERR_INVALID, 0, 0)
+    EndIf
+
+    Return $aArray[$__CALLBACKARRAY_IDENTIFIER] == "CallbackArray"
+EndFunc
+
+
+
+Func __CallbackArray_IsIndexValid(Const ByRef $aArray, Const $nIndex, Const $bSkipCheck = False)
+    If Not $bSkipCheck And Not _CallbackArray_IsCallbackArray($aArray) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    Local $nSize = UBound($aArray) - $__CALLBACKARRAY_PARAMS
+
+    If Not _Integer_IsInRange($nIndex, 0, $nSize - 1) Then
+        Return SetError($CALLBACKARRAY_ERR_INVALID_INDEX, 0, 0)
+    EndIf
 
     Return 1
 EndFunc
