@@ -1,96 +1,137 @@
 #include ".\..\UnitTest.au3"
 #include ".\..\Vector.au3"
 
-UTInit()
-testVectorInit()
-testVectorSetComparatorCallback()
-testIsVector()
-testVectorPush()
-testVectorPop()
-testVectorGetSize()
-testVectorGetCapacity()
-UTExit()
+_UnitTest_Init()
+_test_Vector_Init()
+_test_Vector_SetComparatorCallback()
+_test_Vector_IsVector()
+_test_Vector_Push()
+_test_Vector_Pop()
+_test_Vector_GetSize()
+_test_Vector_GetCapacity()
+_UnitTest_Exit()
 
 
 
-Func testVectorInit()
-    UTStart("_Vector_Init()")
+Func _test_Vector_Init()
+    _UnitTest_Start("_Vector_Init()")
 
-    UTAssert(_Vector_Init(32, Null, 1)     = Null, "_Vector_Init(32, Null, 1)     = Null")
-    UTAssert(_Vector_Init(32, Null, 1.4)   = Null, "_Vector_Init(32, Null, 1.4)   = Null")
-    UTAssert(_Vector_Init(32, Null, 10.0) <> Null, "_Vector_Init(32, Null, 10.0) <> Null")
-    UTAssert(_Vector_Init()               <> Null, "_Vector_Init()               <> Null")
+    _UnitTest_AssertEqual(Null, "_Vector_Init", 32, Null, 1)
+    _UnitTest_AssertEqual(Null, "_Vector_Init", 32, Null, 1.4)
+    _UnitTest_AssertNotEqual(Null, "_Vector_Init", 32, Null, 10.0)
+    _UnitTest_AssertNotEqual(Null, "_Vector_Init")
 
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
-Func testVectorSetComparatorCallback()
+Func _test_Vector_SetComparatorCallback()
+    _UnitTest_Start("_Vector_SetComparatorCallback")
+
     Local $bTest
     Local $aTestVector = _Vector_Init()
-    UTStart("_Vector_Init")
 
-    $bTest = _Vector_SetComparatorCallback($aTestVector, 'ThisShouldFail') = 0
-    UTAssert($bTest, "_Vector_SetComparatorCallback($aTestVector, 'ThisShouldFail') = 0")
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", Default, 'ThisShouldFail')
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", "Test", 0)
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", Null, True)
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", 100, Binary('0xFF'))
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", 0x4444, 10.0)
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", 0.7766, "VectorCallback")
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", Default, VectorCallback)
 
-    $bTest = _Vector_SetComparatorCallback($aTestVector, 0) = 0
-    UTAssert($bTest, "_Vector_SetComparatorCallback($aTestVector, 0) = 0")
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", $aTestVector, 'ThisShouldFail')
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", $aTestVector, 0)
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", $aTestVector, True)
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", $aTestVector, Binary('0xFF'))
+    _UnitTest_AssertEqual(0, "_Vector_SetComparatorCallback", $aTestVector, 10.0)
+    _UnitTest_AssertEqual(1, "_Vector_SetComparatorCallback", $aTestVector, "VectorCallback")
+    _UnitTest_AssertEqual(1, "_Vector_SetComparatorCallback", $aTestVector, VectorCallback)
 
-    $bTest = _Vector_SetComparatorCallback($aTestVector, True) = 0
-    UTAssert($bTest, "_Vector_SetComparatorCallback($aTestVector, True) = 0")
-
-    $bTest = _Vector_SetComparatorCallback($aTestVector, Binary('0xFF')) = 0
-    UTAssert($bTest, "_Vector_SetComparatorCallback($aTestVector, Binary('0xFF')) = 0")
-
-    $bTest = _Vector_SetComparatorCallback($aTestVector, 10.0) = 0
-    UTAssert($bTest, "_Vector_SetComparatorCallback($aTestVector, 10.0) = 0")
-
-    $bTest = _Vector_SetComparatorCallback($aTestVector, VectorCallback) = 1
-    UTAssert($bTest, "_Vector_SetComparatorCallback($aTestVector, VectorCallback) = 1")
-
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
-Func testIsVector()
+Func _test_Vector_IsVector()
     Local $aTestVector = _Vector_Init()
-    UTStart("_Vector_IsVector")
+    _UnitTest_Start("_Vector_IsVector")
 
-    UTAssert(_Vector_IsVector($aTestVector)   = 1, "_Vector_IsVector($aTestVector)   = 1")
-    UTAssert(_Vector_IsVector(True)           = 0, "_Vector_IsVector(True)           = 0")
-    UTAssert(_Vector_IsVector(100)            = 0, "_Vector_IsVector(100)            = 0")
-    UTAssert(_Vector_IsVector(VectorCallback) = 0, "_Vector_IsVector(VectorCallback) = 0")
-    UTAssert(_Vector_IsVector('IAmAVector')   = 0, "_Vector_IsVector('IAmAVector')   = 0")
-    UTAssert(_Vector_IsVector(Binary('0xFF')) = 0, "_Vector_IsVector(Binary('0xFF')) = 0")
+    _UnitTest_AssertEqual(1, "_Vector_IsVector", $aTestVector)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", True)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", 100)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", VectorCallback)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", "VectorCallback")
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", "IAmAVector")
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", Binary('0xFF'))
 
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
-Func testVectorPush()
+Func _test_Vector_Push()
     Local $aTestVector = _Vector_Init()
-    UTStart("_Vector_Push")
+    _UnitTest_Start("_Vector_Push")
 
-    UTAssert(_Vector_Push($aTestVector, 10)                       = 1, "_Vector_Push($aTestVector, 10)                       = 1")
-    UTAssert(_Vector_Push($aTestVector, 'Hello World')            = 1, "_Vector_Push($aTestVector, 'Hello World')            = 1")
-    UTAssert(_Vector_Push($aTestVector, Binary('0xDEADBEEF'))     = 1, "_Vector_Push($aTestVector, Binary('0xDEADBEEF'))     = 1")
-    UTAssert(_Vector_Push($aTestVector, Default)                  = 1, "_Vector_Push($aTestVector, Default)                  = 1")
-    UTAssert(_Vector_Push($aTestVector, Null)                     = 1, "_Vector_Push($aTestVector, Null)                     = 1")
-    UTAssert(_Vector_Push($aTestVector, True)                     = 1, "_Vector_Push($aTestVector, True)                     = 1")
-    UTAssert(_Vector_Push($aTestVector, False)                    = 1, "_Vector_Push($aTestVector, False)                    = 1")
-    UTAssert(_Vector_Push($aTestVector, DllStructCreate('DWORD')) = 1, "_Vector_Push($aTestVector, DllStructCreate('DWORD')) = 1")
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, 10)
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, 'Hello World')
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, Binary('0xDEADBEEF'))
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, Default)
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, Null)
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, True)
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, False)
+    _UnitTest_AssertEqual(1, "_Vector_Push", $aTestVector, DllStructCreate('DWORD'))
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, 10)
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, 'Hello World')
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, Binary('0xDEADBEEF'))
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, Default)
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, Null)
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, True)
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, False)
+    _UnitTest_AssertEqual(0, "_Vector_Push", Default, DllStructCreate('DWORD'))
 
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
-Func testVectorPop()
+Func _test_Vector_Pop()
     Local $aTestVector = _Vector_Init()
-    UTStart("_Vector_Pop")
+    _UnitTest_Start("_Vector_Pop")
+
+    _UnitTest_AssertEqual(Null, "_Vector_Pop", $aTestVector)
+    
+    _Vector_Push($aTestVector, False)
+    _UnitTest_AssertEqual(False, "_Vector_Pop", $aTestVector)
+    _UnitTest_AssertNotEqual(True, "_Vector_Pop", $aTestVector)
+
+    _Vector_Push($aTestVector, Null)
+    _UnitTest_AssertEqual(Null, "_Vector_Pop", $aTestVector)
+
+    _Vector_Push($aTestVector, Default)
+    _UnitTest_AssertEqual(Default, "_Vector_Pop", $aTestVector)
+    
+    _Vector_Push($aTestVector, Binary('0xDEADBEEF'))
+    _UnitTest_AssertEqual(Binary('0xDEADBEEF'), "_Vector_Pop", $aTestVector)
+    
+    _Vector_Push($aTestVector, 'Hello World')
+    _UnitTest_AssertEqualCaseSensitive('Hello World', "_Vector_Pop", $aTestVector)
+    
+    _Vector_Push($aTestVector, 10)
+    _UnitTest_AssertEqual(10, "_Vector_Pop", $aTestVector)
+
+    $aTestVector = _Vector_Init()
+    _UnitTest_AssertEqual(Null, "_Vector_Pop", $aTestVector)
+
+    _UnitTest_Stop()
+EndFunc
+
+
+
+Func _test_Vector_GetSize()
+    Local $aTestVector = _Vector_Init()
+    _UnitTest_Start("_Vector_GetSize")
 
     _Vector_Push($aTestVector, 10)
     _Vector_Push($aTestVector, 'Hello World')
@@ -101,73 +142,69 @@ Func testVectorPop()
     _Vector_Push($aTestVector, False)
     _Vector_Push($aTestVector, DllStructCreate('DWORD'))
 
-    UTAssert(_Vector_Pop($aTestVector) <> Null                , "_Vector_Pop($aTestVector) <> Null                ")
-    UTAssert(_Vector_Pop($aTestVector) =  False               , "_Vector_Pop($aTestVector) =  False               ")
-    UTAssert(_Vector_Pop($aTestVector) =  True                , "_Vector_Pop($aTestVector) =  True                ")
-    UTAssert(_Vector_Pop($aTestVector) =  Null                , "_Vector_Pop($aTestVector) =  Null                ")
-    UTAssert(_Vector_Pop($aTestVector) =  Default             , "_Vector_Pop($aTestVector) =  Default             ")
-    UTAssert(_Vector_Pop($aTestVector) =  Binary('0xDEADBEEF'), "_Vector_Pop($aTestVector) =  Binary('0xDEADBEEF')")
-    UTAssert(_Vector_Pop($aTestVector) == 'Hello World'       , "_Vector_Pop($aTestVector) == 'Hello World'       ")
-    UTAssert(_Vector_Pop($aTestVector) =  10                  , "_Vector_Pop($aTestVector) =  10                  ")
-    UTAssert(_Vector_Pop($aTestVector) =  Null                , "_Vector_Pop($aTestVector) =  Null                ")
+    _UnitTest_AssertEqual(8, "_Vector_GetSize", $aTestVector)
 
-    UTStop()
+    _Vector_Pop($aTestVector)
+    _Vector_Pop($aTestVector)
+
+    _UnitTest_AssertNotEqual(8, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertEqual(6, "_Vector_GetSize", $aTestVector)
+    
+    _Vector_Pop($aTestVector)
+    _Vector_Pop($aTestVector)
+
+    _UnitTest_AssertNotEqual(8, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertNotEqual(6, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertNotEqual(3, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertEqual(4, "_Vector_GetSize", $aTestVector)
+
+    _Vector_Pop($aTestVector)
+    _Vector_Pop($aTestVector)
+    _Vector_Pop($aTestVector)
+    _Vector_Pop($aTestVector)
+    _Vector_Pop($aTestVector)
+
+    _UnitTest_AssertNotEqual(8, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertNotEqual(6, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertNotEqual(3, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertNotEqual(2, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertNotEqual(1, "_Vector_GetSize", $aTestVector)
+    _UnitTest_AssertEqual(0, "_Vector_GetSize", $aTestVector)
+
+    _UnitTest_Stop()
 EndFunc
 
 
 
-Func testVectorGetSize()
+Func _test_Vector_GetCapacity()
+    _UnitTest_Start("_Vector_GetCapacity")
+
     Local $aTestVector = _Vector_Init()
-    UTStart("_Vector_GetSize")
+    _UnitTest_AssertEqual(32, "_Vector_GetCapacity", $aTestVector)
 
-    _Vector_Push($aTestVector, 10)
-    _Vector_Push($aTestVector, 'Hello World')
-    _Vector_Push($aTestVector, Binary('0xDEADBEEF'))
-    _Vector_Push($aTestVector, Default)
-    _Vector_Push($aTestVector, Null)
-    _Vector_Push($aTestVector, True)
-    _Vector_Push($aTestVector, False)
-    _Vector_Push($aTestVector, DllStructCreate('DWORD'))
-
-    UTAssert(_Vector_GetSize($aTestVector) = 8, "_Vector_GetSize($aTestVector) = 8 // Pushed 8 values")
-    _Vector_Pop($aTestVector)
-    _Vector_Pop($aTestVector)
-    UTAssert(_Vector_GetSize($aTestVector) = 6, "_Vector_GetSize($aTestVector) = 6 // Popped 2 values")
-    _Vector_Pop($aTestVector)
-    _Vector_Pop($aTestVector)
-    UTAssert(_Vector_GetSize($aTestVector) = 4, "_Vector_GetSize($aTestVector) = 4 // Popped 2 values")
-    UTAssert(_Vector_GetSize($aTestVector) = 4, "_Vector_GetSize($aTestVector) = 4 // Popped nothing")
-    _Vector_Pop($aTestVector)
-    _Vector_Pop($aTestVector)
-    _Vector_Pop($aTestVector)
-    _Vector_Pop($aTestVector)
-    _Vector_Pop($aTestVector)
-    UTAssert(_Vector_GetSize($aTestVector) = 0, "_Vector_GetSize($aTestVector) = 0 // Popped 5 values")
-
-    UTStop()
-EndFunc
-
-
-
-Func testVectorGetCapacity()
-    Local $aTestVector = _Vector_Init()
-    UTStart("_Vector_GetCapacity")
-
-    UTAssert(_Vector_GetCapacity($aTestVector) =  32  , "_Vector_GetCapacity($aTestVector) =  32   // Default Init")
     $aTestVector = _Vector_Init(500)
-    UTAssert(_Vector_GetCapacity($aTestVector) =  500 , "_Vector_GetCapacity($aTestVector) =  500  // Init of 500")
-    $aTestVector = _Vector_Init(0)
-    UTAssert(_Vector_GetCapacity($aTestVector) =  0   , "_Vector_GetCapacity($aTestVector) =  0    // Init of 0")
-    $aTestVector = _Vector_Init(3)
-    UTAssert(_Vector_GetCapacity($aTestVector) =  0   , "_Vector_GetCapacity($aTestVector) =  0    // Init of 3")
-    $aTestVector = _Vector_Init(-100)
-    UTAssert(_Vector_GetCapacity($aTestVector) =  0   , "_Vector_GetCapacity($aTestVector) =  0    // Init of -100")
-    $aTestVector = _Vector_Init(4)
-    UTAssert(_Vector_GetCapacity($aTestVector) <> 0   , "_Vector_GetCapacity($aTestVector) <> 0    // Init of 4")
-    _Vector_Reserve($aTestVector, 1000)
-    UTAssert(_Vector_GetCapacity($aTestVector) >= 1000, "_Vector_GetCapacity($aTestVector) >= 1000 // Reserve of 1000")
+    _UnitTest_AssertNotEqual(32, "_Vector_GetCapacity", $aTestVector)
+    _UnitTest_AssertEqual(500, "_Vector_GetCapacity", $aTestVector)
 
-    UTStop()
+    $aTestVector = _Vector_Init(0)
+    _UnitTest_AssertNotEqual(32, "_Vector_GetCapacity", $aTestVector)
+    _UnitTest_AssertNotEqual(500, "_Vector_GetCapacity", $aTestVector)
+    _UnitTest_AssertEqual(0, "_Vector_GetCapacity", $aTestVector)
+
+    $aTestVector = _Vector_Init(3)
+    _UnitTest_AssertNotEqual(3, "_Vector_GetCapacity", $aTestVector)
+
+    $aTestVector = _Vector_Init(-100)
+    _UnitTest_AssertNotEqual(-100, "_Vector_GetCapacity", $aTestVector)
+
+    
+    $aTestVector = _Vector_Init(4)
+    _UnitTest_AssertNotEqual(0, "_Vector_GetCapacity", $aTestVector)
+
+    _Vector_Reserve($aTestVector, 1000)
+    _UnitTest_AssertGreaterEqual(1000, "_Vector_GetCapacity", $aTestVector)
+
+    _UnitTest_Stop()
 EndFunc
 
 
