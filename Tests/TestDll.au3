@@ -7,40 +7,40 @@ Global $dDllPayload = GetDllPayload()
 
 
 
-UTInit()
+_UnitTest_Init()
 testDllStart()
 testDllOpen()
 testDllGetProcAddress()
 testDllClose()
 testDllShutdown()
-UTExit()
+_UnitTest_Exit()
 
 
 
 Func testDllStart()
-    UTStart("_Dll_StartUp()")
+    _UnitTest_Start("_Dll_StartUp()")
 
-    UTAssert(_Dll_StartUp(), "_Dll_StartUp() // First init try")
-    UTAssert(_Dll_StartUp(), "_Dll_StartUp() // Second init try")
+    _UnitTest_AssertEqual(1, "_Dll_StartUp")
+    _UnitTest_AssertEqual(1, "_Dll_StartUp")
 
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
 Func testDllOpen()
-    UTStart("_Dll_Open()")
+    _UnitTest_Start("_Dll_Open()")
+    
+    _UnitTest_AssertGreater(0, "_Dll_Open", $dDllPayload)
+    _UnitTest_AssertGreater(0, "_Dll_Open", $dDllPayload)
 
-    UTAssert(_Dll_Open($dDllPayload), "_Dll_Open($dDllPayload) // First open try")
-    UTAssert(_Dll_Open($dDllPayload), "_Dll_Open($dDllPayload) // Second open try")
-
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
 Func testDllGetProcAddress()
-    UTStart("_Dll_GetProcAddress()")
+    _UnitTest_Start("_Dll_GetProcAddress()")
 
     Local $hDll = _Dll_Open($dDllPayload)
 
@@ -49,46 +49,43 @@ Func testDllGetProcAddress()
     _Dll_GetProcAddress($hDll, "PushInt")
     _Dll_GetProcAddress($hDll, "GetInt")
 
+    _UnitTest_AssertNotEqual(0, "_Dll_GetProcAddress", $hDll, 'MakeVector')
+    _UnitTest_AssertNotEqual(0, "_Dll_GetProcAddress", $hDll, 'KillVector')
+    _UnitTest_AssertNotEqual(0, "_Dll_GetProcAddress", $hDll, 'PushInt')
+    _UnitTest_AssertNotEqual(0, "_Dll_GetProcAddress", $hDll, 'GetInt')
+    _UnitTest_AssertEqual(0, "_Dll_GetProcAddress", $hDll, 'InvalidFunc')
+    _UnitTest_AssertEqual(0, "_Dll_GetProcAddress", $hDll, True)
+    _UnitTest_AssertEqual(0, "_Dll_GetProcAddress", $hDll, 180.0)
+    _UnitTest_AssertEqual(0, "_Dll_GetProcAddress", $hDll, 50)
 
-    UTAssert(_Dll_GetProcAddress($hDll, 'MakeVector') <> 0, "_Dll_GetProcAddress($hDll, 'MakeVector') <> 0")
-    UTAssert(_Dll_GetProcAddress($hDll, 'KillVector') <> 0, "_Dll_GetProcAddress($hDll, 'KillVector') <> 0")
-    UTAssert(_Dll_GetProcAddress($hDll, 'PushInt')    <> 0, "_Dll_GetProcAddress($hDll, 'PushInt')    <> 0")
-    UTAssert(_Dll_GetProcAddress($hDll, 'GetInt')     <> 0, "_Dll_GetProcAddress($hDll, 'GetInt')     <> 0")
-    UTAssert(_Dll_GetProcAddress($hDll, 'InvalidFunc') = 0, "_Dll_GetProcAddress($hDll, 'MakeVector') <> 0")
-    UTAssert(_Dll_GetProcAddress($hDll, True)          = 0, "_Dll_GetProcAddress($hDll, True)          = 0")
-    UTAssert(_Dll_GetProcAddress($hDll, 180.0)         = 0, "_Dll_GetProcAddress($hDll, 180.0)         = 0")
-    UTAssert(_Dll_GetProcAddress($hDll, 50)            = 0, "_Dll_GetProcAddress($hDll, 50)            = 0")
-
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
 Func testDllClose()
-    UTStart("_Dll_Close()")
+    _UnitTest_Start("_Dll_Close()")
 
     Local $hDll = _Dll_Open($dDllPayload)
-    UTAssert($hDll <> 0, "_Dll_Open($dDllPayload) <> 0")
+    _UnitTest_AssertEqual(0, "_Dll_Close", '$hDll')
+    _UnitTest_AssertEqual(1, "_Dll_Close", $hDll)
+    _UnitTest_AssertEqual(0, "_Dll_Close", 42)
+    _UnitTest_AssertEqual(0, "_Dll_Close", True)
+    _UnitTest_AssertEqual(0, "_Dll_Close", $hDll)
+    _UnitTest_AssertEqual(0, "_Dll_Close", Default)
 
-    UTAssert(_Dll_Close('$hDll') = 0, "_Dll_Close('$hDll') = 0")
-    UTAssert(_Dll_Close($hDll)   = 1, "_Dll_Close($hDll)   = 1")
-    UTAssert(_Dll_Close(42)      = 0, "_Dll_Close(42)      = 0")
-    UTAssert(_Dll_Close(True)    = 0, "_Dll_Close(True)    = 0")
-    UTAssert(_Dll_Close($hDll)   = 0, "_Dll_Close($hDll)   = 0")
-    UTAssert(_Dll_Close(Default) = 0, "_Dll_Close(Default) = 0")
-
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
 
 Func testDllShutdown()
-    UTStart("_Dll_Shutdown()")
+    _UnitTest_Start("_Dll_Shutdown()")
 
-    UTAssert(_Dll_Shutdown() = 1, "_Dll_Shutdown() = 1")
-    UTAssert(_Dll_Shutdown() = 0, "_Dll_Shutdown() = 0")
+    _UnitTest_AssertEqual(1, "_Dll_Shutdown")
+    _UnitTest_AssertEqual(0, "_Dll_Shutdown")
 
-    UTStop()
+    _UnitTest_Stop()
 EndFunc
 
 
