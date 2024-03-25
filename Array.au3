@@ -32,16 +32,16 @@
 
 
  Script Function:
-    _Array_New($nArraySize = 0, Const $vInitValue = 0)                -> Array
-    _Array_Resize(ByRef $avArray, $nNewSize)                        -> Bool
-    _Array_GetSize(Const ByRef $avArray)                            -> UInt
-    _Array_GetInitValue(Const ByRef $avArray)                        -> Variant
-    _Array_Get(Const ByRef $avArray, $nIndex, Const $vValue = 0)    -> Variant
-    _Array_Set(ByRef $avArray, $nIndex, Const $vValue)                -> Bool
+    _Array_New($nArraySize = 0, Const $vInitValue = 0)           -> Array
+    _Array_Resize(ByRef $avArray, $nNewSize)                     -> Bool
+    _Array_GetSize(Const ByRef $avArray)                         -> UInt
+    _Array_GetInitValue(Const ByRef $avArray)                    -> Variant
+    _Array_Get(Const ByRef $avArray, $nIndex, Const $vValue = 0) -> Variant
+    _Array_Set(ByRef $avArray, $nIndex, Const $vValue)           -> Bool
 
  Internal Functions:
-    __Array_GetIndex(Const ByRef $avArray, $nIndex)                  -> UInt
-    __Array_IsSizeValid(Const $nSize)                                -> Bool
+    __Array_GetIndex(Const ByRef $avArray, $nIndex)              -> UInt
+    __Array_IsSizeValid(Const $nSize)                            -> Bool
 
 
 #ce ----------------------------------------------------------------------------
@@ -51,14 +51,17 @@
 #AutoIt3Wrapper_Au3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6 -w 7
 
 
+
 Global Const $ARRAYERR_NO_ARRAY      = 1
 Global Const $ARRAYERR_INVALID_SIZE  = 2
 Global Const $ARRAYERR_INVALID_INDEX = 3
+Global Const $ARRAYERR_SIZE_IS_ZERO  = 4
 
 Global Enum $__AU_ARRAY_SIZE, _
             $__AU_ARRAY_INITVALUE, _
             $__AU_ARRAY_RESERVED
 Global Const $__AU_ARRAY_EMPTY = [0, 0]
+
 
 
 ; #FUNCTION# ====================================================================================================================
@@ -130,6 +133,52 @@ Func _Array_Resize(ByRef $avArray, $nNewSize)
     $avArray[$__AU_ARRAY_SIZE] = $nNewSize
 
     If $nOldSize < $nNewSize Then
+
+        For $i = $nOldSize + $__AU_ARRAY_RESERVED To $nNewSize + $__AU_ARRAY_RESERVED - 1
+            $avArray[$i] = $avArray[$__AU_ARRAY_INITVALUE]
+        Next
+
+    EndIf
+
+    Return 1
+EndFunc
+
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Array_ShiftSize
+; Description ...: Increases or decreases the size of an array by $nShift created through _Array_New.
+; Syntax ........: _Array_Resize(ByRef $avArray, $nNewSize)
+; Parameters ....: $avArray             - [in/out] The array.
+;                  $nNewSize            - A general number value.
+; Return values .: 1 on Success, 0 on Failure and sets the errorcode to $ARRAYERR_NO_ARRAY or $ARRAYERR_INVALID_SIZE.
+; Author ........: Zvend
+; Modified ......:
+; Remarks .......:
+; Related .......: _Array_New, _Array_GetSize, _Array_GetInitValue, _Array_Get, _Array_Set
+; Link ..........:
+; Example .......: No
+; ===============================================================================================================================
+Func _Array_ShiftSize(ByRef $avArray, $nShift)
+    If Not IsInt($nShift) Or $nShift = 0 Then
+        Return SetError($ARRAYERR_INVALID_SIZE, 0, 0)
+    EndIf
+
+    If Not IsArray($avArray) Then
+        Return SetError($ARRAYERR_NO_ARRAY, 0, 0)
+    EndIf
+
+    Local $nOldSize = $avArray[$__AU_ARRAY_SIZE]
+    Local $nNewSize = $nOldSize + $nShift
+
+    If Not __Array_IsSizeValid($nNewSize) Then
+        Return SetError($ARRAYERR_INVALID_SIZE, 0, 0)
+    EndIf
+
+    ReDim $avArray[$__AU_ARRAY_RESERVED + $nNewSize]
+    $avArray[$__AU_ARRAY_SIZE] = $nNewSize
+
+    If $nShift Then ;If shift increases size, fill uo new entries with the init value
 
         For $i = $nOldSize + $__AU_ARRAY_RESERVED To $nNewSize + $__AU_ARRAY_RESERVED - 1
             $avArray[$i] = $avArray[$__AU_ARRAY_INITVALUE]
@@ -267,12 +316,17 @@ Func __Array_GetIndex(Const ByRef $avArray, $nIndex)
     EndIf
 
     Local $nSize = _Array_GetSize($avArray)
-    If $nIndex >= $nSize Then
-        Return SetError($ARRAYERR_INVALID_INDEX, 0, 0)
+
+    If $nSize <= 0 Then
+        Return SetError($ARRAYERR_SIZE_IS_ZERO, 0, 0)
     EndIf
 
-    If $nIndex < 0 Then
-        $nIndex = $nSize - Abs(Mod($nIndex, $nSize))
+    If $nIndex < 0 And abs($nIndex) <= $nSize Then
+        $nIndex = $nSize + $nIndex
+    EndIf
+
+    If $nIndex < 0 Or $nIndex >= $nSize Then
+        Return SetError($ARRAYERR_INVALID_INDEX, 0, 0)
     EndIf
 
     Return $nIndex
