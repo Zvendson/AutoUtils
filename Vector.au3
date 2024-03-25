@@ -57,13 +57,18 @@
 
 
 
+#include ".\Function.au3"
+
+
+
 Global Enum _
-    $__VECTOR_SIZE     , _
-    $__VECTOR_CAPACITY , _
-    $__VECTOR_DEFAULT  , _
-    $__VECTOR_MODIFIER , _
-    $__VECTOR_BUFFER   , _
-    $__VECTOR_COMPARE  , _
+    $__VECTOR_IDENTIFIER, _
+    $__VECTOR_SIZE      , _
+    $__VECTOR_CAPACITY  , _
+    $__VECTOR_DEFAULT   , _
+    $__VECTOR_MODIFIER  , _
+    $__VECTOR_BUFFER    , _
+    $__VECTOR_COMPARE   , _
     $__VECTOR_PARAMS
 
 
@@ -76,8 +81,7 @@ Global Enum _
     $VECTORERR_BAD_VECTOR   , _
     $VECTORERR_INVALID_INDEX, _
     $VECTORERR_EMPTY_VECTOR , _
-    $VECTORERR_BAD_COMPARE  , _
-    $VECTORERR_COUNT
+    $VECTORERR_BAD_COMPARE
 
 
 ; #FUNCTION# ====================================================================================================================
@@ -107,12 +111,13 @@ Func _Vector_Init(Const $nCapacity = 32, Const $vDefaultValue = Null, Const $fMo
 
     Local $aContainer[$nCapacity]
     Local $aNewVector[$__VECTOR_PARAMS]
-    $aNewVector[$__VECTOR_SIZE]     = 0
-    $aNewVector[$__VECTOR_CAPACITY] = $nCapacity
-    $aNewVector[$__VECTOR_DEFAULT]  = $vDefaultValue
-    $aNewVector[$__VECTOR_MODIFIER] = $fModifier
-    $aNewVector[$__VECTOR_BUFFER]   = $aContainer
-    $aNewVector[$__VECTOR_COMPARE]  = Null
+    $aNewVector[$__VECTOR_IDENTIFIER] = "Vector"
+    $aNewVector[$__VECTOR_SIZE]       = 0
+    $aNewVector[$__VECTOR_CAPACITY]   = $nCapacity
+    $aNewVector[$__VECTOR_DEFAULT]    = $vDefaultValue
+    $aNewVector[$__VECTOR_MODIFIER]   = $fModifier
+    $aNewVector[$__VECTOR_BUFFER]     = $aContainer
+    $aNewVector[$__VECTOR_COMPARE]    = Null
 
     Return $aNewVector
 EndFunc
@@ -135,8 +140,13 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Vector_SetComparatorCallback(ByRef $aVector, Const $fuCompare)
-    If Not IsFunc($fuCompare) Then
+Func _Vector_SetComparatorCallback(ByRef $aVector, $fuCompare)
+    If Not _Vector_IsVector($aVector) Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    $fuCompare = _Function_Validate($fuCompare)
+    If @error Then
         Return SetError($VECTORERR_INVALID_FUNC, 0, 0)
     EndIf
 
@@ -169,7 +179,7 @@ Func _Vector_IsVector(Const ByRef $aVector)
         Return SetError($VECTORERR_BAD_VECTOR, 0, 0)
     EndIf
 
-    Return 1
+    Return $aVector[$__VECTOR_IDENTIFIER] == "Vector"
 EndFunc
 
 
