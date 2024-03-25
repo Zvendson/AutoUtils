@@ -1,7 +1,10 @@
 ---
 name: Test And Release
 
-on: push
+on:
+  push:
+    tags:
+      - "*"
 
 jobs:
   Unit_Tests:
