@@ -3,8 +3,8 @@ name: Test And Release
 
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
 
 jobs:
   Unit_Tests:
@@ -56,10 +56,12 @@ jobs:
           if ($callback64.ExitCode -ne 0) {
               Write-Error "[x64] $($callback64.ExitCode) CallbackArray Unit Tests failed"
           }
-      - name: Release
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Prerelease"
           files: |
+            README.md
             *.au3
