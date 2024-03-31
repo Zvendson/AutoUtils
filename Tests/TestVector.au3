@@ -1,15 +1,29 @@
+#AutoIt3Wrapper_Au3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6 -w 7
+
+
+
 #include ".\..\UnitTest.au3"
 #include ".\..\Vector.au3"
 
-_UnitTest_Init()
-_test_Vector_Init()
-_test_Vector_SetComparatorCallback()
-_test_Vector_IsVector()
-_test_Vector_Push()
-_test_Vector_Pop()
-_test_Vector_GetSize()
-_test_Vector_GetCapacity()
-_UnitTest_Exit()
+
+
+If @ScriptName == "TestVector.au3" Then
+    _UnitTest_Init()
+    _test_Vector()
+    _UnitTest_Exit()
+EndIf
+
+
+
+Func _test_Vector()
+    _test_Vector_Init()
+    _test_Vector_IsVector()
+    _test_Vector_SetComparatorCallback()
+    _test_Vector_Push()
+    _test_Vector_Pop()
+    _test_Vector_GetSize()
+    _test_Vector_GetCapacity()
+EndFunc
 
 
 
@@ -20,6 +34,22 @@ Func _test_Vector_Init()
     _UnitTest_AssertEqual(Null, "_Vector_Init", 32, Null, 1.4)
     _UnitTest_AssertNotEqual(Null, "_Vector_Init", 32, Null, 10.0)
     _UnitTest_AssertNotEqual(Null, "_Vector_Init")
+
+    _UnitTest_Stop()
+EndFunc
+
+
+Func _test_Vector_IsVector()
+    Local $aTestVector = _Vector_Init()
+    _UnitTest_Start("_Vector_IsVector")
+
+    _UnitTest_AssertEqual(1, "_Vector_IsVector", $aTestVector)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", True)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", 100)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", VectorCallback)
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", "VectorCallback")
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", "IAmAVector")
+    _UnitTest_AssertEqual(0, "_Vector_IsVector", Binary('0xFF'))
 
     _UnitTest_Stop()
 EndFunc
@@ -51,22 +81,6 @@ Func _test_Vector_SetComparatorCallback()
     _UnitTest_Stop()
 EndFunc
 
-
-
-Func _test_Vector_IsVector()
-    Local $aTestVector = _Vector_Init()
-    _UnitTest_Start("_Vector_IsVector")
-
-    _UnitTest_AssertEqual(1, "_Vector_IsVector", $aTestVector)
-    _UnitTest_AssertEqual(0, "_Vector_IsVector", True)
-    _UnitTest_AssertEqual(0, "_Vector_IsVector", 100)
-    _UnitTest_AssertEqual(0, "_Vector_IsVector", VectorCallback)
-    _UnitTest_AssertEqual(0, "_Vector_IsVector", "VectorCallback")
-    _UnitTest_AssertEqual(0, "_Vector_IsVector", "IAmAVector")
-    _UnitTest_AssertEqual(0, "_Vector_IsVector", Binary('0xFF'))
-
-    _UnitTest_Stop()
-EndFunc
 
 
 
@@ -101,7 +115,7 @@ Func _test_Vector_Pop()
     _UnitTest_Start("_Vector_Pop")
 
     _UnitTest_AssertEqual(Null, "_Vector_Pop", $aTestVector)
-    
+
     _Vector_Push($aTestVector, False)
     _UnitTest_AssertEqual(False, "_Vector_Pop", $aTestVector)
     _UnitTest_AssertNotEqual(True, "_Vector_Pop", $aTestVector)
@@ -111,13 +125,13 @@ Func _test_Vector_Pop()
 
     _Vector_Push($aTestVector, Default)
     _UnitTest_AssertEqual(Default, "_Vector_Pop", $aTestVector)
-    
+
     _Vector_Push($aTestVector, Binary('0xDEADBEEF'))
     _UnitTest_AssertEqual(Binary('0xDEADBEEF'), "_Vector_Pop", $aTestVector)
-    
+
     _Vector_Push($aTestVector, 'Hello World')
     _UnitTest_AssertEqualCaseSensitive('Hello World', "_Vector_Pop", $aTestVector)
-    
+
     _Vector_Push($aTestVector, 10)
     _UnitTest_AssertEqual(10, "_Vector_Pop", $aTestVector)
 
@@ -149,7 +163,7 @@ Func _test_Vector_GetSize()
 
     _UnitTest_AssertNotEqual(8, "_Vector_GetSize", $aTestVector)
     _UnitTest_AssertEqual(6, "_Vector_GetSize", $aTestVector)
-    
+
     _Vector_Pop($aTestVector)
     _Vector_Pop($aTestVector)
 
@@ -197,7 +211,7 @@ Func _test_Vector_GetCapacity()
     $aTestVector = _Vector_Init(-100)
     _UnitTest_AssertNotEqual(-100, "_Vector_GetCapacity", $aTestVector)
 
-    
+
     $aTestVector = _Vector_Init(4)
     _UnitTest_AssertNotEqual(0, "_Vector_GetCapacity", $aTestVector)
 
