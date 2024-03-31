@@ -5,6 +5,8 @@
 #include ".\..\UnitTest.au3"
 #include ".\..\CallbackArray.au3"
 
+
+
 Global Enum $CALLBACKID_TEST_1, _
             $CALLBACKID_TEST_2, _
             $CALLBACKID_TEST_3, _
@@ -15,12 +17,20 @@ Global Enum $CALLBACKID_TEST_1, _
 
 
 
-_UnitTest_Init()
-_test_CallbackArray_Init()
-_test_CallbackArray_Add()
-_test_CallbackArray_Remove()
-_test_CallbackArray_Get()
-_UnitTest_Exit()
+If @ScriptName == "TestCallbackArray.au3" Then
+    _UnitTest_Init()
+    _test_CallbackArray()
+    _UnitTest_Exit()
+EndIf
+
+
+
+Func _test_CallbackArray()
+    _test_CallbackArray_Init()
+    _test_CallbackArray_Add()
+    _test_CallbackArray_Remove()
+    _test_CallbackArray_Get()
+EndFunc
 
 
 
@@ -86,7 +96,7 @@ Func _test_CallbackArray_Remove()
     _CallbackArray_Add($hOriginalCallbackArray, $CALLBACKID_TEST_5, CB5)
     _CallbackArray_Add($hOriginalCallbackArray, $CALLBACKID_TEST_6, CB6)
     Local $hTestCallbackArray = 0
-    
+
     $hTestCallbackArray = $hOriginalCallbackArray
     _UnitTest_AssertEqual(1, "_CallbackArray_Remove", $hTestCallbackArray, $CALLBACKID_TEST_1, CB1)
 
