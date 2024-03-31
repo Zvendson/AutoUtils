@@ -211,7 +211,12 @@ Func _IndexArray_Reset(ByRef $aArray, Const $nSize = 32) ;-> Bool
         Return SetError(1, 0, 0)
     EndIf
 
-    $aArray = _IndexArray_Init($nSize)
+    Local $aTemp = _IndexArray_Init($nSize)
+    If $aTemp = Null Or @error Then
+        Return SetError(@error, 0, 0)
+    EndIf
+
+    $aArray = $aTemp
 
     Return 1
 EndFunc
