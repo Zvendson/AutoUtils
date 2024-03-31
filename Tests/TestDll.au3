@@ -1,5 +1,6 @@
 #AutoIt3Wrapper_Au3Check_Parameters=-q -d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6 -w 7
 
+
 #include ".\..\UnitTest.au3"
 #include ".\..\Dll.au3"
 
@@ -30,7 +31,7 @@ EndFunc
 
 Func testDllOpen()
     _UnitTest_Start("_Dll_Open()")
-    
+
     _UnitTest_AssertGreater(0, "_Dll_Open", $dDllPayload)
     _UnitTest_AssertGreater(0, "_Dll_Open", $dDllPayload)
 
