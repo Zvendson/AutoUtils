@@ -8,11 +8,29 @@
     Small UnitTest library for GitHub Workflows
 
  Script Functions:
-    UTInit()                            -> 0
-    UTExit()                            -> 0
-    UTStart(Const $sTitle)              -> 0
-    UTStop()                            -> 0
-    UTAssert(Const $bBool, Const $sOut) -> Bool
+    _UnitTest_Init($fuCallback = __UnitTest_DefaultOut, $fuHandleConverter = "")              -> 0
+    _UnitTest_Exit(Const $bExit = 1)                                                          -> Bool
+    _UnitTest_Start(Const $sTitle)                                                            -> 0
+    _UnitTest_Stop()                                                                          -> 0
+    _UnitTest_AssertEqual(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)                 -> Bool
+    _UnitTest_AssertNotEqual(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)              -> Bool
+    _UnitTest_AssertLesser(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)                -> Bool
+    _UnitTest_AssertGreater(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)               -> Bool
+    _UnitTest_AssertLesserEqual(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)           -> Bool
+    _UnitTest_AssertGreaterEqual(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)          -> Bool
+    _UnitTest_AssertEqualCaseSensitive(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30)    -> Bool
+    _UnitTest_AssertNotEqualCaseSensitive(Const $vExpected, $sFuncName, $vArg1, ..., $vArg30) -> Bool
+    _UnitTest_AssertCallback($fuCallback, Const $vExpected, $sFuncName, $vArg1, ..., $vArg30) -> Bool
+    _UnitTest_ConvertMessage($aArgs)                                                          -> String
+
+ Internal Functions:
+    __UnitTest_FuncCallToString($sFuncName, $aParams, $vResult)                                  -> String
+    __UnitTest_Assert(ByRef $aArgs, $sFuncName, $vArg1, ..., $vArg30)                            -> Variant
+    __UnitTest_DefaultOut($aArgs)                                                                -> 0
+    __UnitTest_GetDisplayVarValue($vValue)                                                       -> String
+    __UnitTest_StructToArray($tStruct, $nOverflowAt = 5000)                                      -> Array
+    __UnitTest_CallResult(Const $sAssertName, Const $bResult, Const $nTimeDiff, Const $sCallOut) -> 0
+    __UnitTest_DefaultHandleConverter($vValue)                                                   -> String|0
 
 #ce ----------------------------------------------------------------------------
 
@@ -25,6 +43,8 @@
 #include ".\Function.au3"
 #include ".\Vector.au3"
 #include ".\CallbackArray.au3"
+#include ".\BigMask.au3"
+#include ".\IndexArray.au3"
 
 
 
@@ -40,42 +60,8 @@ Global $__g_nUT_TempTime = 0
 Global $__g_nUT_TempMaxLen = 0
 
 
-Func __UnitTest_DefaultHandleConverter($vValue)
-    Local $nSize
-    Local $vTemp
-    Local $sOut
 
-    If _Vector_IsVector($vValue) Then
-        $vTemp = __UnitTest_GetDisplayVarValue(_Vector_GetDefaultValue($vValue))
-        Return SetExtended(1, StringFormat("Vector<%s>(Size=%d/%d)", $vTemp, _Vector_GetSize($vValue), _Vector_GetCapacity($vValue)))
-    EndIf
-
-    If _CallbackArray_IsCallbackArray($vValue) Then
-        $nSize = _CallbackArray_GetSize($vValue)
-        $sOut = StringFormat("CallbackArray<%d>(", $nSize)
-
-        For $i = 0 To $nSize - 1
-            $vTemp = _CallbackArray_Get($vValue, $i)
-            If @error Then
-                ContinueLoop
-            EndIf
-
-            $sOut &= $vTemp[0]
-            If $i < $nSize - 1 Then
-                $sOut &= ", "
-            EndIf
-        Next
-
-        $sOut &= ")"
-
-        Return SetExtended(1, $sOut)
-    EndIf
-
-    Return $vValue
-EndFunc
-
-
-Func _UnitTest_Init($fuCallback = __UnitTest_DefaultOut, $fuHandleConverter = "")
+Func _UnitTest_Init($fuCallback = __UnitTest_DefaultOut, $fuHandleConverter = "") ;-> 0
     $__g_fuUT_OutFunction             = $fuCallback
     $__g_fuUT_HandleConverterFunction = $fuHandleConverter
     $__g_nUT_UnitTestCount            = 0
@@ -87,7 +73,7 @@ EndFunc
 
 
 
-Func _UnitTest_Exit(Const $bExit = 1)
+Func _UnitTest_Exit(Const $bExit = 1) ;-> Bool
     Local $aArgs1 = [2, "%d total UnitTests.\n", $__g_nUT_UnitTestCount]
     Call($__g_fuUT_OutFunction, $aArgs1)
 
@@ -113,7 +99,7 @@ EndFunc
 
 
 
-Func _UnitTest_Start(Const $sTitle)
+Func _UnitTest_Start(Const $sTitle) ;-> 0
     Local $aArgs = [2, "> Testing: %s\n", $sTitle]
     Call($__g_fuUT_OutFunction, $aArgs)
     $__g_nUT_LocalTime = 0
@@ -122,7 +108,7 @@ EndFunc
 
 
 
-Func _UnitTest_Stop()
+Func _UnitTest_Stop() ;-> 0
     $__g_nUT_GlobalTime += $__g_nUT_LocalTime
 
     Local $aArgs1 = [1, ">\t%s\n", _String_Repeat("-", $__g_nUT_TempMaxLen - 3)]
@@ -134,7 +120,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertEqual(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertEqual(Const $vExpected, $sFuncName, _  ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -156,7 +142,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertNotEqual(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertNotEqual(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -178,7 +164,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertLesser(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertLesser(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -200,7 +186,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertGreater(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertGreater(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -222,7 +208,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertLesserEqual(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertLesserEqual(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -244,7 +230,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertGreaterEqual(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertGreaterEqual(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -266,7 +252,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertEqualCaseSensitive(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertEqualCaseSensitive(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -288,7 +274,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertNotEqualCaseSensitive(Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertNotEqualCaseSensitive(Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -310,7 +296,7 @@ EndFunc
 
 
 
-Func _UnitTest_AssertCallback($fuCallback, Const $vExpected, $sFuncName, _
+Func _UnitTest_AssertCallback($fuCallback, Const $vExpected, $sFuncName, _ ;-> Bool
         $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
         $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
         $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
@@ -335,7 +321,15 @@ EndFunc
 
 
 
-Func __UnitTest_FuncCallToString($sFuncName, $aParams, $vResult)
+Func _UnitTest_ConvertMessage($aArgs) ;-> String
+    $aArgs[0] = "CallArgArray"
+    Local $sResult = Call("StringFormat", $aArgs)
+    Return SetError(@error, @extended, $sResult)
+EndFunc
+
+
+
+Func __UnitTest_FuncCallToString($sFuncName, $aParams, $vResult) ;-> String
     Local $nSize = UBound($aParams) - 1
     Local $sCallOut = $sFuncName & "("
 
@@ -351,13 +345,15 @@ Func __UnitTest_FuncCallToString($sFuncName, $aParams, $vResult)
 EndFunc
 
 
-Func __UnitTest_Assert(ByRef $aArgs, $sFuncName, $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
-                                                 $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
-                                                 $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
-                                                 $vArg16 = Null, $vArg17 = Null, $vArg18 = Null, $vArg19 = Null, $vArg20 = Null, _
-                                                 $vArg21 = Null, $vArg22 = Null, $vArg23 = Null, $vArg24 = Null, $vArg25 = Null, _
-                                                 $vArg26 = Null, $vArg27 = Null, $vArg28 = Null, $vArg29 = Null, $vArg30 = Null, _
-                                                 $nParamCount = @NumParams)
+
+Func __UnitTest_Assert(ByRef $aArgs, $sFuncName, _ ;-> Variant
+        $vArg1  = Null, $vArg2  = Null, $vArg3  = Null, $vArg4  = Null, $vArg5  = Null, _
+        $vArg6  = Null, $vArg7  = Null, $vArg8  = Null, $vArg9  = Null, $vArg10 = Null, _
+        $vArg11 = Null, $vArg12 = Null, $vArg13 = Null, $vArg14 = Null, $vArg15 = Null, _
+        $vArg16 = Null, $vArg17 = Null, $vArg18 = Null, $vArg19 = Null, $vArg20 = Null, _
+        $vArg21 = Null, $vArg22 = Null, $vArg23 = Null, $vArg24 = Null, $vArg25 = Null, _
+        $vArg26 = Null, $vArg27 = Null, $vArg28 = Null, $vArg29 = Null, $vArg30 = Null, _
+        $nParamCount = @NumParams)
     $__g_nUT_UnitTestCount += 1
 
     Local $aArguments = ["CallArgArray", _
@@ -383,24 +379,25 @@ Func __UnitTest_Assert(ByRef $aArgs, $sFuncName, $vArg1  = Null, $vArg2  = Null,
 EndFunc
 
 
-Func __UnitTest_DefaultOut($aArgs)
+
+Func __UnitTest_DefaultOut($aArgs) ;-> 0
     ConsoleWrite(_UnitTest_ConvertMessage($aArgs))
 EndFunc
 
 
 
-Func __UnitTest_GetDisplayVarValue($vValue)
+Func __UnitTest_GetDisplayVarValue($vValue) ;-> String
     Local $sOut = ""
     Local $nSize = 0
 
-    $vValue = __UnitTest_DefaultHandleConverter($vValue)
-    If @extended Then
-        Return $vValue
+    Local $vConverted = __UnitTest_DefaultHandleConverter($vValue)
+    If IsString($vConverted) Then
+        Return $vConverted
     EndIf
 
     If Not ($__g_fuUT_HandleConverterFunction == "") Then
-        $vValue = Call($__g_fuUT_HandleConverterFunction, $vValue)
-        If @extended Then
+        $vConverted = Call($__g_fuUT_HandleConverterFunction, $vValue)
+        If IsString($vConverted) Then
             Return $vValue
         EndIf
     EndIf
@@ -426,7 +423,7 @@ Func __UnitTest_GetDisplayVarValue($vValue)
             Return StringFormat("%f", $vValue)
 
         Case "String"
-            Return StringFormat('"%s"', BinaryLen($vValue), StringLeft($vValue, 34))
+            Return StringFormat('"%s"', $vValue)
 
         Case "Binary"
             $nSize = BinaryLen($vValue)
@@ -468,12 +465,14 @@ Func __UnitTest_GetDisplayVarValue($vValue)
         Case "Object"
             Return StringFormat('Objecz("%s")', ObjName($vValue))
 
+        Case Else
+            Return StringFormat("Unknown<%s>(%s)", VarGetType($vValue), $vValue)
     EndSwitch
 EndFunc
 
 
 
-Func __UnitTest_StructToArray($tStruct, $nOverflowAt = 5000)
+Func __UnitTest_StructToArray($tStruct, $nOverflowAt = 5000) ;-> Array
     Local $vElement = Null
     Local $nElement = 1
     Local $nIndex   = 1
@@ -548,7 +547,7 @@ EndFunc
 
 
 
-Func __UnitTest_CallResult(Const $sAssertName, Const $bResult, Const $nTimeDiff, Const $sCallOut)
+Func __UnitTest_CallResult(Const $sAssertName, Const $bResult, Const $nTimeDiff, Const $sCallOut) ;-> 0
     Local $sTime = StringFormat("%0.3f ms", $nTimeDiff)
     Local $sName = ""
     Local $sPrefix = ""
@@ -568,7 +567,7 @@ Func __UnitTest_CallResult(Const $sAssertName, Const $bResult, Const $nTimeDiff,
     Local $sMessage = _UnitTest_ConvertMessage($aArgs)
     If StringLen($sMessage) > $__g_nUT_TempMaxLen Then
         $__g_nUT_TempMaxLen = StringLen($sMessage)
-    EndIf  
+    EndIf
 
     Call($__g_fuUT_OutFunction, $aArgs)
 
@@ -576,10 +575,67 @@ EndFunc
 
 
 
-Func _UnitTest_ConvertMessage($aArgs)
-    $aArgs[0] = "CallArgArray"
-    Local $sResult = Call("StringFormat", $aArgs)
-    Return SetError(@error, @extended, $sResult)
+Func __UnitTest_DefaultHandleConverter($vValue) ;-> String|0
+    Local $nSize
+    Local $vTemp
+    Local $sOut
+    Local $nDisplaySize
+
+    If _IndexArray_IsIndexArray($vValue) Then
+        $nSize = _IndexArray_GetSize($vValue)
+        $nDisplaySize = _Integer_Validate($nSize, 1, 4)
+        Local $aIndexArrayContent[$nDisplaySize]
+        For $i = 0 To $nDisplaySize - 1
+            $aIndexArrayContent[$i] = _IndexArray_Get($vValue, $i, Null)
+        Next
+
+        If $nSize > $nDisplaySize Then
+            Redim $aIndexArrayContent[$nDisplaySize + 1]
+            $aIndexArrayContent[$nDisplaySize] = "..."
+        EndIf
+
+        $sOut = __UnitTest_GetDisplayVarValue($aIndexArrayContent)
+
+        Return StringFormat("IndexArray<%d>(%s)", $nSize, $sOut)
+    EndIf
+
+    If _BigMask_IsBigMask($vValue) Then
+        $vTemp = _BigMask_ToBinary($vValue)
+        $nSize = BinaryLen($vTemp)
+        If $nSize > 16 Then
+            $vTemp = StringLeft($vTemp, 34) & "..."
+        EndIf
+
+        Return StringFormat("BigMask<%s>(Groups=%s, Mask=%s)", _BigMask_GetSize($vValue), _BigMask_GetGroupSize($vValue), $vTemp)
+    EndIf
+
+    If _Vector_IsVector($vValue) Then
+        $vTemp = __UnitTest_GetDisplayVarValue(_Vector_GetDefaultValue($vValue))
+        Return StringFormat("Vector<%s>(Size=%d/%d)", $vTemp, _Vector_GetSize($vValue), _Vector_GetCapacity($vValue))
+    EndIf
+
+    If _CallbackArray_IsCallbackArray($vValue) Then
+        $nSize = _CallbackArray_GetSize($vValue)
+        $sOut = StringFormat("CallbackArray<%d>(", $nSize)
+
+        For $i = 0 To $nSize - 1
+            $vTemp = _CallbackArray_Get($vValue, $i)
+            If @error Then
+                ContinueLoop
+            EndIf
+
+            $sOut &= $vTemp[0]
+            If $i < $nSize - 1 Then
+                $sOut &= ", "
+            EndIf
+        Next
+
+        $sOut &= ")"
+
+        Return $sOut
+    EndIf
+
+    Return 0
 EndFunc
 
 
