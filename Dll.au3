@@ -4,6 +4,26 @@
  Author(s):       Zvend
  Discord(s):      zvend
 
+ Script Function:
+    _Dll_Close(Const ByRef $hDllHandle)                            -> Bool
+    _Dll_CloseAll()                                                -> Bool
+    _Dll_GetModuleExist(Const ByRef $hDllHandle)                   -> Bool
+    _Dll_GetProcAddress(Const ByRef $hDllHandle, Const $sProcName) -> Ptr
+    _Dll_IsInitialized()                                           -> Bool
+    _Dll_Open(Const $dDllBinary)                                   -> Handle
+    _Dll_Shutdown()                                                -> Bool
+    _Dll_StartUp()                                                 -> Bool
+
+ Internal Functions:
+    __Dll_LoadLibraryA(Const ByRef $dDllBinary)                                            -> Handle
+    __Dll_FreeLibrary(Const ByRef $hDllHandle)                                             -> Bool
+    __Dll_IsDosMagic(Const ByRef $dDllBinary)                                              -> Bool
+    __Dll_GetDllLoaderPayload()                                                            -> Bool
+    __Dll_GetModuleHandleW(Const $sModuleName)                                             -> Bool
+    __Dll_GetProcAddress(Const $hModule, Const $sProcName)                                 -> Ptr
+    __Dll_VirtualAlloc(Const $pAddress, Const $nSize, Const $nAllocation, Const $nProtect) -> Ptr
+    __Dll_VirtualFree(Const $pAddress, Const $nSize, Const $nFreeType)                     -> Bool
+
 #ce ----------------------------------------------------------------------------
 
 #include-once
@@ -216,7 +236,7 @@ Global Const $__DLL_MEMCOMMIT                  = 0x00001000
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_Close(Const ByRef $hDllHandle)
+Func _Dll_Close(Const ByRef $hDllHandle) ;-> Bool
     If Not _Dll_IsInitialized() Then
         Return SetError($DLLERR_NOT_INITIALIZED, 0, 0)
     EndIf
@@ -263,7 +283,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_CloseAll()
+Func _Dll_CloseAll() ;-> Bool
     If Not _Dll_IsInitialized() Then
         Return SetError($DLLERR_NOT_INITIALIZED, 0, 0)
     EndIf
@@ -321,7 +341,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_GetModuleExist(Const ByRef $hDllHandle)
+Func _Dll_GetModuleExist(Const ByRef $hDllHandle) ;-> Bool
     If Not _Dll_IsInitialized() Then
         Return SetError($DLLERR_NOT_INITIALIZED, 0, 0)
     EndIf
@@ -350,7 +370,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_GetProcAddress(Const ByRef $hDllHandle, Const $sProcName)
+Func _Dll_GetProcAddress(Const ByRef $hDllHandle, Const $sProcName) ;-> Ptr
     If Not _Dll_IsInitialized() Then
         Return SetError($DLLERR_NOT_INITIALIZED, 0, 0)
     EndIf
@@ -392,7 +412,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_IsInitialized()
+Func _Dll_IsInitialized() ;-> Bool
     Return $__g_bDll_DllSetup
 EndFunc
 
@@ -420,7 +440,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_Open(Const $dDllBinary)
+Func _Dll_Open(Const $dDllBinary) ;-> Handle
     If Not _Dll_IsInitialized() Then
         ;Dynamic load StartUp. It will auto shutdown on AutoIt Exit.
         ;Will also auto free libraries
@@ -525,7 +545,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_Shutdown()
+Func _Dll_Shutdown() ;-> Bool
     If Not _Dll_IsInitialized() Then
         Return SetError($DLLERR_NOT_INITIALIZED, 0, 0)
     EndIf
@@ -571,7 +591,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail
 ; Example .......: No
 ; ===============================================================================================================================
-Func _Dll_StartUp()
+Func _Dll_StartUp() ;-> Bool
     If _Dll_IsInitialized() Then
         Return 1
     EndIf
@@ -643,7 +663,7 @@ EndFunc
 ; Description ...: Loads a dll module from an address in memory.
 ; Syntax ........: __Dll_LoadLibraryA($dDllBinary)
 ; Parameters ....: $dDllBinary          - [in/out and const] The binary data of a 32bit dll.
-; Return values .: Success - Success - The Dll Module(Handle)
+; Return values .: Success - The Dll Module(Handle)
 ; ...............: Failure - 0 and @error is set to non-zero.
 ; Author ........: Zvend
 ; Modified.......:
@@ -652,7 +672,7 @@ EndFunc
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_LoadLibraryA(Const ByRef $dDllBinary)
+Func __Dll_LoadLibraryA(Const ByRef $dDllBinary) ;-> Handle
     ;Calls a function from the custom assembly to load the library from a pointer
     Local $aCall = DllCallAddress("HANDLE", $__g_pDll_DllLoad, "PTR", $__g_pDll_LoadLib, "PTR", $__g_pDll_GetProcAddr, "PTR", $dDllBinary)
 
@@ -680,7 +700,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_FreeLibrary(Const ByRef $hDllHandle)
+Func __Dll_FreeLibrary(Const ByRef $hDllHandle) ;-> Bool
     ;Calls a function from the custom assembly to free a library
     DllCallAddress("PTR", $__g_pDll_DllFree, "HANDLE", $hDllHandle)
 
@@ -707,7 +727,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_IsDosMagic(Const ByRef $dDllBinary)
+Func __Dll_IsDosMagic(Const ByRef $dDllBinary) ;-> Bool
     ;Checks the first 2 bytes for 4D 5A which is represented as 'MZ'.
     Return BinaryMid($dDllBinary, 1, 2) == "0x4D5A"
 EndFunc
@@ -728,7 +748,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/february/inside-windows-win32-portable-executable-file-format-in-detail
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_GetDllLoaderPayload()
+Func __Dll_GetDllLoaderPayload() ;-> Bool
     Static Local $dBinary = ""
 
     If $dBinary == "" Then
@@ -809,7 +829,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlew
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_GetModuleHandleW(Const $sModuleName)
+Func __Dll_GetModuleHandleW(Const $sModuleName) ;-> Bool
     Local $aCall = DllCall($__g_hDll_KernelDll, "HANDLE", "GetModuleHandleW", "WSTR", $sModuleName)
 
     If @error Then
@@ -827,7 +847,7 @@ EndFunc
 ; Syntax ........: __Dll_GetProcAddress($hModule, $sProcName)
 ; Parameters ....: $hModule             - [const] A handle to the DLL module that contains the dllexport.
 ; ...............: $sProcName           - [const] The function or variable name, or the function's ordinal value.
-; Return values .: Success - 1
+; Return values .: Success - Address(Ptr) of the exported sProcName.
 ; ...............: Failure - 0 and @error is set to non-zero.
 ; Author ........: Zvend
 ; Modified.......:
@@ -837,7 +857,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_GetProcAddress(Const $hModule, Const $sProcName)
+Func __Dll_GetProcAddress(Const $hModule, Const $sProcName) ;-> Ptr
     Local $aCall = DllCall($__g_hDll_KernelDll, "PTR", "GetProcAddress", "HANDLE", $hModule, "STR", $sProcName)
 
     If @error Then
@@ -867,7 +887,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-__Dll_VirtualAlloc
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_VirtualAlloc(Const $pAddress, Const $nSize, Const $nAllocation, Const $nProtect)
+Func __Dll_VirtualAlloc(Const $pAddress, Const $nSize, Const $nAllocation, Const $nProtect) ;-> Ptr
     Local $aCall = DllCall($__g_hDll_KernelDll, "PTR", "VirtualAlloc", "PTR", $pAddress, "ULONG_PTR", $nSize, "DWORD", $nAllocation, "DWORD", $nProtect)
 
     If @error Then
@@ -898,7 +918,7 @@ EndFunc
 ; Link ..........: https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-__Dll_VirtualFree
 ; Example .......: No
 ; ===============================================================================================================================
-Func __Dll_VirtualFree(Const $pAddress, Const $nSize, Const $nFreeType)
+Func __Dll_VirtualFree(Const $pAddress, Const $nSize, Const $nFreeType) ;-> Bool
     Local $aCall = DllCall($__g_hDll_KernelDll, "BOOL", "VirtualFree", "PTR", $pAddress, "ULONG_PTR", $nSize, "DWORD", $nFreeType)
 
     If @error Then
@@ -907,5 +927,6 @@ Func __Dll_VirtualFree(Const $pAddress, Const $nSize, Const $nFreeType)
 
     Return $aCall[0]
 EndFunc
+
 
 

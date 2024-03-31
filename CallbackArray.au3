@@ -5,10 +5,13 @@
  Discord(s):      zvend
 
  Script Function:
-    _CallbackArray_Init(Const $nSize)                                             -> CallbackArray-Handle
-    _CallbackArray_Get(ByRef $aArray, Const $nIndex)                              -> Array[Count, "Callback1", ..., "CallbackN"]
-    _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback)            -> Boolean
-    _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove) -> Boolean
+    _CallbackArray_Init($nSize)                                                                -> CallbackArray
+    _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback)                         -> Bool
+    _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove)              -> Bool
+    _CallbackArray_GetSize(Const ByRef $aArray)                                                -> UInt32
+    _CallbackArray_Get(Const ByRef $aArray, Const $nIndex)                                     -> Array[Count, "Callback1", ..., "CallbackN"]
+    _CallbackArray_IsCallbackArray(Const ByRef $aArray)                                        -> Bool
+    _CallbackArray_IsIndexValid(Const ByRef $aArray, Const $nIndex, Const $bSkipCheck = False) -> Bool
 
  Description:
     Callback Arrays are 1D arrays storing sub arrays of strings. They are meant to be ID controlled.
@@ -36,9 +39,10 @@
         _CallbackArray_Add($g_aMyCallbacks, $EVENT_MOUSE_BTN_UP  , "OnMouseButtonUp2")
         _CallbackArray_Add($g_aMyCallbacks, $EVENT_MOUSE_MOVE    , "OnMouseMove")
 
-    Your array would look like this now:
+    Your CallbackArray would look like this now:
         Global $g_aMyCallbacks =
         [ ;~ [Count, Name_1, Name_2, ..., Name_N]
+            "CallbackArray",
             [3, "OnMouseButtonDown", "OnMouseButtonDown", "OnMouseButtonDown"],
             [2, "OnMouseButtonUp", "OnMouseButtonUp"],
             [1, "OnMouseMove"]
@@ -102,7 +106,7 @@ Global Enum _
 
 
 
-Func _CallbackArray_Init($nSize) ;-> CallbackArray-Handle
+Func _CallbackArray_Init($nSize) ;-> CallbackArray
     If Not IsInt($nSize) Or $nSize < 1 Then
         Return SetError($CALLBACKARRAY_ERR_BAD_SIZE, 0, Null)
     EndIf
@@ -122,13 +126,13 @@ EndFunc
 
 
 
-Func _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback) ;-> Boolean
+Func _CallbackArray_Add(ByRef $aArray, Const $nIndex, Const $sCallback) ;-> Bool
     Local $sFunction = _Function_Validate($sCallback)
     If @error Then
         Return SetError($CALLBACKARRAY_ERR_INVALID_CALLBACK, 0, 0)
     EndIf
 
-    If Not __CallbackArray_IsIndexValid($aArray, $nIndex) Then
+    If Not _CallbackArray_IsIndexValid($aArray, $nIndex) Then
         Return SetError(@error, 0, 0)
     EndIf
 
@@ -145,7 +149,7 @@ EndFunc
 
 
 
-Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove) ;-> Boolean
+Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemove) ;-> Bool
     Local $sFunction = _Function_Validate($sCallbackToRemove)
     If @error Then
         Return SetError($CALLBACKARRAY_ERR_INVALID_CALLBACK, 0, 0)
@@ -160,7 +164,7 @@ Func _CallbackArray_Remove(ByRef $aArray, Const $nIndex, Const $sCallbackToRemov
         Return 1
     EndIf
 
-    If Not __CallbackArray_IsIndexValid($aArray, $nIndex) Then
+    If Not _CallbackArray_IsIndexValid($aArray, $nIndex) Then
         Return SetError(@error, 0, 0)
     EndIf
 
@@ -189,7 +193,7 @@ EndFunc
 
 
 
-Func _CallbackArray_GetSize(Const ByRef $aArray) ;-> Int32
+Func _CallbackArray_GetSize(Const ByRef $aArray) ;-> UInt32
     If Not _CallbackArray_IsCallbackArray($aArray) Then
         Return SetError(@error, 0, 0)
     EndIf
@@ -202,7 +206,7 @@ EndFunc
 Func _CallbackArray_Get(Const ByRef $aArray, Const $nIndex) ;-> Array[Count, "Callback1", ..., "CallbackN"]
     Static Local $aEmptyArray = [0]
 
-    If Not __CallbackArray_IsIndexValid($aArray, $nIndex) Then
+    If Not _CallbackArray_IsIndexValid($aArray, $nIndex) Then
         Return SetError(@error, 0, $aEmptyArray)
     EndIf
 
@@ -211,8 +215,12 @@ EndFunc
 
 
 
-Func _CallbackArray_IsCallbackArray(Const ByRef $aArray) ;-> Boolean
+Func _CallbackArray_IsCallbackArray(Const ByRef $aArray) ;-> Bool
     If Not IsArray($aArray) Then
+        Return SetError($CALLBACKARRAY_ERR_INVALID, 0, 0)
+    EndIf
+
+    If UBound($aArray) < $__CALLBACKARRAY_PARAMS Then
         Return SetError($CALLBACKARRAY_ERR_INVALID, 0, 0)
     EndIf
 
@@ -221,7 +229,7 @@ EndFunc
 
 
 
-Func __CallbackArray_IsIndexValid(Const ByRef $aArray, Const $nIndex, Const $bSkipCheck = False)
+Func _CallbackArray_IsIndexValid(Const ByRef $aArray, Const $nIndex, Const $bSkipCheck = False) ;-> Bool
     If Not $bSkipCheck And Not _CallbackArray_IsCallbackArray($aArray) Then
         Return SetError(@error, 0, 0)
     EndIf
