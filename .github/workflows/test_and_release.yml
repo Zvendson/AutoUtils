@@ -52,4 +52,5 @@ jobs:
           generate_release_notes: true
           files: |
             README.md
+            LICENSE.md
             *.au3
