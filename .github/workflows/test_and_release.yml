@@ -46,10 +46,9 @@ jobs:
           if ($process64.ExitCode -ne 0) {
               Write-Error "[x64] $($process64.ExitCode) Vector Unit Tests failed"
           }
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - uses: softprops/action-gh-release@v2
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
+          generate_release_notes: true
           files: |
             README.md
             *.au3
