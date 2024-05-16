@@ -1546,6 +1546,71 @@ EndFunc
 
 
 #cs────────────────────────────────────────────────────────────────────────────┐
+│ Copies the contents of a source memory block to a destination memory block,  │
+│ and supports overlapping source and destination memory blocks.               │
+│                                                                              │
+│ Parameter:                                                                   │
+│   Ptr/Struct  $vSource                                                       │
+│   Ptr/Struct  $vDestination                                                  │
+│   Integer     $nLength                                                       │
+│                                                                              │
+│ Returns:                                                                     │
+│   Bool   // Success or Failure                                               │
+│                                                                              │
+│ Errors:                                                                      │
+│   1 to 5  See 'DllCall'.                                                     │
+│   6       $nLength is not an integer.                                        │
+│   7       $nLength needs to be atleast 1 or bigger.                          │
+│   8       $vDestination is not a Struct nor a Ptr.                           │
+│   9       $vSource is not a Struct nor a Ptr.                                │
+#ce────────────────────────────────────────────────────────────────────────────┘
+Func _Win32_MoveAutoItMemory($vSource, $vDestination, $nLength)
+    If Not IsInt($nLength) Then
+        Return SetError(6, 0, False)
+    EndIf
+
+
+    If $nLength < 1 Then
+        Return SetError(7, 0, False)
+    EndIf
+
+
+    Local $sDestType
+    If IsDllStruct($vDestination) Then
+        $sDestType = "STRUCT*"
+
+    ElseIf IsInt($vDestination) Or IsPtr($vDestination) Then
+        $sDestType = "PTR*"
+
+    Else
+        Return SetError(8, 0, False)
+
+    EndIf
+
+
+    If IsDllStruct($vSource) Then
+        DllCall($__g_hWin32_Kernel32, "NONE", "RtlMoveMemory", $sDestType, $vDestination, "STRUCT*", $vSource, "SIZE_T", $nLength)
+
+    ElseIf IsInt($vSource) Or IsPtr($vSource) Then
+        DllCall($__g_hWin32_Kernel32, "NONE", "RtlMoveMemory", $sDestType, $vDestination, "PTR*", $vSource, "SIZE_T", $nLength)
+
+    Else
+        Return SetError(9, 0, False)
+
+    EndIf
+
+
+    If @error Then
+        Return SetError(@error, 0, False)
+    EndIf
+
+
+    Return True
+EndFunc
+
+
+
+#cs────────────────────────────────────────────────────────────────────────────┐
 │ Reserves, commits, or changes the state of a region of memory within the     │
 │ virtual address space of a specified process. The function initializes the   │
 │ memory it allocates to zero.                                                 │
