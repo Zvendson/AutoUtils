@@ -1858,3 +1858,40 @@ EndFunc
 
 
 
+#cs────────────────────────────────────────────────────────────────────────────┐
+│ Signals one object and waits on another object as a single operation.        │
+│                                                                              │
+│ Parameter:                                                                   │
+│   Handle   $hSignal                                                          │
+│   Handle   $hWait                                                            │
+│   Integer  $nTimeout = -1                                                    │
+│                                                                              │
+│ Returns:                                                                     │
+│   Bool   // Success or Failure                                               │
+│                                                                              │
+│ Errors:                                                                      │
+│   1 to 5  See 'DllCall'                                                      │
+│   6       $nTimeout is not an Integer.                                       │
+│   7       $hWait is not a Handle.                                            │
+#ce────────────────────────────────────────────────────────────────────────────┘
+Func _Win32_SignalObjectAndWait($hSignal, $hWait, $nTimeout = -1)
+    If Not IsInt($nTimeout) Then
+        Return SetError(6, 0, 0xFFFFFFFF) ;~ WAIT_FAILED
+    EndIf
+
+    If Not ( IsInt($hWait) Or IsPtr($hWait) ) Then
+        Return SetError(7, 0, 0xFFFFFFFF) ;~ WAIT_FAILED
+    EndIf
+
+
+    Local $aDllCall = DllCall($__g_hWin32_Kernel32, "DWORD", "SignalObjectAndWait", "HANDLE", $hSignal, "HANDLE", $hWait, "DWORD", $nTimeout, "BOOL", 0)
+
+    If @error Then
+        Return SetError(@error, 0, 0xFFFFFFFF)
+    EndIf
+
+    Return $aDllCall[0]
+EndFunc
+
+
+
