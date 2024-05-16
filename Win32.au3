@@ -1,16 +1,16 @@
-﻿#cs════════════════╦═══════════════════╗
-║ AutoIt Version   ║ 3.3.16.1          ║
-╠══════════════════╬═══════════════════╣═══════════════════════════════════════╗
-║ Author(s)        ║ Discord(s)        ║ E-Mail(s)                             ║
-╠══════════════════╬═══════════════════╬═══════════════════════════════════════╣
-║ Zvend            ║ zvend             ║ svendganske@hotmail.com               ║
-╠═════════════╤════╩═══════════════════╩═══════════════════════════════════════╣
-│ Description │ This is just a simplified wrapper for windows process          │
-├─────────────┘ interactions with lightweight error handling. It requires that │
-│ AutoIt runs as Admin when using those functions. I focus on its simplicity   │
-│ here a lot to make it run faster in general since i am trying to push the    │
-│ limits with my scripts but still keep everything in an API style.            │
-#ce────────────────────────────────────────────────────────────────────────────┘
+﻿#cs════════════════╤═══════════════════════════════════════════════════════════╗
+║ AutoIt Version   │ 3.3.16.1                                                  ║
+╟──────────────────┼───────────────────┬───────────────────────────────────────╢
+║ Author(s)        │ Discord(s)        │ GitHub                                ║
+╟──────────────────┼───────────────────┼───────────────────────────────────────╢
+║ Zvend            │ zvend             │ Zvendson                              ║
+╟─────────────┬────┴───────────────────┴───────────────────────────────────────╢
+║ Description │ This is just a simplified wrapper for windows process          ║
+╟─────────────┘ interactions with lightweight error handling. It requires that ║
+║ AutoIt runs as Admin when using those functions. I focus on its simplicity   ║
+║ here a lot to make it run faster in general since i am trying to push the    ║
+║ limits with my scripts but still keep everything in an API style.            ║
+#ce════════════════════════════════════════════════════════════════════════════╝
 
 #include-once
 #RequireAdmin
